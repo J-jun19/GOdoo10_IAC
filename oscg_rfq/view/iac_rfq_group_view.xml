@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <!--RFQ Group 的视图 -->
+      <record id="view_rfq_group_view_form" model="ir.ui.view">
+          <field name="name">vendor.rfq.group.form</field>
+          <field name="type">form</field>
+          <field name="model">iac.rfq.group</field>
+          <field name="arch" type="xml">
+              <form string="Currency Transform">
+                  <header>
+                      <button String="签核" states="pending" type="object" class="oe_highlight" name="action_webflow"/>
+                      <button String="无效" states="pending" type="object" class="oe_highlight" name="disactive"/>
+                      <field name="state" widget="statusbar" statusbar_visible="pending,sent,done" readonly="1"/>
+                  </header>
+                  <sheet>
+                      <group>
+                          <group>
+                              <field name="role_list"/>
+                              <field name="note"/>
+                          </group>
+                          <group>
+                              <field name="approve_result"/>
+                              <field name="approve_start"/>
+                              <field name="approve_end"/>
+                          </group>
+                          <field name="rfq_ids">
+                              <tree string="rfq line">
+                                  <field name="name"/>
+                                  <field name="part_id"/>
+                                  <field name="vendor_id"/>
+                                  <field name="division_id"/>
+                              </tree>
+                          </field>
+                      </group>
+                  </sheet>
+
+                  <!--<div class="oe_chatter">-->
+                  <!--<field name="message_follower_ids" widget="mail_followers"/>-->
+                  <!--<field name="message_ids" widget="mail_thread"/>-->
+                  <!--</div>-->
+
+              </form>
+          </field>
+      </record>
+
+      <record id="view_rfq_group_view_list" model="ir.ui.view">
+          <field name="name">vendor.rfq group</field>
+          <field name="type">tree</field>
+          <field name="model">iac.rfq.group</field>
+          <field name="arch" type="xml">
+              <tree>
+                  <field name="role_list"/>
+                  <field name="note"/>
+                  <field name="rfq_ids"/>
+                  <field name="approve_result"/>
+                  <field name="approve_start"/>
+                  <field name="approve_end"/>
+                  <field name="state"/>
+              </tree>
+          </field>
+      </record>
+
+
+
+      <record model="ir.actions.act_window"  id="action_rfq_grouping">
+          <field name="name">RFQ Group</field>
+          <field name="res_model">iac.rfq.group</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+          <!--<field name="domain" eval="[('type','=','history')]"/>-->
+          <!--<field name="view_id" ref="view_rfq_quote_list"/>-->
+      </record>
+
+
+      <!--RFQ Qh 的视图 -->
+      <record id="view_iac_rfq_qh_form" model="ir.ui.view">
+          <field name="name">RFQ Approve Rule</field>
+          <field name="type">form</field>
+          <field name="model">iac.rfq.qh</field>
+          <field name="arch" type="xml">
+              <form string="RFQ Approve Rule">
+                  <group>
+                      <group>
+                          <field name="name"/>
+                          <field name="key"/>
+                      </group>
+                      <group>
+                          <field name="value"/>
+                          <field name="active"/>
+                      </group>
+                      <group>
+                          <field name="note" />
+                      </group>
+                  </group>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_rfq_qh_list" model="ir.ui.view">
+          <field name="name">iac.rfq.qh</field>
+          <field name="type">tree</field>
+          <field name="model">iac.rfq.qh</field>
+          <field name="arch" type="xml">
+              <tree>
+                  <field name="name"/>
+                  <field name="key"/>
+                  <field name="value"/>
+                  <field name="active"/>
+                  <field name="note" />
+              </tree>
+          </field>
+      </record>
+      <record model="ir.actions.act_window"  id="action_rfq_qh">
+          <field name="name">Info record Wf Rule</field>
+          <field name="res_model">iac.rfq.qh</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="view_rfq_qh_list"/>
+      </record>
+
+
+      <!-- -->
+      <record model="ir.actions.act_window"  id="action_rfq_all">
+          <field name="name">RFQ All</field>
+          <field name="res_model">iac.rfq</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form,tree</field>
+          <field name="domain" eval="['|',('state','=','rfq'),('state','=','open')]"/>
+          <field name="view_id" ref="view_rfq_quote_list"/>
+      </record>
+
+
+      <!--server action -->
+      <!--1. grouping, 2.group_and_webflow-->
+      <record id="action_server_grouping" model="ir.actions.server">
+          <field name="name">Mass Confirm</field>
+          <field name="condition">True</field>
+          <field name="type">ir.actions.server</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq"></field>
+          <field name="state">code</field>
+          <field name="code">
+              if env.context.get('active_ids'):
+              model.browse(context['active_ids']).group_and_webflow()
+          </field>
+          <field name="usage">model</field>
+      </record>
+      <record model="ir.values" id="more_label_rfq_grouping">
+          <field name="name">Mass Confirm</field>
+          <field name="action_id" ref="action_server_grouping" />
+          <field name="value" eval="'ir.actions.server,' +str(ref('action_server_grouping'))" />
+          <field name="key">action</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq" />
+          <field name="model">iac.rfq</field>
+          <field name="key2">client_action_multi</field>
+      </record>
+
+
+  </data>
+</odoo>

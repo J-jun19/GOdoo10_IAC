@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--放量视图废除 begin-->
+        <!--&lt;!&ndash;asn.maxqty&ndash;&gt;-->
+        <!--<record id="iac_asn_maxqty_create_form_view" model="ir.ui.view">-->
+            <!--<field name="name">iac.asn.max.qty.create.form.view</field>-->
+            <!--<field name="model">iac.asn.max.qty.create</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="ASN" >-->
+                    <!--<header>-->
+                        <!--&lt;!&ndash;<button String="签核" states="pending" type="object" class="oe_highlight" name="action_webflow"/>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<field name="state" widget="statusbar" statusbar_visible="pending,sent,done" readonly="1"/>&ndash;&gt;-->
+                    <!--</header>-->
+                    <!--<sheet>-->
+                        <!--<group colspan="4">-->
+                            <!--<group >-->
+                                <!--<field name="plant_id" options="{'no_create': True, 'no_edit': True,'no_create': True}" required="1"-->
+                                       <!--attrs="{'readonly':[('create_date','!=',False)]}"/>-->
+                                <!--<field name="part_id_inc" attrs="{'readonly':[('create_date','!=',False)]}"-->
+                                       <!--options="{'no_create': True, 'no_edit': True,'no_create': True,'on_change': 'onchange_vendor_id_part_id'}"-->
+                                       <!--domain="[('plant_id', '=', plant_id)]" required="1"/>-->
+                                <!--<field name="maxqty" readonly="1"/>-->
+                                <!--<field name="remained_qty" readonly="1"/>-->
+                                <!--<field name="increase_qty" attrs="{'readonly':[('state','=','cancel')]}" />-->
+                            <!--</group>-->
+                            <!--<group >-->
+                                <!--<field name="vendor_id" attrs="{'readonly':[('create_date','!=',False)]}"-->
+                                       <!--options="{'no_create': True, 'no_edit': True,'no_create': True,'on_change': 'onchange_vendor_id_part_id'}"-->
+                                       <!--domain="[('plant.id','=',plant_id),('state','in',['done','block']),('vendor_type','in',['normal','spot'])]" required="1"/>-->
+                                <!--<field name="engineid"  readonly="1"/>-->
+                                <!--<field name="max_qty_last" readonly="1"/>-->
+                                <!--<field name="shipped_qty" readonly="1"/>-->
+
+                            <!--</group>-->
+                            <!--<group colspan="4">-->
+                                <!--<field name="comments" attrs="{'readonly':[('state','=','cancel')]}"/>-->
+                                <!--<field name="last_max_qty_id" invisible="1"/>-->
+                                <!--<field name="create_date" invisible="1"/>-->
+                                <!--<field name="state" invisible="1"/>-->
+                            <!--</group>-->
+                        <!--</group>-->
+
+                    <!--</sheet>-->
+                    <!--&lt;!&ndash;-->
+                    <!--<div class="oe_chatter">-->
+                        <!--<field name="message_follower_ids" widget="mail_followers"/>-->
+                        <!--<field name="message_ids" widget="mail_thread"/>-->
+                    <!--</div>-->
+                    <!--&ndash;&gt;-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="view_iac_asn_maxqty_create_view_list" model="ir.ui.view">-->
+            <!--<field name="name">asn.maxqty</field>-->
+            <!--<field name="type">tree</field>-->
+            <!--<field name="model">iac.asn.max.qty.create</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree>-->
+                    <!--<field name="state"/>-->
+                    <!--<field name="plant_id"/>-->
+                    <!--<field name="vendor_id"/>-->
+                    <!--<field name="part_id"/>-->
+                    <!--<field name="maxqty"/>-->
+                    <!--<field name="engineid"/>-->
+                    <!--<field name="division"/>-->
+                    <!--<field name="shipped_qty"/>-->
+                    <!--<field name="remained_qty"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="view_search_iac_asn_max_qty_create" model="ir.ui.view">-->
+            <!--<field name="name">Asn Max Qty Search</field>-->
+            <!--<field name="model">iac.asn.max.qty.create</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<search string="Search Vendor">-->
+                    <!--<field name="plant_id"/>-->
+                    <!--<field name="vendor_id"/>-->
+                    <!--<field name="part_id"/>-->
+                <!--</search>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_iac_asn_maxqty_create" model="ir.actions.act_window">-->
+            <!--<field name="name">ASN MaxQTY Increase</field>-->
+            <!--<field name="res_model">iac.asn.max.qty.create</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form</field>-->
+            <!--<field name="context">{}</field>-->
+        <!--</record>-->
+        <!--放量视图废除 end-->
+        <template id="assets_backend" name="oscg_rfq assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/oscg_rfq/static/src/js/oscg_rfq.js"/>
+            </xpath>
+        </template>
+
+
+
+
+        <record id="iac_asn_maxqty_create_form_view" model="ir.ui.view">
+            <field name="name">iac.asn.max.qty.create.form.view</field>
+            <field name="model">iac.asn.max.qty.create.update</field>
+            <field name="arch" type="xml">
+                <form string="ASN" create="false">
+                    <sheet>
+                        <group>
+                            <group >
+                                <field name="plant_id" options="{'no_create': True, 'no_edit': True,'no_open': True}" required="1" readonly="1"/>
+                                <field name="part_id"
+                                       options="{'no_create': True, 'no_edit': True,'no_open': True,'on_change': 'onchange_vendor_id_part_id'}"
+                                       domain="[('plant_id', '=', plant_id)]" required="1" readonly="1"/>
+                                <field name="maxqty" readonly="1"/>
+                                <field name="available_qty" readonly="1"/>
+                            </group>
+                            <group >
+                                <field name="vendor_id"
+                                       options="{'no_create': True, 'no_edit': True,'no_open': True,'on_change': 'onchange_vendor_id_part_id'}"
+                                       domain="[('plant.id','=',plant_id),('state','in',['done','block']),('vendor_type','in',['normal','spot'])]" required="1" readonly="1"/>
+                                <field name="engineid"  readonly="1"/>
+                                <field name="shipped_qty" readonly="1"/>
+                                <field name="change_qty" readonly="1"/>
+
+                            </group>
+                        </group>
+                       <notebook>
+                        <page string="可交量修改記錄">
+                            <field name="asn_line_ids" context="{'disable_open':True}">
+                                <tree string="asn_line_ids" editable="bottom">
+                                    <field name="increase_qty" options="{'no_create': True, 'no_edit': True,'no_open': True}" required="1"/>
+                                    <field name="comments" options="{'no_create': True, 'no_edit': True,'no_open': True}" required="1"/>
+                                    <field name="write_uid" readonly="1"/>
+                                    <field name="write_date" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_iac_asn_maxqty_create_view_list" model="ir.ui.view">
+            <field name="name">asn.maxqty</field>
+            <field name="type">tree</field>
+            <field name="model">iac.asn.max.qty.create.update</field>
+            <field name="arch" type="xml">
+                <tree create="false">
+                    <!--<field name="state"/>-->
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="part_id"/>
+                    <field name="maxqty"/>
+                    <field name="engineid"/>
+                    <!--<field name="division"/>-->
+                    <field name="shipped_qty"/>
+                    <field name="available_qty"/>
+                    <field name="change_qty"/>
+                    <!--<field name="remained_qty"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_search_iac_asn_max_qty_create" model="ir.ui.view">
+            <field name="name">Asn Max Qty Search</field>
+            <field name="model">iac.asn.max.qty.create.update</field>
+            <field name="arch" type="xml">
+                <search string="Search Vendor">
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="part_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="iac_asn_max_qty_create_update_wizard_form" model="ir.ui.view">
+            <field name="name">asn max qty wizard</field>
+            <field name="model">iac.asn.max.qty.create.update.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="會根據輸入料號查出所有有可交量的代用料，請注意！">
+                            <field name="plant_id" options="{'no_create': True,'no_open': True}" required="1"/>
+                            <field name="vendor_id" options="{'no_create': True,'no_open': True}" required="1"/>
+                            <field name="part_id" options="{'no_create': True,'no_open': True}" required="1" attrs="{'readonly':[('plant_id','=',False)]}"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name='search_asn_max_qty'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                        or
+                        <button string='Cancel'
+                                class='btn-default'
+                                special='cancel'/>
+                        or
+                        <button name='create_asn_max_qty'
+                        string='Create'
+                        class='btn-primary'
+                        type='object'/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_iac_asn_maxqty_create" model="ir.actions.act_window">
+            <field name="name">ASN MaxQTY Increase</field>
+            <field name="res_model">iac.asn.max.qty.create.update.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <record id="action_iac_asn_maxqty_import" model="ir.actions.act_window">
+            <field name="name">asn maxqty import</field>
+            <field name="res_model">asn.maxqty.import.update.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_asn_maxqty_import_update_wizard" model="ir.ui.view">
+            <field name="name">asn maxqty import update wizard</field>
+            <field name="model">asn.maxqty.import.update.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="file_name" readonly="1"/>
+                        <field name="file" filename="file_name"/>
+                    </group>
+                    <footer>
+                        <button name='maxqty_upload'
+                        string='Confirm'
+                        class='btn-primary'
+                        type='object'/>
+                        or
+                        <button string='Cancel'
+                                class='btn-default'
+                                special='cancel'/>
+                        or
+                        <button name='maxqty_download'
+                        string='Download Template'
+                        class='btn-primary'
+                        type='object'/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <!--批量放量视图废除begin-->
+        <!--ASN MAX QTY IMPORT -->
+        <!--<record id="view_asn_maxqty_import_as_wizard" model="ir.ui.view">-->
+            <!--<field name="name">Quote Cm Import</field>-->
+            <!--<field name="model">asn.maxqty.import.wizard</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Wizard tools">-->
+                    <!--<group>-->
+                        <!--<field name="file_name" invisible="0"/>-->
+                        <!--<field name="res_model" invisible="1"/>-->
+                        <!--<field name="file" filename="file_name"/>-->
+                    <!--</group>-->
+                    <!--<footer>-->
+                        <!--<button name="action_upload_file" string="Confirm" type="object"  class="oe_highlight"  />-->
+                        <!--or-->
+                        <!--<button string="Cancel" class="oe_link" special="cancel" />-->
+                        <!--or-->
+                        <!--<button name="action_download_file" string="Download Template" type="object"  class="oe_highlight"  />-->
+                    <!--</footer>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash;max import&ndash;&gt;-->
+        <!--<record model="ir.actions.act_window"  id="action_iac_asn_maxqty_import">-->
+            <!--<field name="name">Max Import</field>-->
+            <!--<field name="res_model">asn.maxqty.import.wizard</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">form</field>-->
+            <!--<field name="target">new</field>-->
+            <!--<field name="domain">[('state','=','done')]</field>-->
+            <!--<field name="context" eval="{'default_res_model': 'asn.maxqty'}"/>-->
+        <!--</record>-->
+        <!--批量放量视图废除end-->
+
+
+   </data>
+</odoo>

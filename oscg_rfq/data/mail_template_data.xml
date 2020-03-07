@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!--Email template -->
+        <record id="email_template_edi_rfq" model="mail.template">
+            <field name="name">Quote Email template</field>
+            <field name="email_from">iac-ep_support@iac.com.tw</field>
+            <field name="subject">${object.company_id.name} ${object.state in ('draft', 'sent') and 'Quotation' or 'Order'} (Ref ${object.name or 'n/a' })</field>
+            <field name="email_to">${object.buyer_email}</field>
+            <field name="partner_to">${object.vendor_id.id}</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq"/>
+            <field name="auto_delete" eval="True"/>
+            <!--<field name="report_template" ref="report_sale_order"/>-->
+            <!--<field name="report_name">${(object.name or '').replace('/','_')}${object.state == 'draft' and '_draft' or ''}</field>-->
+            <field name="lang">${object.vendor_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<p>Dear ${object.vendor_id.name}
+% set access_url = is_online and access_action['url']
+
+% if object.vendor_id.parent_id:
+    (<i>${object.vendor_id.parent_id.name}</i>)
+% endif
+,</p>
+<p>
+Here is your ${doc_name} <strong>${object.name}</strong>
+% if object.origin:
+(with reference: ${object.origin} )
+% endif
+from ${object.company_id.name}.
+</p>
+请回填单价、生效日期、失效日期、MOQ、MPQ、L/T、C/W、R/W、PO Base/Delivery Base
+    <br/><br/>
+% if is_online:
+    <center>
+        <a href="${access_url}" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">${access_name}</a>
+        <br/><br/>
+        <span style="color:#888888">(or view attached PDF)</span>
+    </center>
+    <br/>
+% endif
+
+<p>You can reply to this email if you have any questions.</p>
+<p>Thank you,</p>
+
+<p style="color:#eeeeee;">
+% if object.user_id and object.user_id.signature:
+    ${object.user_id.signature | safe}
+% endif
+</p>
+]]></field>
+        </record>
+
+        <!--Default Notification Email template for invoices-->
+        <record id="mail_template_data_notification_email_iac_rfq" model="mail.template">
+            <field name="name">Quote Order Notification Email</field>
+            <field name="subject">${object.subject}</field>
+            <field name="model_id" ref="mail.model_mail_message"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[<html>
+                <head></head>
+                <body style="margin: 0; padding: 0;">
+                <table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed" summary="o_mail_notification">
+                    <tbody>
+
+                      <!-- HEADER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px;">
+                            <tr>
+                              <td valign="middle">
+                                  <span style="font-size:20px; color:white; font-weight: bold;">
+                                      ${object.record_name}
+                                  </span>
+                              </td>
+                              <td valign="middle" align="right">
+                                  <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${user.company_id.name}">
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- CONTENT -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px;">
+                            <tbody>
+                              <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                ${object.body | safe}
+                              </td>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- FOOTER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px;">
+                            <tr>
+                              <td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                ${user.company_id.name}<br/>
+                                ${user.company_id.phone or ''}
+                              </td>
+                              <td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                % if user.company_id.email:
+                                <a href="mailto:${user.company_id.email}" style="text-decoration:none; color: white;">${user.company_id.email}</a><br/>
+                                % endif
+                                % if user.company_id.website:
+                                    <a href="${user.company_id.website}" style="text-decoration:none; color: white;">
+                                        ${user.company_id.website}
+                                    </a>
+                                % endif
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center">
+                            Powered by <a href="https://www.odoo.com">Odoo</a>.
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                </body>
+                </html>
+            ]]></field>
+        </record>
+
+      <!--config_parameter-->
+        <record id="config_parameter_iac_rfq_1" model="ir.config_parameter">
+            <field name="key">iac.rfq.variants.11</field>
+            <field name="value">90</field>
+        </record>
+        <record id="config_parameter_iac_rfq_2" model="ir.config_parameter">
+            <field name="key">iac.rfq.variants.21</field>
+            <field name="value">120</field>
+        </record>
+        <!-- Sequences for iac.rfq -->
+        <record id="seq_iac_rfq" model="ir.sequence">
+            <field name="name">IAC RFQ</field>
+            <field name="code">iac.rfq</field>
+            <field name="prefix"></field>
+            <field name="padding">10</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_iac_asn" model="ir.sequence">
+            <field name="name">IAC ASN</field>
+            <field name="code">iac.asn</field>
+            <field name="prefix">%(y)s%(month)s%(day)s</field>
+            <field name="padding">3</field>
+            <field name="auto_reset">1</field>
+            <field name="reset_period">day</field>
+            <field name="reset_init_number">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_iac_interface_rpc" model="ir.sequence">
+            <field name="name">interface_rpc</field>
+            <field name="code">iac.interface.rpc</field>
+            <field name="prefix"></field>
+            <field name="padding">15</field>
+            <field name="company_id" eval="False"/>
+        </record>
+      <!--cron action-->
+        <record model="ir.cron" id="idle_rfq_job">
+            <field name='name'>idle_rfq_job</field>
+            <!-- <field name="nextcall">2017-02-14 00:45:00</field> -->
+            <field name='interval_number'>7</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="model">iac.rfq</field>
+            <field name="function">idle_rfq_job</field>
+            <field name="args">()</field>
+        </record>
+        <record model="ir.cron" id="job_clean_asn_from_sap">
+            <field name='name'>job_clean_asn_from_sap</field>
+            <!-- <field name="nextcall">2017-02-14 00:45:00</field> -->
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="model">iac.asn</field>
+            <field name="function">job_clean_asn_from_sap</field>
+            <field name="args">()</field>
+        </record>
+        <record model="ir.cron" id="job_sap_rpc_get_vmi_data">
+            <field name='name'>job_sap_rpc_get_vmi_data</field>
+            <!-- <field name="nextcall">2017-02-14 00:45:00</field> -->
+            <field name='interval_number'>7</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="model">iac.asn.vmi.sap</field>
+            <field name="function">job_sap_rpc_get_vmi_data</field>
+            <field name="args">()</field>
+        </record>
+        <record model="ir.cron" id="job_create_asn_vmi">
+            <field name='name'>job_create_asn_vmi</field>
+            <!-- <field name="nextcall">2017-02-14 00:45:00</field> -->
+            <field name='interval_number'>7</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="model">iac.asn.vmi.sap</field>
+            <field name="function">job_create_asn_vmi</field>
+            <field name="args">()</field>
+        </record>
+        <record model="ir.cron" id="job_sap_rpc_get_buy_sell_data">
+            <field name='name'>job_sap_rpc_get_buy_sell_data</field>
+            <!-- <field name="nextcall">2017-02-14 00:45:00</field> -->
+            <field name='interval_number'>7</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="model">iac.asn.buy.sell.sap</field>
+            <field name="function">job_sap_rpc_get_buy_sell_data</field>
+            <field name="args">()</field>
+        </record>
+        <record model="ir.cron" id="job_create_asn_buy_sell">
+            <field name='name'>job_create_asn_buy_sell</field>
+            <!-- <field name="nextcall">2017-02-14 00:45:00</field> -->
+            <field name='interval_number'>7</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="model">iac.asn.buy.sell.sap</field>
+            <field name="function">job_create_asn_buy_sell</field>
+            <field name="args">()</field>
+        </record>
+
+      <!--server action -->
+        <!--1. grouping, 2.group_and_webflow-->
+        <record id="action_server_grouping" model="ir.actions.server">
+            <field name="name">Mass Confirm</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq"></field>
+            <field name="state">code</field>
+            <field name="code">
+if env.context.get('active_ids'):
+    model.browse(context['active_ids']).group_and_webflow()
+            </field>
+            <field name="usage">model</field>
+        </record>
+        <record model="ir.values" id="more_label_rfq_grouping">
+            <field name="name">Mass Confirm</field>
+            <field name="action_id" ref="action_server_grouping" />
+            <field name="value" eval="'ir.actions.server,' +str(ref('action_server_grouping'))" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq" />
+            <field name="model">iac.rfq</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+        <record id="action_server_group_approve" model="ir.actions.server">
+            <field name="name">Group签核</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_group"></field>
+            <field name="state">code</field>
+            <field name="code">
+if env.context.get('active_ids'):
+    model.browse(context['active_ids']).action_webflow()
+            </field>
+            <field name="usage">model</field>
+        </record>
+        <record model="ir.values" id="action_server_group_approve">
+            <field name="name">Group签核</field>
+            <field name="action_id" ref="action_server_grouping" />
+            <field name="value" eval="'ir.actions.server,' +str(ref('action_server_group_approve'))" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_group" />
+            <field name="model">iac.rfq.group</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+        <record id="action_server_as_create_rfq" model="ir.actions.server">
+            <field name="name">Create RFQ</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq"></field>
+            <field name="state">code</field>
+            <field name="code">
+if env.context.get('active_ids'):
+    model.browse(context['active_ids']).action_replay_as_confirm()
+            </field>
+            <field name="usage">model</field>
+        </record>
+        <record model="ir.values" id="more_label_as_create_rfq">
+            <field name="name">Create RFQ</field>
+            <field name="action_id" ref="action_server_as_create_rfq" />
+            <field name="value" eval="'ir.actions.server,' +str(ref('action_server_as_create_rfq'))" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq" />
+            <field name="model">iac.rfq</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+        <!--rfq delete(cancel)-->
+        <record id="action_server_rfq_delete" model="ir.actions.server">
+            <field name="name">Delete Quote</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq"></field>
+            <field name="state">code</field>
+            <field name="code">
+if env.context.get('active_ids'):
+    model.browse(context['active_ids']).action_cancel()
+            </field>
+            <field name="usage">model</field>
+        </record>
+        <record model="ir.values" id="more_label_rfq_delete">
+            <field name="name">Delete Quote</field>
+            <field name="action_id" ref="action_server_as_create_rfq" />
+            <field name="value" eval="'ir.actions.server,' +str(ref('action_server_rfq_delete'))" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq" />
+            <field name="model">iac.rfq</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+        <!--asn create label-->
+        <record id="action_server_asn_create" model="ir.actions.server">
+            <field name="name">Create ASN</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_purchase_order_line"></field>
+            <field name="state">code</field>
+            <field name="code">
+if env.context.get('active_ids'):
+    action = model.browse(context['active_ids']).po_create_asn()
+            </field>
+            <field name="usage">model</field>
+        </record>
+        <record model="ir.values" id="more_label_asn_create">
+            <field name="name">Create ASN</field>
+            <field name="action_id" ref="action_server_asn_create" />
+            <field name="value" eval="'ir.actions.server,' +str(ref('action_server_asn_create'))" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_purchase_order_line" />
+            <field name="model">iac.purchase.order.line</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+    </data>
+</odoo>

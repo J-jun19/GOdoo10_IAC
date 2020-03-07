@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <!--Mass RFQ 的变量设置-->
+      <record model="ir.ui.view" id="view_iac_rfq_mass_variant_search">
+          <field name="model">iac.rfq.mass.variant</field>
+          <field name="arch" type="xml">
+              <search string="System Properties">
+                  <field name="key" string="Key"/>
+                  <field name="value"/>
+              </search>
+          </field>
+      </record>
+
+      <record model="ir.ui.view" id="view_iac_rfq_mass_variant_list">
+          <field name="model">iac.rfq.mass.variant</field>
+          <field name="arch" type="xml">
+              <tree string="System Parameters">
+                  <field name="plant_id"/>
+                  <field name="key"/>
+                  <field name="value"/>
+              </tree>
+          </field>
+      </record>
+
+      <record model="ir.ui.view" id="view_iac_rfq_mass_variant_form">
+          <field name="model">iac.rfq.mass.variant</field>
+          <field name="arch" type="xml">
+              <form string="System Parameters">
+                <sheet>
+                  <group>
+                      <field name="plant_id"/>
+                      <field name="key"/>
+                  </group>
+                  <group colspan="4">
+                      <field name="value"/>
+                      <field name="memo"/>
+                  </group>
+                </sheet>
+              </form>
+          </field>
+      </record>
+
+      <!-- Buyer查询批量生成的RFQ数据 -->
+      <record id="view_iac_rfq_mass_buyer_wizard_form" model="ir.ui.view">
+          <field name="name">Buyer Filter Info record MASS</field>
+          <field name="model">iac.rfq.mass.buyer.wizard</field>
+          <field name="arch" type="xml">
+              <form string="Wizard tools">
+                  <group>
+                      <field name="plant_id" />
+                      <field name="part_id" />
+                  </group>
+                  <group>
+                      <field name="vendor_id" />
+                      <field name="division_id" />
+                  </group>
+                  <group>
+                      <field name="flag" />
+                  </group>
+                  <footer>
+                      <button name="action_confirm" string="确定" type="object"  class="oe_highlight"  />
+                      or
+                      <button string="取消" class="oe_link" special="cancel" />
+                  </footer>
+              </form>
+          </field>
+      </record>
+
+      <!-- Buyer查询批量生成的RFQ数据 -->
+      <record id="view_iac_rfq_mass_cm_wizard_form" model="ir.ui.view">
+          <field name="name">CM Filter Info record MASS</field>
+          <field name="model">iac.rfq.mass.cm.wizard</field>
+          <field name="arch" type="xml">
+              <form string="Wizard tools">
+                  <group>
+                      <field name="plant_id" />
+                      <field name="part_id" />
+                  </group>
+                  <group>
+                      <field name="vendor_id" />
+                      <field name="division_id" />
+                  </group>
+                  <group>
+                      <field name="flag" />
+                  </group>
+                  <footer>
+                      <button name="action_confirm" string="确定" type="object"  class="oe_highlight"  />
+                      or
+                      <button string="取消" class="oe_link" special="cancel" />
+                  </footer>
+              </form>
+          </field>
+      </record>
+
+      <!--Buyer处理RFQ Mass的视图 -->
+      <record id="view_iac_mass_header_buyer_form" model="ir.ui.view">
+          <field name="name">Buyer Process Info record</field>
+          <field name="type">form</field>
+          <field name="model">iac.rfq.mass.header.buyer</field>
+          <field name="arch" type="xml">
+              <form string="Buyer Process Info record" create="false" >
+                  <header>
+                      <button String="submit" type="object" class="oe_highlight" name="button_to_submit" />
+                  </header>
+                  <sheet>
+                      <group colspan="4">
+                          <!--
+                          <field name="memo" />
+                          -->
+                      </group>
+                      <notebook>
+                          <page string="Info record Mass Lines">
+                              <field name="rfq_line_ids"  >
+                                   <tree string="Info record Mass Lines" create="false" delete="false">
+                                       <field name="flag"/>
+                                       <field name="other_reason"/>
+                                       <field name="expected_valid_from"/>
+                                       <field name="expected_valid_to"/>
+                                       <field name="expected_price"/>
+                                       <field name="part_id" readonly="1"/>
+                                       <field name="vendor_code" readonly="1"/>
+                                       <field name="input_price" readonly="1"/>
+                                       <field name="valid_from" readonly="1"/>
+                                       <field name="valid_to" readonly="1"/>
+                                       <field name="currency_id" readonly="1"/>
+                                       <field name="last_sum_amount" readonly="1"/>
+                                  </tree>
+                              </field>
+                          </page>
+                      </notebook>
+                  </sheet>
+              </form>
+          </field>
+      </record>
+
+      <!--CM处理RFQ Mass的视图 -->
+      <record id="view_iac_mass_header_cm_form" model="ir.ui.view">
+          <field name="name">Cm Process Info record</field>
+          <field name="type">form</field>
+          <field name="model">iac.rfq.mass.header.cm</field>
+          <field name="arch" type="xml">
+              <form string="Buyer Process Info record" create="false" >
+                  <header>
+                      <button String="submit"  type="object" class="oe_highlight" name="button_to_submit" />
+                  </header>
+                  <sheet>
+                      <group colspan="4">
+                          <!--
+                          <field name="memo" />
+                          -->
+                      </group>
+                      <notebook>
+                          <page string="Info record Mass Lines">
+                              <field name="rfq_line_ids">
+                                   <tree string="Info record Mass Lines" create="false" delete="false">
+                                       <field name="flag"/>
+                                       <field name="other_reason"/>
+                                       <field name="vendor_code" readonly="1"/>
+                                       <field name="part_id" readonly="1"/>
+                                       <field name="input_price" readonly="1"/>
+                                       <field name="valid_from" readonly="1"/>
+                                       <field name="valid_to" readonly="1"/>
+                                       <field name="currency_id" readonly="1"/>
+                                       <field name="last_sum_amount" readonly="1"/>
+                                  </tree>
+                              </field>
+                          </page>
+                      </notebook>
+                  </sheet>
+              </form>
+          </field>
+      </record>
+
+      <!--rfq job 执行定时任务的日志 -->
+      <record model="ir.ui.view" id="view_iac_rfq_mass_job_list">
+          <field name="model">iac.rfq.mass.job</field>
+          <field name="arch" type="xml">
+              <tree string="Job Executed Log">
+                  <field name="state"/>
+                  <field name="start_time"/>
+                  <field name="end_time"/>
+                  <field name="proc_part_count"/>
+                  <field name="idle_part_count"/>
+                  <field name="fail_part_count"/>
+
+              </tree>
+          </field>
+      </record>
+
+      <record model="ir.ui.view" id="view_iac_rfq_mass_job_form">
+          <field name="model">iac.rfq.mass.job</field>
+          <field name="arch" type="xml">
+              <form string="Job Executed Log">
+                  <sheet>
+                      <group>
+                          <field name="start_time" readonly="1"/>
+                          <field name="proc_part_count" readonly="1"/>
+                          <field name="fail_part_count" readonly="1"/>
+                      </group>
+                      <group >
+                          <field name="end_time" readonly="1"/>
+                          <field name="idle_part_count" readonly="1"/>
+                          <field name="state" readonly="1"/>
+                      </group>
+                      <notebook>
+                          <page string="Info record Job Exeception Log">
+                              <field name="job_ex_line_ids" >
+                                  <tree string="Info record Job Exeception Log">
+                                      <field name="plant_id" readonly="1"/>
+                                      <field name="part_id" readonly="1"/>
+                                      <field name="ex_msg" readonly="1"/>
+                                      <field name="last_rfq_his_id" readonly="1"/>
+                                  </tree>
+                              </field>
+                          </page>
+                      </notebook>
+                  </sheet>
+              </form>
+          </field>
+      </record>
+
+
+      <record id="view_iac_rfq_mass_line_buyer_form" model="ir.ui.view">
+          <field name="name">Buyer Confirm Info record Line</field>
+          <field name="type">form</field>
+          <field name="model">iac.rfq.mass.line.buyer</field>
+          <field name="arch" type="xml">
+              <form string="IAC Info record" create="false" >
+                  <header>
+                      <field name="state" widget="statusbar" statusbar_visible="draft,processing,done" readonly="1"/>
+                  </header>
+                  <sheet>
+                      <group>
+                          <group>
+                              <field name="flag" />
+                              <field name="plant_id" options="{'no_create': True}" readonly="1"/>
+                              <field name="part_id" options="{'no_create': True}"  readonly="1"/>
+                              <field name="vendor_id" options="{'no_create': False}" readonly="1"/>
+
+
+                          </group>
+                          <group>
+                              <field name="currency_id" options="{'no_create': True}" readonly="1"/>
+                              <field name="price_control" readonly="1"/>
+                              <field name="buyer_code" options="{'no_create': True}" readonly="1"/>
+                              <field name="division_id" options="{'no_create': True}" readonly="1"/>
+                          </group>
+                          <group>
+                              <field name="input_price" readonly="1"/>
+                              <field name="lt" readonly="1"/>
+                              <field name="moq" readonly="1"/>
+                              <field name="mpq" readonly="1"/>
+                              <field name="rw" readonly="1"/>
+                              <field name="cw" readonly="1"/>
+                              <field name="tax" readonly="1"/>
+                              <field name="valid_from" readonly="1"/>
+                              <field name="valid_to" readonly="1"/>
+                          </group>
+                          <group>
+                              <field name="expected_price"   attrs="{'invisible': [('flag', 'in', ['C','N'])]}"/>
+                              <field name="expected_valid_from"  attrs="{'invisible': [('flag', 'in', ['C','N'])]}"/>
+                              <field name="expected_valid_to"  attrs="{'invisible': [('flag', 'in', ['C','N'])]}"/>
+                              <field name="reason_id"  attrs="{'invisible': [('flag', 'in', ['C','Y'])]}"/>
+                              <field name="other_reason" attrs="{'invisible': [('flag', 'in', ['C','Y'])]}"/>
+                          </group>
+                      </group>
+                  </sheet>
+
+              </form>
+          </field>
+      </record>
+
+      <record id="view_iac_rfq_mass_line_buyer_list" model="ir.ui.view">
+          <field name="name">Info record Mass Line</field>
+          <field name="type">tree</field>
+          <field name="model">iac.rfq.mass.line.buyer</field>
+          <field name="arch" type="xml">
+              <tree editable="top" create="false" edit="true">
+                  <field name="flag"/>
+                  <field name="reason_id" options="{'no_create': True}"/>
+                  <field name="other_reason"/>
+                  <field name="expected_price"/>
+                  <field name="expected_valid_from"/>
+                  <field name="expected_valid_to"/>
+                  <field name="part_id" readonly="1"/>
+                  <field name="vendor_code" readonly="1"/>
+                  <field name="input_price" readonly="1"/>
+                  <field name="valid_from" readonly="1"/>
+                  <field name="valid_to" readonly="1"/>
+                  <field name="currency_id" readonly="1"/>
+
+              </tree>
+          </field>
+      </record>
+
+
+      <record id="view_iac_rfq_mass_line_cm_form" model="ir.ui.view">
+          <field name="name">CM Confirm Info record Line</field>
+          <field name="type">form</field>
+          <field name="model">iac.rfq.mass.line.cm</field>
+          <field name="arch" type="xml">
+              <form string="IAC Info record" create="false" >
+                  <header>
+                      <field name="state" widget="statusbar" statusbar_visible="draft,processing,done" readonly="1"/>
+                  </header>
+                  <sheet>
+                      <group>
+                          <group>
+                              <field name="flag" />
+                              <field name="plant_id" options="{'no_create': True}" readonly="1"/>
+                              <field name="part_id" options="{'no_create': True}"  readonly="1"/>
+                              <field name="vendor_id" options="{'no_create': False}" readonly="1"/>
+
+
+                          </group>
+                          <group>
+                              <field name="currency_id" options="{'no_create': True}" readonly="1"/>
+                              <field name="price_control" readonly="1"/>
+                              <field name="buyer_code" options="{'no_create': True}" readonly="1"/>
+                              <field name="division_id" options="{'no_create': True}" readonly="1"/>
+                          </group>
+                          <group>
+                              <field name="input_price" readonly="1"/>
+                              <field name="lt" readonly="1"/>
+                              <field name="moq" readonly="1"/>
+                              <field name="mpq" readonly="1"/>
+                              <field name="rw" readonly="1"/>
+                              <field name="cw" readonly="1"/>
+                              <field name="tax" readonly="1"/>
+                              <field name="valid_from" readonly="1"/>
+                              <field name="valid_to" readonly="1"/>
+                          </group>
+                          <group>
+
+                              <field name="reason_id"  attrs="{'invisible': [('flag', 'in', ['C'])]}"/>
+                              <field name="other_reason" attrs="{'invisible': [('flag', 'in', ['C'])]}"/>
+                          </group>
+                      </group>
+                  </sheet>
+
+              </form>
+          </field>
+      </record>
+
+      <record id="view_iac_rfq_mass_line_cm_list" model="ir.ui.view">
+          <field name="name">Info record Mass Line</field>
+          <field name="type">tree</field>
+          <field name="model">iac.rfq.mass.line.cm</field>
+          <field name="arch" type="xml">
+              <tree editable="top" create="false" edit="true">
+                  <field name="flag"/>
+                  <field name="reason_id" />
+                  <field name="part_id" readonly="1"/>
+                  <field name="vendor_code" readonly="1"/>
+                  <field name="input_price" readonly="1"/>
+                  <field name="valid_from" readonly="1"/>
+                  <field name="valid_to" readonly="1"/>
+                  <field name="currency_id" readonly="1"/>
+              </tree>
+          </field>
+      </record>
+
+
+      <!--设置内部菜单 Buyer 专用 -->
+
+      <record id="action_server_iac_rfq_mass_line_buyer_set_state_C" model="ir.actions.server">
+          <field name="name">Set to (Init State)</field>
+          <field name="condition">True</field>
+          <field name="type">ir.actions.server</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_buyer"></field>
+          <field name="state">code</field>
+          <field name="code">
+              if env.context.get('active_ids'):
+              model.browse(context['active_ids']).set_state_C()
+          </field>
+          <field name="usage">model</field>
+      </record>
+      <record model="ir.values" id="ir_values_iac_rfq_mass_line_buyer_set_state_C">
+          <field name="name">Set to (Init State)</field>
+          <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_mass_line_buyer_set_state_C" />
+          <field name="key">action</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_buyer" />
+          <field name="model">iac.rfq.mass.line.buyer</field>
+          <field name="key2">client_action_multi</field>
+      </record>
+
+
+      <record id="action_server_iac_rfq_mass_line_buyer_set_state_Y" model="ir.actions.server">
+          <field name="name">Set to (Need To Create RFQ)</field>
+          <field name="condition">True</field>
+          <field name="type">ir.actions.server</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_buyer"></field>
+          <field name="state">code</field>
+          <field name="code">
+              if env.context.get('active_ids'):
+              model.browse(context['active_ids']).set_state_Y()
+          </field>
+          <field name="usage">model</field>
+      </record>
+      <record model="ir.values" id="ir_values_iac_rfq_mass_line_buyer_set_state_Y">
+          <field name="name">Set to (Need To Create RFQ)</field>
+          <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_mass_line_buyer_set_state_Y" />
+          <field name="key">action</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_buyer" />
+          <field name="model">iac.rfq.mass.line.buyer</field>
+          <field name="key2">client_action_multi</field>
+      </record>
+
+
+      <record id="action_server_iac_rfq_mass_line_buyer_set_state_N" model="ir.actions.server">
+          <field name="name">Set to (Need Not To Create RFQ)</field>
+          <field name="condition">True</field>
+          <field name="type">ir.actions.server</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_buyer"></field>
+          <field name="state">code</field>
+          <field name="code">
+              if env.context.get('active_ids'):
+              model.browse(context['active_ids']).set_state_N()
+          </field>
+          <field name="usage">model</field>
+      </record>
+      <record model="ir.values" id="ir_values_iac_rfq_mass_line_buyer_set_state_N">
+          <field name="name">Set to (Need Not To Create RFQ)</field>
+          <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_mass_line_buyer_set_state_N" />
+          <field name="key">action</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_buyer" />
+          <field name="model">iac.rfq.mass.line.buyer</field>
+          <field name="key2">client_action_multi</field>
+      </record>
+
+
+      <record id="action_server_iac_rfq_mass_line_buyer_submit" model="ir.actions.server">
+          <field name="name">Submit To Create RFQ</field>
+          <field name="condition">True</field>
+          <field name="type">ir.actions.server</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_buyer"></field>
+          <field name="state">code</field>
+          <field name="code">
+              if env.context.get('active_ids'):
+              model.browse(context['active_ids']).submit()
+          </field>
+          <field name="usage">model</field>
+      </record>
+      <record model="ir.values" id="ir_values_iac_rfq_mass_line_buyer_submit">
+          <field name="name">Submit To Create RFQ OR NO Cost Down</field>
+          <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_mass_line_buyer_submit" />
+          <field name="key">action</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_buyer" />
+          <field name="model">iac.rfq.mass.line.buyer</field>
+          <field name="key2">client_action_multi</field>
+      </record>
+
+      <!--设置内部菜单 CM 专用 -->
+
+      <record id="action_server_iac_rfq_mass_line_cm_set_state_C" model="ir.actions.server">
+          <field name="name">Set to (Init State)</field>
+          <field name="condition">True</field>
+          <field name="type">ir.actions.server</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_cm"></field>
+          <field name="state">code</field>
+          <field name="code">
+              if env.context.get('active_ids'):
+              model.browse(context['active_ids']).set_state_C()
+          </field>
+          <field name="usage">model</field>
+      </record>
+      <record model="ir.values" id="ir_values_iac_rfq_mass_line_cm_set_state_C">
+          <field name="name">Set to (Init State)</field>
+          <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_mass_line_cm_set_state_C" />
+          <field name="key">action</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_cm" />
+          <field name="model">iac.rfq.mass.line.cm</field>
+          <field name="key2">client_action_multi</field>
+      </record>
+
+
+      <record id="action_server_iac_rfq_mass_line_cm_set_state_N" model="ir.actions.server">
+          <field name="name">Set to (Need Not To Create RFQ)</field>
+          <field name="condition">True</field>
+          <field name="type">ir.actions.server</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_cm"></field>
+          <field name="state">code</field>
+          <field name="code">
+              if env.context.get('active_ids'):
+              model.browse(context['active_ids']).set_state_N()
+          </field>
+          <field name="usage">model</field>
+      </record>
+      <record model="ir.values" id="ir_values_iac_rfq_mass_line_cm_set_state_N">
+          <field name="name">Set to (Need Not To Create RFQ)</field>
+          <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_mass_line_cm_set_state_N" />
+          <field name="key">action</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_cm" />
+          <field name="model">iac.rfq.mass.line.cm</field>
+          <field name="key2">client_action_multi</field>
+      </record>
+
+
+      <record id="action_server_iac_rfq_mass_line_cm_submit" model="ir.actions.server">
+          <field name="name">Submit</field>
+          <field name="condition">True</field>
+          <field name="type">ir.actions.server</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_cm"></field>
+          <field name="state">code</field>
+          <field name="code">
+              if env.context.get('active_ids'):
+              model.browse(context['active_ids']).submit()
+          </field>
+          <field name="usage">model</field>
+      </record>
+      <record model="ir.values" id="ir_values_iac_rfq_mass_line_cm_submit">
+          <field name="name">Submit</field>
+          <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_mass_line_cm_submit" />
+          <field name="key">action</field>
+          <field name="model_id" ref="oscg_rfq.model_iac_rfq_mass_line_cm" />
+          <field name="model">iac.rfq.mass.line.cm</field>
+          <field name="key2">client_action_multi</field>
+      </record>
+
+      <!-- 设置菜单使用的action-->
+      <record model="ir.actions.act_window"  id="action_iac_rfq_mass_line_buyer_list">
+          <field name="name">Info record Buyer Mass Line</field>
+          <field name="res_model">iac.rfq.mass.line.buyer</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree</field>
+          <field name="domain" eval="[('state','in',['draft','processing'])]"/>
+          <field name="view_id" ref="view_iac_rfq_mass_line_buyer_list"/>
+      </record>
+
+
+      <record model="ir.actions.act_window"  id="action_iac_rfq_mass_line_cm_list">
+          <field name="name">Info record CM Mass Line</field>
+          <field name="res_model">iac.rfq.mass.line.cm</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree</field>
+          <field name="domain" eval="[('state','in',['draft','processing'])]"/>
+          <field name="view_id" ref="view_iac_rfq_mass_line_cm_list"/>
+      </record>
+
+      <!-- 跳转到视图view_iac_mass_header_buyer_form-->
+      <act_window name="Buyer Process RFQ" res_model="iac.rfq.mass.header.buyer" id="action_iac_rfq_mass_header_buyer_form" target="main" view_type="form"/>
+
+      <act_window name="CM Process RFQ" res_model="iac.rfq.mass.header.cm" id="action_iac_rfq_mass_header_cm_form" target="main" view_type="form"/>
+
+      <!--MASS RFQ 变量设置的菜单相关 -->
+      <act_window name="Info record Mass Parameters" res_model="iac.rfq.mass.variant" id="action_iac_rfq_mass_variant_list"/>
+      <act_window name="Buyer Filter Info record Mass" res_model="iac.rfq.mass.buyer.wizard" id="action_iac_rfq_mass_buyer_wizard" target="new" view_type="form" view_mode="form"/>
+      <act_window name="CM Filter Info record Mass" res_model="iac.rfq.mass.cm.wizard" id="action_iac_rfq_mass_cm_wizard" target="new" view_type="form" view_mode="form"/>
+
+      <act_window name="Info record Mass Job Log" res_model="iac.rfq.mass.job" id="action_iac_rfq_mass_job_list"/>
+
+
+
+
+  </data>
+</odoo>

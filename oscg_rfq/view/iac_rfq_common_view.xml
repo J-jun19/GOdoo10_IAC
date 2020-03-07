@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+      <!--rfq Quote-->
+      <record id="view_rfq_quote_list" model="ir.ui.view">
+          <field name="name">vendor.rfq</field>
+          <field name="type">tree</field>
+          <field name="model">iac.rfq</field>
+          <field name="arch" type="xml">
+              <tree create="false">
+                  <field name="state"/>
+                  <field name="name"/>
+                  <field name="plant_id"/>
+                  <field name="vendor_id"/>
+                  <field name="part_id"/>
+                  <field name="currency_id"/>
+                  <field name="input_price"/>
+                  <field name="valid_from"/>
+                  <field name="valid_to"/>
+                  <field name="price_control"/>
+                  <field name="vendor_part_no"/>
+                  <field name="lt"/>
+                  <field name="moq"/>
+                  <field name="mpq"/>
+                  <field name="rw"/>
+                  <field name="cw"/>
+                  <field name="tax"/>
+                  <field name="note" invisible="1"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="view_waimai_order_uplaod_wizard" model="ir.ui.view">
+          <field name="name">iac.document.upload</field>
+          <field name="model">iac.document.upload</field>
+          <field name="arch" type="xml">
+              <form string="Wizard tools">
+                  <group>
+                      <field name="file_name" invisible="0"/>
+                      <field name="res_model" invisible="1"/>
+                      <field name="file" filename="file_name"/>
+                  </group>
+                  <footer>
+                      <button name="action_confirm" string="Confirm" type="object"  class="oe_highlight"  />
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel" />
+                  </footer>
+              </form>
+          </field>
+      </record>
+
+
+      <record model="ir.actions.act_window"  id="action_rfq_all">
+          <field name="name">RFQ All</field>
+          <field name="res_model">iac.rfq</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form,tree</field>
+          <field name="domain" eval="['|',('state','=','rfq'),('state','=','open')]"/>
+          <field name="view_id" ref="view_rfq_quote_list"/>
+      </record>
+
+
+
+  </data>
+</odoo>

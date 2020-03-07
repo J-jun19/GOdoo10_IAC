@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--定义盘点数据导入预览的视图-->
+        <record id="iac_asn_form_view" model="ir.ui.view">
+            <field name="name">iac.asn.form.view</field>
+            <field name="model">iac.asn</field>
+            <field name="arch" type="xml">
+                <form string="ASN" edit="false" create="false">
+                <header>
+                </header>
+                <sheet>
+                    <group colspan="4">
+                        <field name="asn_no"/>
+                        <field name="plant_id"/>
+                        <field name="storage_location"/>
+                        <field name="vendor_id"/>
+                    </group>
+                    <group colspan="4">
+                        <field name="etd_date"/>
+                        <field name="airbill_no"/>
+                        <field name="housebill_no"/>
+                        <field name="customer_country"/>
+                        <field name="customer_currency"/>
+                    </group>
+                        <field name="line_ids">
+                            <tree string="asn line">
+                                <field name="asn_line_no" readonly="1"/>
+                                <field name="po_id" readonly="1" options="{'no_open': True}"/>
+                                <field name="part_id" readonly="1" options="{'no_open': True}"/>
+                                <field name="part_desc" readonly="1"/>
+                                <field name="max_qty" readonly="1"/>
+                                <field name="asn_qty" readonly="1"/>
+                                <field name="packing_note"/>
+                                <field name="gross_weight" />
+                                <field name="amount" />
+                                <field name="invoice_no" />
+                                <field name="origin_country" options="{'no_create': True, 'no_edit': True,'no_create': True}"/>
+                            </tree>
+                        </field>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <record id="view_iac_asn_view_list" model="ir.ui.view">
+            <field name="name">iac.asn</field>
+            <field name="type">tree</field>
+            <field name="model">iac.asn</field>
+            <field name="arch" type="xml">
+                <tree create="false">
+                    <field name="state"/>
+                    <field name="asn_no"/>
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="etd_date" />
+                    <field name="eta_date"  />
+                </tree>
+            </field>
+        </record>
+
+
+
+
+        <!--定义动作从导入视图到预览视图的动作,从批量导入盘点数据文件视图跳转到批量导入盘点数据数据预览视图-->
+        <record id="view_po_line_list" model="ir.ui.view">
+            <field name="name">ASN PO Line</field>
+            <field name="type">tree</field>
+            <field name="model">iac.purchase.order.line.asn</field>
+            <field name="arch" type="xml">
+                <tree string="PO" create="false" editable="top" edit="true">
+                    <field name="new_asn_qty" string="Ship Qty"/>
+                    <field name="document_erp_id" string="PO#" readonly="1"/>
+                    <field name="slocation_id" string="storage location" readonly="1"/>
+                    <field name="order_line_code" string="Line#"  readonly="1"/>
+                    <field name="vendor_id"  readonly="1" options="{'no_open': True}"/>
+                    <field name="part_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="order_date" readonly="1" />
+
+                    <field name="vendor_part_no" readonly="1"/>
+                    <field name="quantity" string="Qty Ordered" readonly="1"/>
+                    <field name="open_qty" string="Open Qty" readonly="1" />
+                    <field name="asn_qty" string="Qty Shipped" readonly="1"/>
+                    <field name="price" string="Unit Price" readonly="1"/>
+                    <field name="asn_max_qty" string="Qty Allowed" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_po_line_search" model="ir.ui.view">
+            <field name="name">iac.purchase.order.line.asn.search</field>
+            <field name="model">iac.purchase.order.line.asn</field>
+            <field name="arch" type="xml">
+                <search string="pm_events">
+                    <field name="order_id" filter_domain="[('order_id','ilike',self)]" string="PO No"/>
+                    <field name="part_id" filter_domain="[('part_id','ilike',self)]" string="Part No"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Vendor" domain="" context="{'group_by':'vendor_id'}"/>
+                        <filter string="Plant" domain="" context="{'group_by':'plant_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+
+        <record id="view_iac_asn_wizard" model="ir.ui.view">
+            <field name="name">iac.asn.wizard</field>
+            <field name="model">iac.asn.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Wizard view">
+                    <group>
+                        <field name="vendor_id" invisible="0" options="{'no_create': True}"/>
+                        <field name="po_lst" invisible="0"/>
+                        <field name="part_lst" invisible="0"/>
+                        <field name="date_from" invisible="0"/>
+                        <field name="date_to" invisible="0"/>
+                    </group>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_iac_asn_vendor" model="ir.actions.act_window">
+            <field name="name">ASN list</field>
+            <field name="res_model">iac.asn</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+        </record>
+
+
+
+
+        <!--asn import-->
+        <record model="ir.actions.act_window"  id="action_iac_asn_import">
+            <field name="name">ASN Import</field>
+            <field name="res_model">iac.document.upload</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context" eval="{'default_res_model': 'iac.asn','default_code':'5'}"/>
+        </record>
+
+
+        <record id="action_server_iac_asn_all" model="ir.actions.server">
+            <field name="name">Send To SAP</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_asn"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.send_to_sap()
+            </field>
+        </record>
+
+
+
+        <record id="ir_value_iac_asn_all" model="ir.values">
+            <field name="name">Send To SAP</field>
+            <field name="model_id" ref="model_iac_asn"/>
+            <field name="model">iac.asn</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%action_server_iac_asn_all" name="value"/>
+        </record>
+
+    </data>
+</odoo>

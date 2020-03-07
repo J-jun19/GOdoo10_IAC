@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+        <data>
+            <!--厂商批量上传创建核放单-->
+
+            <record id="view_iac_vendor_create_check_list_wizard" model="ir.ui.view">
+              <field name="name">Vendor Create Check List</field>
+              <field name="model">iac.vendor.create.check.list</field>
+              <field name="arch" type="xml">
+              <form string="Wizard tools">
+                  <group>
+                      <field name="file_name" invisible="0" />
+                      <field name="file" filename="file_name" />
+
+
+                  </group>
+
+                  <group>
+                      <p><b>Reference：</b><a href="dms/file/download/140954">国别_币别_选项参考.xls</a></p>
+                  </group>
+                  <group>
+                      <p><b>Notice：</b>请按照模板准备文件，国别、币别等栏位填入类似101代号，不要输入中英文</p>
+                  </group>
+
+                  <footer>
+                      <button name="vendor_create_checklist" string="Confirm" type="object"  class="oe_highlight"  />
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel" />
+                      or
+                      <!--<button string="Cancel" class="oe_link" special="cancel" />-->
+                      <button name="action_download_check_file" string="Download Template" type="object"  class="oe_highlight"  />
+                  </footer>
+              </form>
+              </field>
+            </record>
+
+            <record model="ir.actions.act_window" id="action_vendor_upload_check_list">
+                <field name="name">批量上传建立核放单</field>
+                <field name="res_model">iac.vendor.create.check.list</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">form</field>
+                <field name="view_id" ref="view_iac_vendor_create_check_list_wizard"/>
+                <field name="target">new</field>
+            </record>
+
+
+    <!--==========================================================================================================    -->
+          <!--入库单buyer & LG单笔和多笔送签-->
+          <!--<record id="action_server_iac_buyer_approve_godown_entry" model="ir.actions.server">-->
+            <!--<field name="name">送签</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_customs_sas_header"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.button_to_approve()-->
+            <!--</field>-->
+          <!--</record>-->
+
+          <!--<record id="action_value_buyer_approve_entry" model="ir.values">-->
+            <!--<field name="name">送签</field>-->
+            <!--<field name="model_id" ref="model_iac_customs_sas_header"/>-->
+            <!--<field name="model">iac.customs.sas.header</field>-->
+            <!--<field name="key2">client_action_multi</field> &lt;!&ndash;菜单出现的位置&ndash;&gt;-->
+            <!--<field eval="'ir.actions.server,%d'%action_server_iac_buyer_approve_godown_entry" name="value"/>-->
+          <!--</record>-->
+
+            <!--&lt;!&ndash;入库单buyer & LG单笔和多笔退件&ndash;&gt;-->
+          <!--<record id="action_server_iac_buyer_reject_godown_entry" model="ir.actions.server">-->
+            <!--<field name="name">退件</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_customs_sas_header"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.button_to_reject()-->
+            <!--</field>-->
+          <!--</record>-->
+
+          <!--<record id="action_value_iac_buyer_reject_entry" model="ir.values">-->
+            <!--<field name="name">退件</field>-->
+            <!--<field name="model_id" ref="model_iac_customs_sas_header"/>-->
+            <!--<field name="model">iac.customs.sas.header</field>-->
+            <!--<field name="key2">client_action_multi</field> &lt;!&ndash;菜单出现的位置&ndash;&gt;-->
+            <!--<field eval="'ir.actions.server,%d'%action_server_iac_buyer_reject_godown_entry" name="value"/>-->
+          <!--</record>-->
+
+   <!--========================================================================================================-->
+
+            <!--关务审核核放单-->
+            <record id="view_lg_approve_checklist_tree" model="ir.ui.view">
+                <field name="name">Lg approve Checklist</field>
+                <field name="type">tree</field>
+                <field name="model">iac.customs.pass.port.header</field>
+                <field name="arch" type="xml">
+                  <tree create="false" delete="false" edit="false">
+                      <field name="id"/>
+                      <field name="state"/>
+                      <field name="pass_port_no"/>
+                      <field name="pass_port_typecd"/>
+                      <field name="sas_pass_port_preent_no"/>
+                      <field name="io_typecd"/>
+                      <field name="bind_typecd"/>
+                      <field name="rlt_no" string="对应的出入库单编号"/>
+                      <field name="vehicle_no" />
+                      <field name="vehicle_ic_no" />
+                      <field name="vehicle_wt"/>
+                      <field name="vehicle_frame_wt"/>
+                      <field name="total_wt"/>
+                      <field name="total_gross_wt"/>
+                      <field name="total_net_wt"/>
+                      <field name="create_date"/>
+                      <field name="rmk"/>
+                      <!--<field name="create_date"/>-->
+                      <!--<field name="usetocod"/>-->
+                  </tree>
+              </field>
+          </record>
+
+          <record model="ir.actions.act_window" id="action_lg_approve_checklist">
+                <field name="name">关务审核核放单</field>
+                <field name="res_model">iac.customs.pass.port.header</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <!--<field name="target">main</field>-->
+                <field name="view_id" ref="view_lg_approve_checklist_tree"/>
+                <field name="domain">[('state','in',['wait_lg_approve','interface_submit_fail'])]</field>
+          </record>
+
+          <record id="view_lg_approve_checklist_form" model="ir.ui.view">
+              <field name="name">Lg approve Checklist</field>
+              <field name="type">form</field>
+              <field name="model">iac.customs.pass.port.header</field>
+              <field name="arch" type="xml">
+                  <form string="Lg approve Checklist" create="false" edit="false">
+                      <header>
+                          <!--<button String="送签" states="pending,to_approve" type="object" class="oe_highlight" name="button_to_approve_one" />-->
+                          <!--<button String="编辑订单行" states="pending,to_approve,unapproved" type="object" class="oe_highlight" name="button_to_edit_po_line" />-->
+                          <!--<button String="Call SAP" states="to sap" type="object" class="oe_highlight" name="button_to_sap" context="{'vendor_id':True}" />-->
+                          <!--<field name="state" widget="statusbar" statusbar_visible="pending,to approve,done" readonly="1"/>-->
+                          <field name="state" widget="statusbar" statusbar_visible="wait_lg_approve,lg_reject,interface_submit_success,interface_submit_fail,to_cancel,cancel,done"/>
+                      </header>
+                      <sheet>
+                          <group string="核放单表头">
+                              <group>
+                                  <field name="plant_id" readonly="1"/>
+                                  <field name="vendor_id" readonly="1" options="{'no_create': True,'no_open': True}"/>
+                                  <field name="pass_port_no" readonly="1"/>
+                                  <field name="pass_port_typecd" readonly="1"/>
+                                  <field name="sas_pass_port_preent_no" readonly="1"/>
+                                  <field name="io_typecd" readonly="1"/>
+                                  <field name="bind_typecd" readonly="1"/>
+
+                                  <field name="vehicle_no" readonly="1"/>
+                                  <field name="rmk" readonly="1"/>
+                                  <!--<field name="manually_po_reason_type" readonly="1"/>-->
+                                  <!--<field name="slocation_id" options="{'no_create': True,'no_open': True}" readonly="1"/>-->
+                              </group>
+                              <group>
+                                  <field name="rlt_no" string="对应的出入库单编号"/>
+                                  <field name="vehicle_ic_no" readonly="1"/>
+                                  <field name="vehicle_wt" readonly="1"/>
+                                  <!--<field name="net_wt"/>-->
+                                  <!--<field name="new_incoterm"/>-->
+                                  <!--<field name="new_incoterm1"/>-->
+
+                                  <field name="vehicle_frame_wt" readonly="1"/>
+                                  <field name="total_gross_wt" readonly="1"/>
+                                  <field name="total_wt" readonly="1"/>
+                                  <field name="total_net_wt" readonly="1"/>
+                                  <field name="create_date" readonly="1"/>
+                              </group>
+                          </group >
+                          <notebook options="{'no_create': True,'no_open': True}" readonly="1">
+                              <page string="核放单对应的出入库单Header" options="{'no_create': True,'no_open': True}" readonly="1">
+                                  <field name="sas_header_ids">
+                                      <tree string="Lg approve Checklist" delete="false" create="false" edit="false">
+                                          <field name="state"/>
+                                          <field name="pass_port_no"/>
+                                          <field name="sas_stock_no" string="对应的出入库单编号"/>
+                                          <field name="sas_dcl_no"/>
+                                          <field name="stock_typecd"/>
+                                          <field name="business_typecd"/>
+                                          <field name="centralized_dcl_typecd" />
+                                          <field name="package_qty" />
+                                          <field name="gross_wt"/>
+                                          <field name="net_wt" />
+                                          <field name="owner_system"/>
+                                          <field name="vendor_id"/>
+                                          <field name="plant_id"/>
+                                          <field name="create_date"/>
+                                          <field name="usetocod" />
+                                          <!--<field name="gds_nm" />-->
+                                          <!--<field name="gds_spcf_model_desc" />-->
+                                          <!--<field name="dcl_unitcd"/>-->
+                                          <!--<field name="lawf_unitcd"/>-->
+                                          <!--<field name="secd_lawf_unitcd"/>-->
+                                          <!--<field name="natcd"/>-->
+                                          <!--<field name="destination_natcd"/>-->
+                                          <!--<field name="dcl_uprc_amt"/>-->
+                                          <!--<field name="dcl_total_amt"/>-->
+                                          <!--<field name="dcl_currcd"/>-->
+                                          <!--<field name="lawf_qty"/>-->
+                                          <!--<field name="dcl_qty"/>-->
+                                          <!--<field name="lvyrlf_modecd"/>-->
+                                          <!--<field name="open_asn_qty"/>-->
+                                          <!--<field name="usetocod"/>-->
+                                      </tree>
+                                      <!--</field>-->
+                                  </field>
+                              </page>
+                          </notebook>
+                      </sheet>
+                  </form>
+              </field>
+            </record>
+
+
+            <!--核放单关务单笔和多笔送件-->
+            <record id="action_server_iac_lg_approve_checklist" model="ir.actions.server">
+                <field name="name">送签</field>
+                <field name="type">ir.actions.server</field>
+                <field name="model_id" ref="model_iac_customs_pass_port_header"/>
+                <field name="state">code</field>
+                <field name="code">
+                    if records:
+                        action = records.button_to_customs()
+                </field>
+            </record>
+
+            <record id="action_value_lg_approve_checklist" model="ir.values">
+                <field name="name">送签</field>
+                <field name="model_id" ref="model_iac_customs_pass_port_header"/>
+                <field name="model">iac.customs.pass.port.header</field>
+                <field name="key2">client_action_multi</field> <!--菜单出现的位置-->
+                <field eval="'ir.actions.server,%d'%action_server_iac_lg_approve_checklist" name="value"/>
+            </record>
+
+            <!--核放单关务单笔和多笔退件到vendor-->
+            <record id="action_server_iac_lg_reject_passport_vendor" model="ir.actions.server">
+                <field name="name">退件</field>
+                <field name="type">ir.actions.server</field>
+                <field name="model_id" ref="model_iac_customs_pass_port_header"/>
+                <field name="state">code</field>
+                <field name="code">
+                    if records:
+                        action = records.button_reject_passport()
+                </field>
+            </record>
+
+            <record id="action_value_lg_reject_submit_customs" model="ir.values">
+                <field name="name">退件</field>
+                <field name="model_id" ref="model_iac_customs_pass_port_header"/>
+                <field name="model">iac.customs.pass.port.header</field>
+                <field name="key2">client_action_multi</field> <!--菜单出现的位置-->
+                <field eval="'ir.actions.server,%d'%action_server_iac_lg_reject_passport_vendor" name="value"/>
+            </record>
+
+            <!--核放单关务单笔和多笔重送海关系统-->
+            <record id="action_server_iac_lg_again_approve_checklist" model="ir.actions.server">
+                <field name="name">重送海关系统</field>
+                <field name="type">ir.actions.server</field>
+                <field name="model_id" ref="model_iac_customs_pass_port_header"/>
+                <field name="state">code</field>
+                <field name="code">
+                    if records:
+                        action = records.button_to_customs_again()
+                </field>
+            </record>
+
+            <record id="action_value_lg_pull_check_list_again" model="ir.values">
+                <field name="name">重送海关系统</field>
+                <field name="model_id" ref="model_iac_customs_pass_port_header"/>
+                <field name="model">iac.customs.pass.port.header</field>
+                <field name="key2">client_action_multi</field> <!--菜单出现的位置-->
+                <field eval="'ir.actions.server,%d'%action_server_iac_lg_again_approve_checklist" name="value"/>
+            </record>
+
+        </data>
+    </odoo>

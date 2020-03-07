@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <!-- RFQ Create-->
+
+      <record id="view_iac_rfq_create_list" model="ir.ui.view">
+          <field name="name">RFQ Create</field>
+          <field name="type">tree</field>
+          <field name="model">iac.rfq.create</field>
+          <field name="arch" type="xml">
+              <tree >
+                  <field name="state"/>
+
+                  <field name="name" string="Info record#"/>
+                  <field name="plant_id"/>
+                  <field name="vendor_id"/>
+                  <field name="part_id"/>
+                  <field name="currency_id"/>
+                  <field name="valid_from" />
+                  <field name="valid_to" />
+                  <field name="input_price" />
+                  <field name="lt"/>
+                  <field name="moq"/>
+                  <field name="mpq"/>
+                  <field name="rw"/>
+                  <field name="cw"/>
+                  <field name="tax"/>
+                  <field name="reason_code"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="view_iac_rfq_create_form" model="ir.ui.view">
+          <field name="name">rfq.form</field>
+          <field name="type">form</field>
+          <field name="model">iac.rfq.create</field>
+          <field name="arch" type="xml">
+              <form string="IAC RFQ" create="false" edit="false">
+                  <header>
+
+                      <button String="Submit" states="draft" type="object" class="oe_highlight"  name="buttonSubmit"/>
+
+                      <button String="Reset" states="wf_fail,sap_fail" type="object" class="oe_highlight" name="action_restate_rfq"/>
+                      <!--<button String="Delete" states="replay,draft" type="object" class="oe_highlight" name="action_cancel" />-->
+                      <field name="state" widget="statusbar" statusbar_visible="draft,rfq,cancel" readonly="1"/>
+                  </header>
+                  <sheet>
+                      <group>
+                          <group>
+                              <field name="name" readonly="1" string="Info record#"/>
+                              <field name="plant_id" options="{'no_create': True, 'no_edit': True,'no_create': True,'on_change': 'onchange_plant_id'}" required="1"/>
+                              <field name="vendor_id" options="{'no_create': True, 'no_edit': True,'no_create': True,'on_change': 'onchange_vendor_id_part_id'}" domain="[('plant', '=', plant_id)]" required="1"/>
+                              <field name="part_id" options="{'no_create': True, 'no_edit': True,'no_create': True,'on_change': 'onchange_vendor_id_part_id'}"  domain="[('plant_id', '=', plant_id),('part_type','=','ZROH')]" required="1"/>
+                              <field name="buyer_code" options="{'no_create': True, 'no_edit': True,'no_create': True}" required="1"/>
+                              <field name="division_id" options="{'no_create': True, 'no_edit': True,'no_create': True}"/>
+                          </group>
+                          <group>
+                              <field name="currency_id" options="{'no_create': True, 'no_edit': True,'no_create': True,'on_change': 'onchange_vendor_id_part_id'}" required="1"/>
+                              <field name="price_control" required="1"/>
+                              <field name="vendor_part_no" />
+                              <field name="reason_code" required="1"/>
+                              <field name="note"/>
+                          </group>
+                          <group>
+                              <field name="input_price" required="1"/>
+                              <field name="cost_up_reason_id"/>
+                              <field name="lt" required="1"/>
+                              <field name="moq" required="1"/>
+                              <field name="mpq" required="1"/>
+                              <field name="rw" required="1"/>
+                              <field name="cw" required="1"/>
+                              <field name="tax" required="1"/>
+                              <field name="valid_from" required="1"/>
+                              <field name="valid_to" required="1"/>
+                          </group>
+                          <group>
+                              <field name="last_rfq_id" invisible="1"/>
+                              <field name="orig_price"/>
+                              <field name="orig_lt"/>
+                              <field name="orig_moq"/>
+                              <field name="orig_mpq"/>
+                              <field name="orig_rw"/>
+                              <field name="orig_cw"/>
+                              <field name="orig_tax"/>
+                              <field name="orig_valid_from"/>
+                              <field name="orig_valid_to"/>
+                          </group>
+                      </group>
+                  </sheet>
+                  <!--
+                  <div class="oe_chatter">
+                      <field name="message_follower_ids" widget="mail_followers"/>
+                      <field name="message_ids" widget="mail_thread"/>
+                  </div>
+                  -->
+              </form>
+          </field>
+      </record>
+
+      <!--RFQ Create Action -->
+      <record model="ir.actions.act_window"  id="action_iac_rfq_create">
+          <field name="name">Create Info record</field>
+          <field name="res_model">iac.rfq.create</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form,tree</field>
+          <field name="domain">[('type','=','rfq'),('state','in',['draft','cancel'])]</field>
+          <field name="view_id" ref="view_iac_rfq_create_list"/>
+      </record>
+
+      <!--页面原本的delete按钮换成action下拉的按钮方式-->
+      <record id="action_server_iac_rfq_create_del" model="ir.actions.server">
+            <field name="name">No Action Required</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_create"></field>
+            <field name="state">code</field>
+            <field name="code">
+                if env.context.get('active_ids'):
+                model.browse(context['active_ids']).action_cancel()
+            </field>
+            <field name="usage">model</field>
+        </record>
+
+
+        <record model="ir.values" id="ir_values_iac_rfq_create_rfq_delete">
+            <field name="name">No Action Required</field>
+            <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_create_del" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_quote_as" />
+            <field name="model">iac.rfq.create</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+
+
+  </data>
+</odoo>

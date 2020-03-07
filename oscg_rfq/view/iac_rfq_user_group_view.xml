@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+      <record id="view_iac_rfq_user_group_form" model="ir.ui.view">
+          <field name="name">Info record User Group</field>
+          <field name="model">iac.rfq.user.group</field>
+          <field name="arch" type="xml">
+              <form string="Wizard tools">
+                  <group>
+                      <field name="plant_id" />
+                      <field name="user_id" />
+                  </group>
+                  <group>
+                      <field name="group_id" />
+                      <field name="division_id" />
+                  </group>
+                  <group colspan="4">
+                      <field name="memo" />
+                  </group>
+
+              </form>
+          </field>
+      </record>
+
+      <record id="view_iac_rfq_user_group_list" model="ir.ui.view">
+          <field name="name">Info record User Group</field>
+          <field name="type">tree</field>
+          <field name="model">iac.rfq.user.group</field>
+          <field name="arch" type="xml">
+              <tree >
+                  <field name="plant_id"/>
+                  <field name="user_id"/>
+                  <field name="group_id"/>
+                  <field name="division_id"/>
+                  <field name="memo"/>
+              </tree>
+          </field>
+      </record>
+
+      <record model="ir.actions.act_window"  id="action_iac_rfq_user_group_list">
+          <field name="name">Info record User Group</field>
+          <field name="res_model">iac.rfq.user.group</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form,tree</field>
+
+          <field name="view_id" ref="view_iac_rfq_user_group_list"/>
+      </record>
+
+
+
+  </data>
+</odoo>

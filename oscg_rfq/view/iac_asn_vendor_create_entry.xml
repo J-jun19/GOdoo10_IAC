@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+        <data>
+            <!--厂商批量上传创建入库单-->
+
+            <record id="view_iac_vendor_create_entry_wizard" model="ir.ui.view">
+              <field name="name">Vendor Create Godown Entry</field>
+              <field name="model">iac.vendor.create.godown.entry</field>
+              <field name="arch" type="xml">
+              <form string="Wizard tools">
+                  <group>
+                      <field name="file_name" invisible="0" />
+                      <field name="file" filename="file_name" />
+
+
+                  </group>
+
+                  <group>
+                      <p><b>Reference：</b><a href="dms/file/download/140954">国别_币别_选项参考.xls</a></p>
+                  </group>
+                  <group>
+                      <p><b>Notice：</b>请按照模板准备文件，国别、币别等栏位填入类似101代号，不要输入中英文</p>
+                  </group>
+
+                  <footer>
+                      <button name="vendor_create_entry" string="Confirm" type="object"  class="oe_highlight"  />
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel" />
+                      or
+                      <!--<button string="Cancel" class="oe_link" special="cancel" />-->
+                      <button name="action_download_entry_file" string="Download Template" type="object"  class="oe_highlight"  />
+                  </footer>
+              </form>
+              </field>
+            </record>
+
+            <record model="ir.actions.act_window" id="action_vendor_upload_godown_entry">
+                <field name="name">批量上传建立入库单</field>
+                <field name="res_model">iac.vendor.create.godown.entry</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">form</field>
+                <field name="view_id" ref="view_iac_vendor_create_entry_wizard"/>
+                <field name="target">new</field>
+            </record>
+
+    <!--=======================================================================================================        -->
+            <!--buyer审核入库单-->
+            <record id="view_buy_approve_godown_entry_tree" model="ir.ui.view">
+                <field name="name">Buy approve Godown Entry</field>
+                <field name="type">tree</field>
+                <field name="model">iac.customs.sas.header</field>
+                <field name="arch" type="xml">
+                  <tree create="false" delete="false" edit="false">
+                      <field name="id"/>
+                      <field name="state"/>
+                      <field name="sas_stock_no" string="入库单编号"/>
+                      <field name="sas_dcl_no"/>
+                      <field name="sas_stock_preent_no"/>
+                      <field name="stock_typecd"/>
+                      <field name="business_typecd"/>
+                      <field name="centralized_dcl_typecd" />
+                      <field name="package_qty" />
+                      <field name="gross_wt" />
+                      <field name="net_wt"/>
+                      <field name="pack_type"/>
+                      <field name="owner_system"/>
+                      <field name="has_open_asn"/>
+                      <field name="vendor_id"/>
+                      <field name="plant_id"/>
+                      <field name="create_date"/>
+                      <field name="usetocod"/>
+                  </tree>
+              </field>
+          </record>
+
+
+            <record model="ir.actions.act_window" id="action_buyer_approve_godown_entry">
+                <field name="name">采购审核入库单</field>
+                <field name="res_model">iac.customs.sas.header</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <!--<field name="target">main</field>-->
+                <field name="view_id" ref="view_buy_approve_godown_entry_tree"/>
+                <field name="domain">[('stock_typecd','=','I'),('sas_stock_line_ids.state','=','wait_mm_approve')]</field>
+                <!--<field name="domain">[('stock_typecd','=','I')]</field>-->
+                <!--<field name="domain">[('stock_typecd','=','I'),('buyer_code_ids.dele_flag','=','0')]</field>-->
+            </record>
+
+          <record id="view_buy_approve_godown_entry_form" model="ir.ui.view">
+              <field name="name">Buy approve Godown Entry</field>
+              <field name="type">form</field>
+              <field name="model">iac.customs.sas.header</field>
+              <field name="arch" type="xml">
+                  <form string="Buy approve Godown Entry" create="false" edit="false">
+                      <header>
+                          <!--<button String="送签" states="pending,to_approve" type="object" class="oe_highlight" name="button_to_approve_one" />-->
+                          <!--<button String="编辑订单行" states="pending,to_approve,unapproved" type="object" class="oe_highlight" name="button_to_edit_po_line" />-->
+                          <!--<button String="Call SAP" states="to sap" type="object" class="oe_highlight" name="button_to_sap" context="{'vendor_id':True}" />-->
+                          <!--<field name="state" widget="statusbar" statusbar_visible="pending,to approve,done" readonly="1"/>-->
+                          <field name="state" widget="statusbar" statusbar_visible="wait_mm_approve,wait_lg_approve,mm_reject,lg_reject,interface_submit_success,interface_submit_fail,to_cancel,cancel,done"/>
+                      </header>
+                      <sheet>
+                          <group string="入库单表头">
+                              <group>
+                                  <field name="plant_id" readonly="1"/>
+                                  <field name="vendor_id" readonly="1" options="{'no_create': True,'no_open': True}"/>
+                                  <field name="sas_stock_no" string="入库单编号" readonly="1"/>
+                                  <field name="sas_dcl_no" readonly="1"/>
+                                  <field name="sas_stock_preent_no" readonly="1"/>
+                                  <field name="stock_typecd" readonly="1"/>
+                                  <field name="business_typecd" readonly="1"/>
+
+                                  <field name="centralized_dcl_typecd" readonly="1"/>
+                                  <field name="usetocod" style="color:Red;" readonly="1"/>
+                                  <!--<field name="manually_po_reason_type" readonly="1"/>-->
+                                  <!--<field name="slocation_id" options="{'no_create': True,'no_open': True}" readonly="1"/>-->
+                              </group>
+                              <group>
+                                  <field name="has_open_asn" readonly="1"/>
+                                  <field name="package_qty" readonly="1"/>
+                                  <field name="gross_wt" readonly="1"/>
+                                  <!--<field name="net_wt"/>-->
+                                  <!--<field name="new_incoterm"/>-->
+                                  <!--<field name="new_incoterm1"/>-->
+
+                                  <field name="net_wt" readonly="1"/>
+                                  <field name="owner_system" readonly="1"/>
+                                  <field name="pack_type" readonly="1"/>
+                                  <field name="create_date" readonly="1"/>
+                                  <!--<field name="order_reason" readonly="1"/>-->
+                              </group>
+                          </group >
+                          <notebook options="{'no_create': True,'no_open': True}" readonly="1">
+                              <page string="入库单明细" options="{'no_create': True,'no_open': True}" readonly="1">
+                                  <field name="sas_stock_line_ids">
+                                      <tree string="Buy approve Godown Entry" delete="false" create="false" edit="false">
+                                          <field name="sas_stock_no" string="入库单编号"/>
+                                          <field name="sas_stock_seqno"/>
+                                          <field name="sas_dcl_seqno"/>
+                                          <field name="gds_mtno" />
+                                          <field name="gdecd" />
+                                          <field name="gds_nm" />
+                                          <field name="gds_spcf_model_desc"/>
+                                          <field name="dcl_unitcd"/>
+                                          <field name="dcl_unit_id" string="申报单位名称"/>
+                                          <field name="lawf_unitcd"/>
+                                          <field name="lawf_unit_id" string="法1单位名称"/>
+                                          <field name="secd_lawf_unitcd"/>
+                                          <field name="secd_lawf_unit_id" string="法2单位名称"/>
+                                          <field name="natcd"/>
+                                          <field name="destination_natcd"/>
+                                          <field name="dcl_uprc_amt"/>
+                                          <field name="dcl_total_amt"/>
+                                          <field name="dcl_currcd"/>
+                                          <field name="lawf_qty"/>
+                                          <field name="secd_lawf_qty"/>
+                                          <field name="dcl_qty"/>
+                                          <field name="lvyrlf_modecd"/>
+                                          <field name="open_asn_qty"/>
+                                          <field name="usetocod"/>
+                                      </tree>
+                                  </field>
+                              </page>
+                          </notebook>
+                      </sheet>
+                  </form>
+              </field>
+          </record>
+
+    <!--=====================================================================================================        -->
+          <!--入库单buyer & LG单笔和多笔送签-->
+          <record id="action_server_iac_buyer_approve_godown_entry" model="ir.actions.server">
+            <field name="name">送签</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_customs_sas_header"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.button_to_approve()
+            </field>
+          </record>
+
+          <record id="action_value_buyer_approve_entry" model="ir.values">
+            <field name="name">送签</field>
+            <field name="model_id" ref="model_iac_customs_sas_header"/>
+            <field name="model">iac.customs.sas.header</field>
+            <field name="key2">client_action_multi</field> <!--菜单出现的位置-->
+            <field eval="'ir.actions.server,%d'%action_server_iac_buyer_approve_godown_entry" name="value"/>
+          </record>
+
+            <!--入库单buyer & LG单笔和多笔退件-->
+          <record id="action_server_iac_buyer_reject_godown_entry" model="ir.actions.server">
+            <field name="name">退件</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_customs_sas_header"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.button_to_reject()
+            </field>
+          </record>
+
+          <record id="action_value_iac_buyer_reject_entry" model="ir.values">
+            <field name="name">退件</field>
+            <field name="model_id" ref="model_iac_customs_sas_header"/>
+            <field name="model">iac.customs.sas.header</field>
+            <field name="key2">client_action_multi</field> <!--菜单出现的位置-->
+            <field eval="'ir.actions.server,%d'%action_server_iac_buyer_reject_godown_entry" name="value"/>
+          </record>
+
+   <!--========================================================================================================-->
+
+            <!--关务审核入库单-->
+            <record id="view_lg_approve_godown_entry_tree" model="ir.ui.view">
+                <field name="name">Lg approve Godown Entry</field>
+                <field name="type">tree</field>
+                <field name="model">iac.customs.sas.header</field>
+                <field name="arch" type="xml">
+                  <tree create="false" delete="false" edit="false">
+                      <field name="id"/>
+                      <field name="state"/>
+                      <field name="sas_stock_no" string="入库单编号"/>
+                      <field name="sas_dcl_no"/>
+                      <field name="sas_stock_preent_no"/>
+                      <field name="stock_typecd"/>
+                      <field name="business_typecd"/>
+                      <field name="centralized_dcl_typecd" />
+                      <field name="package_qty" />
+                      <field name="gross_wt" />
+                      <field name="net_wt"/>
+                      <field name="pack_type"/>
+                      <field name="owner_system"/>
+                      <field name="has_open_asn"/>
+                      <field name="vendor_id"/>
+                      <field name="plant_id"/>
+                      <field name="create_date"/>
+                      <field name="usetocod"/>
+                  </tree>
+              </field>
+          </record>
+
+          <record model="ir.actions.act_window" id="action_lg_approve_godown_entry">
+                <field name="name">关务审核入库单</field>
+                <field name="res_model">iac.customs.sas.header</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <!--<field name="target">main</field>-->
+                <field name="view_id" ref="view_lg_approve_godown_entry_tree"/>
+                <field name="domain">[('stock_typecd','=','I'),('state','in',['wait_lg_approve','interface_submit_fail'])]</field>
+          </record>
+
+          <record id="view_lg_approve_godown_entry_form" model="ir.ui.view">
+              <field name="name">Lg approve Godown Entry</field>
+              <field name="type">form</field>
+              <field name="model">iac.customs.sas.header</field>
+              <field name="arch" type="xml">
+                  <form string="Lg approve Godown Entry" create="false" edit="false">
+                      <header>
+                          <!--<button String="送签" states="pending,to_approve" type="object" class="oe_highlight" name="button_to_approve_one" />-->
+                          <!--<button String="编辑订单行" states="pending,to_approve,unapproved" type="object" class="oe_highlight" name="button_to_edit_po_line" />-->
+                          <!--<button String="Call SAP" states="to sap" type="object" class="oe_highlight" name="button_to_sap" context="{'vendor_id':True}" />-->
+                          <!--<field name="state" widget="statusbar" statusbar_visible="pending,to approve,done" readonly="1"/>-->
+                          <field name="state" widget="statusbar" statusbar_visible="wait_mm_approve,wait_lg_approve,mm_reject,lg_reject,interface_submit_success,interface_submit_fail,cancel,done"/>
+                      </header>
+                      <sheet>
+                          <group string="入库单表头">
+                              <group>
+                                  <field name="plant_id" readonly="1"/>
+                                  <field name="vendor_id" readonly="1" options="{'no_create': True,'no_open': True}"/>
+                                  <field name="sas_stock_no" string="入库单编号" readonly="1"/>
+                                  <field name="sas_dcl_no" readonly="1"/>
+                                  <field name="sas_stock_preent_no" readonly="1"/>
+                                  <field name="stock_typecd" readonly="1"/>
+                                  <field name="business_typecd" readonly="1"/>
+
+                                  <field name="centralized_dcl_typecd" readonly="1"/>
+                                  <field name="usetocod" style="color:Red;" readonly="1"/>
+                                  <!--<field name="manually_po_reason_type" readonly="1"/>-->
+                                  <!--<field name="slocation_id" options="{'no_create': True,'no_open': True}" readonly="1"/>-->
+                              </group>
+                              <group>
+                                  <field name="has_open_asn" readonly="1"/>
+                                  <field name="package_qty" readonly="1"/>
+                                  <field name="gross_wt" readonly="1"/>
+                                  <!--<field name="net_wt"/>-->
+                                  <!--<field name="new_incoterm"/>-->
+                                  <!--<field name="new_incoterm1"/>-->
+
+                                  <field name="net_wt" readonly="1"/>
+                                  <field name="owner_system" readonly="1"/>
+                                  <field name="pack_type" readonly="1"/>
+                                  <field name="create_date" readonly="1"/>
+                                  <!--<field name="order_reason" readonly="1"/>-->
+                              </group>
+                          </group >
+                          <notebook options="{'no_create': True,'no_open': True}" readonly="1">
+                              <page string="入库单明细" options="{'no_create': True,'no_open': True}" readonly="1">
+                                  <field name="sas_stock_line_ids">
+                                      <tree string="Buy approve Godown Entry" delete="false" create="false" edit="false">
+                                          <field name="sas_stock_no" string="入库单编号"/>
+                                          <field name="sas_stock_seqno"/>
+                                          <field name="sas_dcl_seqno"/>
+                                          <field name="gds_mtno" />
+                                          <field name="gdecd" />
+                                          <field name="gds_nm" />
+                                          <field name="gds_spcf_model_desc" />
+                                          <field name="dcl_unitcd"/>
+                                          <field name="dcl_unit_id" string="申报单位名称"/>
+                                          <field name="lawf_unitcd"/>
+                                          <field name="lawf_unit_id" string="法1单位名称"/>
+                                          <field name="secd_lawf_unitcd"/>
+                                          <field name="secd_lawf_unit_id" string="法2单位名称"/>
+                                          <field name="natcd"/>
+                                          <field name="destination_natcd"/>
+                                          <field name="dcl_uprc_amt"/>
+                                          <field name="dcl_total_amt"/>
+                                          <field name="dcl_currcd"/>
+                                          <field name="lawf_qty"/>
+                                          <field name="secd_lawf_qty"/>
+                                          <field name="dcl_qty"/>
+                                          <field name="lvyrlf_modecd"/>
+                                          <field name="open_asn_qty"/>
+                                          <field name="usetocod"/>
+                                      </tree>
+                                  </field>
+                              </page>
+                          </notebook>
+                      </sheet>
+                  </form>
+              </field>
+            </record>
+
+
+            <!--入库单关务单笔和多笔送件-->
+            <!--<record id="action_server_iac_lg_approve_godown_entry" model="ir.actions.server">-->
+                <!--<field name="name">送件</field>-->
+                <!--<field name="type">ir.actions.server</field>-->
+                <!--<field name="model_id" ref="model_iac_customs_sas_header"/>-->
+                <!--<field name="state">code</field>-->
+                <!--<field name="code">-->
+                    <!--if records:-->
+                        <!--action = records.button_to_customs()-->
+                <!--</field>-->
+            <!--</record>-->
+
+            <!--<record id="action_value_lg_approve_entry" model="ir.values">-->
+                <!--<field name="name">送件</field>-->
+                <!--<field name="model_id" ref="model_iac_customs_sas_header"/>-->
+                <!--<field name="model">iac.customs.sas.header</field>-->
+                <!--<field name="key2">client_action_multi</field> &lt;!&ndash;菜单出现的位置&ndash;&gt;-->
+                <!--<field eval="'ir.actions.server,%d'%action_server_iac_lg_approve_godown_entry" name="value"/>-->
+            <!--</record>-->
+
+ <!--===========================================================================================-->
+            <!--入库单关务单笔和多笔重送海关系统-->
+            <record id="action_server_iac_lg_again_approve_customs" model="ir.actions.server">
+                <field name="name">重送海关系统</field>
+                <field name="type">ir.actions.server</field>
+                <field name="model_id" ref="model_iac_customs_sas_header"/>
+                <field name="state">code</field>
+                <field name="code">
+                    if records:
+                        action = records.button_to_customs_again()
+                </field>
+            </record>
+
+            <record id="action_value_lg_pull_customs_again" model="ir.values">
+                <field name="name">重送海关系统</field>
+                <field name="model_id" ref="model_iac_customs_sas_header"/>
+                <field name="model">iac.customs.sas.header</field>
+                <field name="key2">client_action_multi</field> <!--菜单出现的位置-->
+                <field eval="'ir.actions.server,%d'%action_server_iac_lg_again_approve_customs" name="value"/>
+            </record>
+
+            <!--入库单关务单笔和多笔退件到vendor-->
+            <!--<record id="action_server_iac_lg_reject_sas_vendor" model="ir.actions.server">-->
+                <!--<field name="name">退件</field>-->
+                <!--<field name="type">ir.actions.server</field>-->
+                <!--<field name="model_id" ref="model_iac_customs_sas_header"/>-->
+                <!--<field name="state">code</field>-->
+                <!--<field name="code">-->
+                    <!--if records:-->
+                        <!--action = records.button_reject_sas()-->
+                <!--</field>-->
+            <!--</record>-->
+
+            <!--<record id="action_value_lg_reject_submit_customs" model="ir.values">-->
+                <!--<field name="name">退件</field>-->
+                <!--<field name="model_id" ref="model_iac_customs_sas_header"/>-->
+                <!--<field name="model">iac.customs.sas.header</field>-->
+                <!--<field name="key2">client_action_multi</field> &lt;!&ndash;菜单出现的位置&ndash;&gt;-->
+                <!--<field eval="'ir.actions.server,%d'%action_server_iac_lg_reject_sas_vendor" name="value"/>-->
+            <!--</record>-->
+        </data>
+    </odoo>

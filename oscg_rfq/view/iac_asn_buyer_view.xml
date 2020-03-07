@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--定义Asn Buyer Change-->
+        <record id="view_iac_asn_buyer_change_list" model="ir.ui.view">
+            <field name="name">iac.asn.buyer.change</field>
+            <field name="type">tree</field>
+            <field name="model">iac.asn.buyer.change</field>
+            <field name="arch" type="xml">
+                <tree create="false">
+                    <field name="state"/>
+                    <field name="asn_no"/>
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="etd_date" />
+                    <field name="eta_date"  />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_iac_asn_buyer_change_form" model="ir.ui.view">
+            <field name="name">iac.asn.buyer.change.form.view</field>
+            <field name="model">iac.asn.buyer.change</field>
+            <field name="arch" type="xml">
+                <form string="ASN" create="false">
+                <header>
+                </header>
+                <sheet>
+                    <group colspan="4">
+                        <group >
+                            <field name="asn_no" readonly="1"/>
+                            <field name="plant_id" readonly="1" string="Ship To"/>
+                            <field name="vendor_id" readonly="1"/>
+                            <field name="etd_date" options="{'on_change': 'on_change_etd_date'}"/>
+                            <field name="delivery_days" options="{'on_change': 'on_change_etd_date'}"/>
+                            <field name="eta_date" readonly="1" />
+
+                        </group>
+                        <group >
+                            <field name="customer_country" domain="[('sh_import','=','Y'),('show_in_list','=','Y')]"/>
+                            <field name="customer_currency"/>
+                            <field name="airbill_no"/>
+                            <field name="housebill_no"/>
+                        </group>
+                    </group>
+
+                    <field name="line_ids" options="{'no_open': True}">
+                        <tree string="asn line"  editable="top" edit="true" delete="false" create="false">
+                            <field name="asn_line_no" readonly="1"/>
+                            <field name="po_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="part_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="part_desc" readonly="1"/>
+                            <field name="max_qty" readonly="1"/>
+                            <field name="asn_qty" readonly="1"/>
+                            <field name="packing_note"/>
+                            <field name="gross_weight" />
+                            <field name="amount" />
+                            <field name="invoice_no" />
+                            <field name="origin_country" options="{'no_create': True, 'no_edit': True,'no_create': True}" domain="[('sh_import','=','Y'),('show_in_list','=','Y')]"/>
+
+                        </tree>
+                    </field>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <!--定义buyer cancel 视图 -->
+        <record id="iac_asn_buyer_cancel_form_view" model="ir.ui.view">
+            <field name="name">iac.asn.cancel.form.view</field>
+            <field name="model">iac.asn.buyer.cancel</field>
+            <field name="arch" type="xml">
+                <form string="ASN" create="false">
+                <header>
+                </header>
+                <sheet>
+                    <group colspan="4">
+                        <field name="asn_no" readonly="1"/>
+                        <field name="plant_id" string="Ship To" readonly="1"/>
+                        <field name="vendor_id" readonly="1"/>
+                    </group>
+
+                    <field name="line_ids">
+                        <tree string="asn line"  delete="false" create="false">
+                            <field name="asn_line_no" readonly="1"/>
+                            <field name="po_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="part_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="part_desc" readonly="1"/>
+                            <field name="max_qty" readonly="1"/>
+                            <field name="asn_qty" readonly="1" />
+                            <field name="cancel_qty" />
+                            <field name="packing_note"/>
+                            <field name="gross_weight" />
+                            <field name="amount" />
+                            <field name="invoice_no" />
+                            <field name="origin_country" options="{'no_create': True, 'no_edit': True,'no_create': True}"/>
+                        </tree>
+                    </field>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_iac_asn_buyer_cancel_view_list" model="ir.ui.view">
+            <field name="name">iac.asn.buyer.cancel</field>
+            <field name="type">tree</field>
+            <field name="model">iac.asn.buyer.cancel</field>
+            <field name="arch" type="xml">
+                <tree create="false">
+                    <field name="state"/>
+                    <field name="asn_no"/>
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record id="view_iac_asn_buyer_create_wizard" model="ir.ui.view">
+            <field name="name">iac.asn.buyer.wizard</field>
+            <field name="model">iac.asn.buyer.create.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Wizard view">
+                    <group>
+                        <field name="vendor_id" invisible="0" options="{'no_create': True}"/>
+                        <field name="po_lst" invisible="0"/>
+                        <field name="part_lst" invisible="0"/>
+                        <field name="date_from" invisible="0" />
+                        <field name="date_to" invisible="0" />
+                        <field name="storage_location_id" required="1" options="{'no_open':True,'no_create':True,'no_edit':True}" attrs="{'readonly':[('vendor_id','=',False)]}"/>
+                    </group>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--asn line buyer 视图 -->
+        <record id="view_iac_asn_line_buyer_cancel" model="ir.ui.view">
+            <field name="name">Buyer Cancel ASN</field>
+            <field name="model">iac.asn.line.buyer.cancel</field>
+            <field name="arch" type="xml">
+                <form string="Buyer Cancel ASN">
+                    <group colspan="4">
+                        <group>
+                            <field name="asn_no" readonly="1"/>
+                            <field name="vendor_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="part_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="max_qty" readonly="1"/>
+                            <field name="on_road_qty" readonly="1"/>
+                            <field name="gr_qty" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="asn_line_no" readonly="1"/>
+                            <field name="plant_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="asn_qty" readonly="1"/>
+                            <field name="cancel_qty" />
+                            <field name="po_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="po_line_id" readonly="1" options="{'no_open': True}"/>
+
+                        </group>
+                    </group>
+
+
+
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_iac_asn_buyer_change" model="ir.actions.act_window">
+            <field name="name">ASN Buyer Change</field>
+            <field name="res_model">iac.asn.buyer.change</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','in',['sap_ok'])]</field>
+        </record>
+
+        <record id="action_iac_asn_buyer_cancel" model="ir.actions.act_window">
+            <field name="name">ASN Buyer Cancel</field>
+            <field name="res_model">iac.asn.buyer.cancel</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_iac_asn_buyer_create_wizard" model="ir.actions.act_window">
+            <field name="name">iac wizard</field>
+            <field name="res_model">iac.asn.buyer.create.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!--buyer_change 多笔送数据到 SAP 菜单-->
+        <record id="action_server_iac_asn_buyer_change" model="ir.actions.server">
+            <field name="name">Send To SAP</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_asn_buyer_change"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.push_to_sap()
+            </field>
+        </record>
+
+
+
+        <record id="ir_value_iac_asn_buyer_change" model="ir.values">
+            <field name="name">Send To SAP</field>
+            <field name="model_id" ref="model_iac_asn_buyer_change"/>
+            <field name="model">iac.asn.buyer.change</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%action_server_iac_asn_buyer_change" name="value"/>
+        </record>
+
+        <!--buyer cancel 菜单-->
+        <record id="action_server_iac_asn_buyer_cancel" model="ir.actions.server">
+            <field name="name">Send To SAP</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_asn_buyer_cancel"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.push_to_sap()
+            </field>
+        </record>
+
+
+
+        <record id="ir_value_iac_asn_buyer_cancel" model="ir.values">
+            <field name="name">Send To SAP</field>
+            <field name="model_id" ref="model_iac_asn_buyer_cancel"/>
+            <field name="model">iac.asn.buyer.cancel</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%action_server_iac_asn_buyer_cancel" name="value"/>
+        </record>
+
+
+        <record id="action_server_iac_asn_buyer_cancel_sap_fail_cancel" model="ir.actions.server">
+            <field name="name">SAP Fail Cancel</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_asn_buyer_cancel"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.sap_fail_cancel()
+            </field>
+        </record>
+
+
+
+        <record id="ir_value_iac_asn_buyer_cancel_sap_fail_cancel" model="ir.values">
+            <field name="name">SAP Fail Cancel</field>
+            <field name="model_id" ref="model_iac_asn_buyer_cancel"/>
+            <field name="model">iac.asn.buyer.cancel</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%action_server_iac_asn_buyer_cancel_sap_fail_cancel" name="value"/>
+        </record>
+
+        <!--buyer 相关的菜单 -->
+
+    </data>
+</odoo>

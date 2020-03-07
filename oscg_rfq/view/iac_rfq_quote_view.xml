@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!--AS 上传rfq的动作-->
+        <!--
+        <record model="ir.actions.act_window" id="action_rfq_quote_import">
+            <field name="name">Quote Import</field>
+            <field name="res_model">iac.document.upload</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context" eval="{'default_res_model': 'iac.rfq.import.quote','default_code': '1'}"/>
+            <field name="view_id" ref="view_rfq_quote_list"/>
+        </record>
+        -->
+
+
+        <record id="view_iac_rfq_import_quote_cm_wizard" model="ir.ui.view">
+            <field name="name">Quote Cm Import</field>
+            <field name="model">iac.rfq.import.quote.cm.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Wizard tools">
+                    <group>
+                        <field name="file_name" invisible="0"/>
+                        <field name="res_model" invisible="1"/>
+                        <field name="file" filename="file_name"/>
+                    </group>
+                    <footer>
+                        <button name="action_upload_file" string="Confirm" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                        or
+                        <button name="action_download_file" string="Download Template" type="object"  class="oe_highlight"  />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_iac_rfq_import_quote_cm_wizard">
+            <field name="name">Quote Import</field>
+            <field name="res_model">iac.rfq.import.quote.cm.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context" eval="{'default_res_model': 'iac.rfq.import.quote'}"/>
+            <field name="view_id" ref="view_rfq_quote_list"/>
+        </record>
+
+        <!--rfq Quote-->
+        <record id="view_iac_rfq_quote_list" model="ir.ui.view">
+            <field name="name">vendor.rfq</field>
+            <field name="type">tree</field>
+            <field name="model">iac.rfq.quote</field>
+            <field name="arch" type="xml">
+                <tree create="false">
+                    <field name="state"/>
+                    <field name="name" string="Sequence#"/>
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="part_id"/>
+                    <field name="currency_id"/>
+                    <field name="input_price"/>
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                    <field name="price_control"/>
+                    <field name="vendor_part_no"/>
+                    <field name="lt"/>
+                    <field name="moq"/>
+                    <field name="mpq"/>
+                    <field name="rw"/>
+                    <field name="cw"/>
+                    <field name="tax"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_iac_rfq_quote_form" model="ir.ui.view">
+            <field name="name">vendor.rfq.form</field>
+            <field name="type">form</field>
+            <field name="model">iac.rfq.quote</field>
+            <field name="arch" type="xml">
+                <form string="IAC RFQ" create="false">
+                    <header>
+
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1" string="Quote#"/>
+                                <field name="plant_id" options="{'no_create': True}" readonly="1" invisible="1"/>
+                                <field name="vendor_id" options="{'no_create': False}" readonly="1" invisible="1"/>
+                                <field name="part_code" readonly="1" invisible="1"/>
+                                <field name="buyer_code" options="{'no_create': True}" readonly="1" invisible="1"/>
+                                <field name="division_id" options="{'no_create': True}" readonly="1" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="currency_id" options="{'no_create': True}" readonly="1" invisible="1"/>
+                                <field name="price_control"/>
+                                <field name="vendor_part_no" readonly="1" invisible="1"/>
+                                <field name="note" readonly="1" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="input_price"/>
+                                <field name="lt"/>
+                                <field name="moq"/>
+                                <field name="mpq"/>
+                                <field name="rw"/>
+                            </group>
+                            <group>
+                                <field name="cw"/>
+                                <field name="tax" readonly="1" invisible="1"/>
+                                <field name="valid_from"/>
+                                <field name="valid_to"/>
+                                <field name="last_rfq_id" invisible="1"/>
+                                <!--<field name="orig_price"/>-->
+                                <!--<field name="orig_lt"/>-->
+                                <!--<field name="orig_moq"/>-->
+                                <!--<field name="orig_mpq"/>-->
+                                <!--<field name="orig_rw"/>-->
+                                <!--<field name="orig_cw"/>-->
+                                <!--<field name="orig_tax"/>-->
+                                <!--<field name="orig_valid_from"/>-->
+                                <!--<field name="orig_valid_to"/>-->
+                            </group>
+                        </group>
+                    </sheet>
+
+                    <!--
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                    -->
+
+
+                </form>
+            </field>
+        </record>
+        <!--
+        <record model="ir.actions.act_window" id="action_iac_rfq_quote">
+            <field name="name">Quote</field>
+            <field name="res_model">iac.rfq.quote</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain" eval="[('type','=','quote'),('state','in',['draft','sent','replay'])]"/>
+            <field name="view_id" ref="view_iac_rfq_quote_list"/>
+        </record>
+        -->
+
+        <record model="ir.actions.act_window" id="action_iac_rfq_quote">
+            <field name="name">Quote</field>
+            <field name="res_model">iac.rfq.quote</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_iac_rfq_quote_list"/>
+        </record>
+
+        <!--quote vendor 视图 -->
+        <record id="view_iac_rfq_quote_vendor_form" model="ir.ui.view">
+            <field name="name">vendor.rfq.form</field>
+            <field name="type">form</field>
+            <field name="model">iac.rfq.quote.vendor</field>
+            <field name="arch" type="xml">
+                <form string="IAC RFQ" create="false">
+                    <header>
+                        <button String="Submit" states="sent" type="object" class="oe_highlight" confirm="Are you sure sent the quote terms to IAC？" name="buttonSubmit"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,rfq,cancel" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1" string="Quote#"/>
+                                <field name="plant_id" options="{'no_create': True}" readonly="1" />
+                                <field name="vendor_id" options="{'no_create': False}"  readonly="1" />
+                                <field name="part_id" options="{'no_open': True}" readonly="1"  />
+                                <field name="buyer_code" options="{'no_create': True}" readonly="1" />
+
+                            </group>
+                            <group>
+                                <field name="currency_id" options="{'no_create': True}" readonly="1" />
+                                <field name="price_control" required="1"/>
+                                <field name="vendor_part_no"  />
+                                <field name="note" readonly="1" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="input_price" required="1"/>
+                                <field name="lt" required="1"/>
+                                <field name="moq" required="1"/>
+                                <field name="mpq" required="1"/>
+                                <field name="rw" required="1"/>
+                            </group>
+                            <group>
+                                <field name="cw" required="1"/>
+                                <field name="tax" readonly="1" invisible="1"/>
+                                <field name="valid_from" required="1"/>
+                                <field name="valid_to" required="1"/>
+                                <field name="last_rfq_id" invisible="1"/>
+                                <!--<field name="orig_price"/>-->
+                                <!--<field name="orig_lt"/>-->
+                                <!--<field name="orig_moq"/>-->
+                                <!--<field name="orig_mpq"/>-->
+                                <!--<field name="orig_rw"/>-->
+                                <!--<field name="orig_cw"/>-->
+                                <!--<field name="orig_tax"/>-->
+                                <!--<field name="orig_valid_from"/>-->
+                                <!--<field name="orig_valid_to"/>-->
+                            </group>
+                        </group>
+                    </sheet>
+
+                    <!--
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                    -->
+
+
+                </form>
+            </field>
+        </record>
+
+        <record id="view_iac_rfq_quote_vendor_list" model="ir.ui.view">
+            <field name="name">vendor.rfq</field>
+            <field name="type">tree</field>
+            <field name="model">iac.rfq.quote.vendor</field>
+            <field name="arch" type="xml">
+                <tree create="false">
+                    <field name="state"/>
+                    <field name="name" string="Sequence#"/>
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="part_id"/>
+                    <field name="currency_id"/>
+                    <field name="input_price"/>
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                    <field name="price_control"/>
+                    <field name="vendor_part_no"/>
+                    <field name="lt"/>
+                    <field name="moq"/>
+                    <field name="mpq"/>
+                    <field name="rw"/>
+                    <field name="cw"/>
+                    <field name="tax"/>
+                    <field name="note" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_rfq_quote_vendor">
+            <field name="name">Quote</field>
+            <field name="res_model">iac.rfq.quote.vendor</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="domain" eval="[('type','=','quote'),('state','=','sent')]"/>
+            <field name="view_id" ref="view_iac_rfq_quote_vendor_list"/>
+            <!--<field name="view_ids" eval="[(5, 0, 0),-->
+                <!--(0, 0, {'view_mode': 'tree', 'view_id': ref('view_iac_rfq_quote_vendor_list')}),-->
+                <!--(0, 0, {'view_mode': 'form', 'view_id': ref('view_iac_rfq_quote_vendor_form')})]"/>-->
+        </record>
+
+
+
+    </data>
+</odoo>

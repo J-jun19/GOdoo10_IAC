@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--定义Asn VMI-->
+        <record id="iac_asn_vmi_form_view" model="ir.ui.view">
+            <field name="name">ASN VMI</field>
+            <field name="model">iac.asn.vmi</field>
+            <field name="arch" type="xml">
+                <form string="ASN" create="false">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group colspan="4">
+                            <field name="state"/>
+                            <field name="sap_flag"/>
+                            <field name="plant_id"/>
+                            <field name="vmi_code"/>
+                            <field name="pull_signal_id"/>
+                            <field name="err_msg"/>
+
+                        </group>
+                        <group colspan="4">
+                            <field name="item_counts"/>
+                            <field name="owner"/>
+
+                            <field name="vendor_id"/>
+                            <field name="odoo_plant_id"/>
+                            <field name="storage_location"/>
+                            <field name="ep_status"/>
+                        </group>
+                        <field name="line_ids">
+                            <tree string="asn line" edit="false" delete="false" create="false">
+                                <field name="state" readonly="1"/>
+                                <field name="po_no" readonly="1"/>
+                                <field name="ps_item" readonly="1"/>
+                                <field name="part_no" readonly="1"/>
+                                <field name="pull_qty" readonly="1"/>
+                                <field name="storage_location" readonly="1"/>
+                                <field name="error_message" readonly="1"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_iac_asn_vmi_view_list" model="ir.ui.view">
+            <field name="name">ASN VMI</field>
+            <field name="type">tree</field>
+            <field name="model">iac.asn.vmi</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="id"/>
+                    <field name="state"/>
+                    <field name="create_date"/>
+                    <field name="sap_flag"/>
+                    <field name="plant_id"/>
+                    <field name="vmi_code"/>
+                    <field name="pull_signal_id"/>
+                    <field name="item_counts"/>
+                    <field name="owner"/>
+
+                    <field name="vendor_id"/>
+                    <field name="odoo_plant_id"/>
+                    <field name="storage_location"/>
+                    <field name="ep_status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="asn_vmi_search_view">
+            <field name="name">Asn Vmi Search</field>
+            <field name="model">iac.asn.vmi</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="id"/>
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="pull_signal_id"/>
+                    <group string="Group By">
+                        <filter name="by_state" string="State"
+                                context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_iac_asn_vmi" model="ir.actions.act_window">
+            <field name="name">ASN VMI</field>
+            <field name="res_model">iac.asn.vmi</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+
+        </record>
+
+        <!--buy sell asn  相关的菜单 -->
+
+    </data>
+</odoo>

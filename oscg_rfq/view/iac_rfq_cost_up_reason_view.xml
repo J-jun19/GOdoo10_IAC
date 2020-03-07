@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_iac_rfq_cost_up_reason_form" model="ir.ui.view">
+            <field name="name">Maintain Cost Up Reason Form</field>
+            <field name="type">form</field>
+            <field name="model">iac.rfq.cost.up.reason</field>
+            <field name="arch" type="xml">
+                <form string="Maintain Cost Up Reason">
+                    <group>
+                        <group>
+                            <field name="item_no"/>
+                            <field name="description"/>
+                            <field name="comment"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_iac_rfq_cost_up_reason_list" model="ir.ui.view">
+            <field name="name">Maintain Cost Up Reason List</field>
+            <field name="type">tree</field>
+            <field name="model">iac.rfq.cost.up.reason</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="item_no"/>
+                    <field name="description"/>
+                    <field name="comment"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_rfq_cost_up_reason">
+            <field name="name">Action Maintain Cost Up Reason</field>
+            <field name="res_model">iac.rfq.cost.up.reason</field>
+            <field name="view_type">form</field>
+            <field name="view_model">tree,form</field>
+            <field name="view_id" ref="view_iac_rfq_cost_up_reason_list"/>
+        </record>
+    </data>
+</odoo>

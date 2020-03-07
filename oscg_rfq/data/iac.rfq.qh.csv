@@ -1,0 +1,6 @@
+id,name,key,value,note
+iac_rfq_qh_1,expression.1,r.new_material or r.to_be_cost_down or r.modified_valid_date,['CM'],
+iac_rfq_qh_2,expression.2,(r.new_material or r.to_be_cost_down or r.modified_valid_date) and ((r.usd_price > 0.5 and r.lt > 90) or (r.usd_price > 1.0 and r.moq > 3000)),"['CM','BG_Leader']",
+iac_rfq_qh_3,expression.3,r.orig_price and r.usd_price > r.orig_price,"['CM','AS_Manager', 'CM_Manager']",
+iac_rfq_qh_4,expression.4,(r.usd_price > r.orig_price) and ((r.usd_price > 0.5 and r.lt > 90) or (r.usd_price > 1.0 and r.moq > 3000)),"['CM','AS_Manager', 'CM_Manager', 'BG_Leader']",
+iac_rfq_qh_5,expression.5,r.lt != r.orig_lt or r.moq != r.orig_moq or r.cw != r.orig_cw or r.rw != r.orig_rw,['MM_Manager'],

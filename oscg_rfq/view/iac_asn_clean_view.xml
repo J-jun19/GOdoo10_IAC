@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--定义Asn Clean-->
+        <record id="iac_asn_clean_form_view" model="ir.ui.view">
+            <field name="name">ASN Clean</field>
+            <field name="model">iac.asn.clean</field>
+            <field name="arch" type="xml">
+                <form string="ASN" create="false">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group colspan="4">
+                            <field name="state"/>
+                            <field name="asn_no"/>
+                            <field name="asn_item"/>
+                            <field name="date"/>
+                            <field name="time"/>
+
+                        </group>
+                        <group colspan="4">
+                            <field name="flag"/>
+                            <field name="plant_code"/>
+
+                            <field name="part_no"/>
+                            <field name="asn_qty"/>
+                            <field name="reduce_qty"/>
+                        </group>
+                        <group>
+                            <field name="document_erp_id"/>
+                            <field name="document_erp_line_no"/>
+                            <field name="asn_id"/>
+                            <field name="asn_line_id"/>
+                            <field name="err_msg"/>
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_iac_asn_clean_list" model="ir.ui.view">
+            <field name="name">ASN VMI</field>
+            <field name="type">tree</field>
+            <field name="model">iac.asn.clean</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="id"/>
+                    <field name="state"/>
+                    <field name="create_date"/>
+                    <field name="asn_no"/>
+                    <field name="asn_item"/>
+                    <!--<field name="date"/>
+                    <field name="time"/>
+                    <field name="flag"/>
+                    <field name="plant_code"/>
+
+                    <field name="part_no"/>-->
+                    <field name="asn_qty"/>
+                    <field name="reduce_qty"/>
+
+                    <field name="document_erp_id"/>
+                    <field name="document_erp_line_no"/>
+                    <field name="asn_id"/>
+                    <field name="asn_line_id"/>
+                    <!--<field name="err_msg"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="asn_clean_search_view">
+            <field name="name">Asn Clean Search</field>
+            <field name="model">iac.asn.clean</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="id"/>
+                    <field name="document_erp_id"/>
+                    <field name="asn_id"/>
+                    <field name="asn_line_id"/>
+                    <group string="Group By">
+                        <filter name="by_state" string="State"
+                                context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_iac_asn_clean" model="ir.actions.act_window">
+            <field name="name">ASN Clean Log</field>
+            <field name="res_model">iac.asn.clean</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+
+        </record>
+
+        <!--buy sell asn  相关的菜单 -->
+
+    </data>
+</odoo>

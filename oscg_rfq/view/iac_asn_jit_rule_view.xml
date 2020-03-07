@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--asn.jitrule-->
+        <record id="view_search_asn_jitrule" model="ir.ui.view">
+            <field name="name">Asn Rule Search</field>
+            <field name="model">iac.asn.jitrule</field>
+            <field name="arch" type="xml">
+                <search string="Search Vendor">
+                    <field name="black_white_list" />
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="part_id_2"/>
+                    <field name="buyer_code"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="iac_asn_jitrule_form_view" model="ir.ui.view">
+            <field name="name">iac.asn.jitrule.form.view</field>
+            <field name="model">iac.asn.jitrule</field>
+            <field name="arch" type="xml">
+                <form string="ASN JITRule" >
+                <header>
+
+                </header>
+                <sheet>
+                    <group colspan="4">
+                        <group >
+                            <field name="black_white_list" required="1" attrs="{'readonly': [('id','>','0')]}"/>
+                            <field name="vendor_id" domain="[('plant.id','=',plant_id),('state','in',['done','block']),('vendor_type','in',['normal','spot','bvi'])]"
+                                   attrs="{'invisible': [('black_white_list', 'not in', ['E001','E002','E005','E006'])],
+                                        'required':[('black_white_list', 'in', ['E001','E002','E005','E006'])],
+                                        'readonly': [('id','>','0')]
+                                       }"
+                                   options="{'no_open': True}"
+                                    />
+                            <field name="part_id_2" domain="[('plant_id','=',plant_id)]"
+                                   attrs="{ 'invisible': [('black_white_list', 'not in', ['I001','E002','E003','E006'])],
+                                         'required':[('black_white_list', 'in', ['I001','E002','E003','E006'])],
+                                         'readonly': [('id','>','0')]
+                                       }"
+                                   options="{'no_open': True}"
+                                    />
+                            <field name="validate_from" required="1"/>
+                        </group>
+                        <group >
+                            <field name="plant_id" required="1"  attrs="{'readonly': [('id','>','0')]}" options="{'no_open': True}"/>
+                            <field name="buyer_code" attrs="{'invisible': [('black_white_list', 'not in', ['E005'])],
+                                                          'required':[('black_white_list', 'in', ['E005'])],
+                                                          'readonly': [('id','>','0')]
+                                                          }"/>
+                            <field name="part_no_4" attrs="{'invisible': [('black_white_list', 'not in', ['E004'])],
+                                                         'required':[('black_white_list', 'in', ['E004'])],
+                                                         'readonly': [('id','>','0')]
+                                                         }"/>
+                            <field name="validate_to" required="1"/>
+                            <field name="id" invisible="1"/>
+                        </group>
+                    </group>
+
+                </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="view_iac_asn_jitrule_view_list" model="ir.ui.view">
+            <field name="name">asn.jitrule</field>
+            <field name="type">tree</field>
+            <field name="model">iac.asn.jitrule</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="black_white_list" required="1"/>
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="part_no"/>
+                    <field name="part_id" invisible="1"/>
+                    <field name="buyer_code"/>
+                    <field name="validate_from"/>
+                    <field name="validate_to"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_asn_jitrule_import_as_wizard" model="ir.ui.view">
+            <field name="name">Quote Cm Import</field>
+            <field name="model">asn.jitrule.import.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Wizard tools">
+                    <group>
+                        <field name="file_name" invisible="0"/>
+                        <field name="res_model" invisible="1"/>
+                        <field name="file" filename="file_name"/>
+                    </group>
+                    <footer>
+                        <button name="action_upload_file" string="Confirm" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                        or
+                        <button name="action_download_file" string="Download Template" type="object"  class="oe_highlight"  />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <!--jitrule import-->
+        <record model="ir.actions.act_window"  id="action_jitrule_import">
+            <field name="name">JITRule Import</field>
+            <field name="res_model">asn.jitrule.import.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context" eval="{'default_res_model': 'iac.asn.jitrule'}"/>
+        </record>
+
+
+        <record id="action_iac_asn_jitrule" model="ir.actions.act_window">
+            <field name="name">ASN JITRule</field>
+            <field name="res_model">iac.asn.jitrule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','done')]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!--buyer_change 多笔送数据到 SAP 菜单-->
+        <record id="action_server_iac_purchase_order_line_buyer" model="ir.actions.server">
+            <field name="name">Buyer Create ASN</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_purchase_order_line_buyer"/>
+            <field name="res_model">iac.purchase.order.line.buyer</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.create_asn()
+            </field>
+        </record>
+
+        <record id="ir_value_iac_purchase_order_line_buyer" model="ir.values">
+            <field name="name">Create ASN</field>
+            <field name="model_id" ref="model_iac_purchase_order_line_buyer"/>
+            <field name="model">iac.purchase.order.line.buyer</field>
+            <field name="key" >action</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%action_server_iac_purchase_order_line_buyer" name="value"/>
+        </record>
+
+    </data>
+</odoo>

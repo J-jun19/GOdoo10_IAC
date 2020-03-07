@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <!-- Top Level Menu -->
+      <menuitem id="menu_asn_root" name="ASN"/>
+
+      <!-- Level 1 Menu -->
+      <menuitem id="menu_asn_view" name="ASN" parent="menu_asn_root" sequence="10"/>
+      <!--
+      <menuitem id="menu_asn_max_asn" name="Max ASN" sequence="20" parent="menu_asn_root"/>
+      -->
+      <menuitem id="menu_asn_administration" name="Administration" sequence="30" parent="menu_asn_root"/>
+      <menuitem id="menu_asn_asn_kakong" name="Max ASN" sequence="20" parent="menu_asn_root"/>
+      <menuitem id="menu_asn_lg_work" name="关务作业" parent="menu_asn_root" sequence="30"/>
+
+      <!--
+      <menuitem id="menu_asn_jitrule_view" name="JITRule" sequence="20" parent="menu_asn_root"/>
+      <menuitem id="menu_asn_max_view" name="ASN MaxQTY" sequence="30" parent="menu_asn_root"/>
+      <menuitem id="menu_asn_buy_sell_view" name="ASN Buy Sell" parent="menu_asn_root" sequence="40"/>
+      <menuitem id="menu_asn_vmi_view" name="ASN VMI" parent="menu_asn_root" sequence="50"/>
+      <menuitem id="menu_asn_clean_view" name="ASN Clean" parent="menu_asn_root" sequence="60"/>
+      -->
+
+      <menuitem id="menu_iac_asn_jitrule" name="Maintain Rule" sequence="10" parent="menu_asn_asn_kakong" action="action_iac_asn_jitrule"/>
+      <menuitem id="menu_iac_jitrule_upload" name="Import Rule" sequence="20" parent="menu_asn_asn_kakong" action="action_jitrule_import"/>
+
+      <menuitem id="menu_iac_asn_maxqty" name="Adjust Max Qty" sequence="30" parent="menu_asn_asn_kakong" action="action_iac_asn_maxqty_create"/>
+      <menuitem id="menu_iac_asn_maxqty_import" name="Batch Adjust Max Qty" sequence="40" parent="menu_asn_asn_kakong" action="action_iac_asn_maxqty_import"/>
+
+
+      <!--Level 3 Menu ASN-->
+      <menuitem id="menu_iac_asn_all" name="ASN List" sequence="10" parent="menu_asn_view" action="action_iac_asn_vendor" />
+      <menuitem id="menu_iac_asn_buyer" name="MM Create" sequence="11" parent="menu_asn_view" action="action_iac_asn_buyer_create_wizard" />
+      <menuitem id="menu_iac_asn_buyer_change" name="Modify LG Data" sequence="20" parent="menu_asn_view" action="action_iac_asn_buyer_change" />
+      <menuitem id="menu_iac_asn_buyer_cancel" name="MM Cancel" sequence="30" parent="menu_asn_view" action="action_iac_asn_buyer_cancel" />
+      <menuitem id="menu_iac_asn_vendor_create" name="Vendor Create" sequence="40" parent="menu_asn_view" action="action_iac_asn_vendor_create_wizard" />
+
+      <!--
+      <menuitem id="menu_iac_asn_vendor_change" name="Vendor Change" sequence="50" parent="menu_asn_view" action="action_iac_asn_vendor_change" />
+      -->
+      <menuitem id="menu_iac_asn_vendor_cancel" name="Vendor Cancel" sequence="60" parent="menu_asn_view" action="action_iac_asn_vendor_cancel" />
+
+      <!--
+      <menuitem id="menu_iac_asn_import" name="ASN Import" sequence="70" parent="menu_asn_view" action="action_iac_asn_import"/>
+      -->
+
+      <!--Level 2 Menu max asn-->
+      <!--
+      <menuitem id="menu_iac_asn_jitrule_1" name="Maintain Rule" sequence="10" parent="menu_asn_max_asn" action="action_iac_asn_jitrule"/>
+      <menuitem id="menu_iac_jitrule_upload_1" name="Import Rule" sequence="20" parent="menu_asn_max_asn" action="action_jitrule_import_2222"/>
+      <menuitem id="menu_iac_asn_maxqty_1" name="Increase Max Qty" sequence="30" parent="menu_asn_max_asn" action="action_iac_asn_maxqty"/>
+      <menuitem id="menu_iac_asn_maxqty_import_1" name="Batch Increase Max Qty" sequence="40" parent="menu_asn_max_asn" action="action_iac_asn_maxqty_import"/>
+
+      -->
+
+      <!--Level 3 ASN Administration-->
+      <menuitem id="menu_iac_asn_vmi" name="VMI ASN Job Log" sequence="10" parent="menu_asn_administration" action="action_iac_asn_vmi" />
+      <menuitem id="menu_iac_asn_buy_sell" name="B&amp;S ASN Job Log" sequence="20" parent="menu_asn_administration" action="action_iac_asn_buy_sell" />
+      <menuitem id="menu_iac_asn_clean" name="ASN Clean Job Log" sequence="30" parent="menu_asn_administration" action="action_iac_asn_clean" />
+
+      <!--Level 3 LG Work-->
+      <menuitem id="menu_vendor_upload_godown_entry" name="厂商批量上传建立入库单" sequence="10" parent="menu_asn_lg_work" action="action_vendor_upload_godown_entry"/>
+      <menuitem id="menu_mm_check_godown_entry" name="采购审核入库单" sequence="20" parent="menu_asn_lg_work" action="action_buyer_approve_godown_entry"/>
+      <menuitem id="menu_lg_check_godown_entry" name="关务审核入库单" sequence="30" parent="menu_asn_lg_work" action="action_lg_approve_godown_entry"/>
+      <menuitem id="menu_vendor_upload_outbound_order" name="厂商批量上传建立出库单" sequence="40" parent="menu_asn_lg_work" action="action_vendor_upload_godown_list"/>
+      <menuitem id="menu_mm_check_outbound_order" name="采购审核出库单" sequence="50" parent="menu_asn_lg_work" action="action_buyer_approve_godown_list"/>
+      <menuitem id="menu_lg_check_outbound_order" name="关务审核出库单" sequence="60" parent="menu_asn_lg_work" action="action_lg_approve_godown_list"/>
+      <menuitem id="menu_vendor_upload_nuclear_release_list" name="厂商批量上传建立核放单" sequence="70" parent="menu_asn_lg_work" action="action_vendor_upload_check_list"/>
+      <menuitem id="menu_lg_check_nuclear_release_list" name="关务审核核放单" sequence="80" parent="menu_asn_lg_work" action="action_lg_approve_checklist"/>
+      <menuitem id="menu_outbound_entry_list_cancel" name="出入库单清单(含厂商作废)" sequence="90" parent="menu_asn_lg_work" action="action_open_entry_godown_detailed_list"/>
+      <menuitem id="menu_lg_check_cancel_oe_list" name="关务审核作废出入库单" sequence="100" parent="menu_asn_lg_work" action="action_lg_approve_entry_godown_detailed_list"/>
+      <menuitem id="menu_nuclear_release_list_cancel" name="核放单清单(含厂商作废)" sequence="110" parent="menu_asn_lg_work" action="action_open_check_list_detailed"/>
+      <menuitem id="menu_lg_check_cancel_nr_list" name="关务审核作废核放单" sequence="120" parent="menu_asn_lg_work" action="action_lg_approve_cancel_check_detailed_list"/>
+
+
+
+
+
+
+
+  </data>
+</odoo>

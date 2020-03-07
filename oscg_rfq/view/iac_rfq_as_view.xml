@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--AS 上传的rfq历史记录列表视图-->
+        <record id="view_iac_rfq_import_as_list" model="ir.ui.view">
+            <field name="name">AS Uploaded History</field>
+            <field name="type">tree</field>
+            <field name="model">iac.rfq.import.as</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false" edit="true" editable="top">
+                    <button name="button_search_other_price" string="Other Price" type="object" class="oe_highlight"/>
+                    <field name="state" readonly="1"/>
+                    <field name="plant_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="costup_reason_id" options="{'no_create': True, 'no_edit': True,'no_open':True}" attrs="{'readonly': [('state','!=', 'reason')]}"/>
+                    <field name="vendor_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="part_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="buyer_code" readonly="1" options="{'no_open': True}"/>
+                    <field name="currency_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="input_price" readonly="1"/>
+                    <field name="valid_from" readonly="1"/>
+                    <field name="valid_to" readonly="1"/>
+                    <field name="price_control" readonly="1"/>
+                    <field name="note" readonly="1"/>
+                    <field name="vendor_part_no" readonly="1"/>
+                    <field name="create_date" readonly="1"/>
+                    <field name="create_uid" readonly="1" options="{'no_open': True}"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--begin AS查看当前RFQ所有有效的历史记录_by_jiangjun-->
+        <record id="view_iac_rfq_import_other_price_form" model="ir.ui.view">
+            <field name="name">AS Uploaded Other Price</field>
+            <field name="type">form</field>
+            <field name="model">iac.rfq.import.as</field>
+            <field name="arch" type="xml">
+                <form string="Info record History" create="false" edit="true">
+                    <sheet>
+                        <group>
+                            <group>
+                                <!--<field name="name" readonly="1"/>-->
+                                <field name="vendor_id" options="{'no_create': True,'no_open': True}" readonly="1"/>
+                                <field name="part_id" options="{'no_create': True,'no_open': True}" readonly="1"/>
+                                <field name="plant_id" options="{'no_create': True,'no_open': True}" readonly="1"/>
+                                <!--<field name="part_code"/>-->
+                                <field name="buyer_code" options="{'no_create': True,'no_open': True}" readonly="1"/>
+                                <!--<field name="buyer_name"/>-->
+                                <field name="division_id" options="{'no_create': True,'no_open': True}" readonly="1"/>
+                                <field name="costup_reason_id" options="{'no_create': True,'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="valid_from" required="1" readonly="1"/>
+                                <field name="valid_to" readonly="1"/>
+                                <field name="price_control" readonly="1"/>
+                                <field name="input_price" readonly="1"/>
+                                <field name="currency_id" options="{'no_create': True,'no_open': True}" readonly="1"/>
+                                <field name="tax" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <notebook options="{'no_create': True,'no_open': True}" readonly="1">
+                              <page string="Other Price" options="{'no_create': True,'no_open': True}" readonly="1">
+                                  <field name="import_new_vs_old_ids">
+                                      <tree string="Other Price" delete="false" create="false" edit="false">
+                                          <field name="old_rfq_plant_id"/>
+                                          <field name="old_rfq_vendor_id"/>
+                                          <field name="old_rfq_part_id"/>
+                                          <field name="old_rfq_buy_id" />
+                                          <field name="old_rfq_division_id" />
+                                          <field name="old_rfq_valid_from" />
+                                          <field name="old_rfq_valid_to"/>
+                                          <field name="old_rfq_price_control"/>
+                                          <field name="old_rfq_price_unit"/>
+                                          <field name="old_rfq_currency_id"/>
+                                          <field name="old_rfq_tax"/>
+                                          <field name="price_compare" string="最新价格变动"/>
+                                          <!--<field name="secd_lawf_unit_id" string="法2单位名称"/>-->
+                                          <!--<field name="natcd"/>-->
+                                          <!--<field name="destination_natcd"/>-->
+                                          <!--<field name="dcl_uprc_amt"/>-->
+                                          <!--<field name="dcl_total_amt"/>-->
+                                          <!--<field name="dcl_currcd"/>-->
+                                          <!--<field name="lawf_qty"/>-->
+                                          <!--<field name="secd_lawf_qty"/>-->
+                                          <!--<field name="dcl_qty"/>-->
+                                          <!--<field name="lvyrlf_modecd"/>-->
+                                          <!--<field name="open_asn_qty"/>-->
+                                          <!--<field name="usetocod"/>-->
+                                      </tree>
+                                  </field>
+                              </page>
+                          </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--点击other price按钮跳转的form视图-->
+        <record model="ir.actions.act_window" id="action_iac_rfq_import_other_price_form">
+            <field name="name">AS Upload Info record</field>
+            <field name="res_model">iac.rfq.import.as</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_iac_rfq_import_other_price_form"/>
+        </record>
+        <!--end-->
+
+        <!--Ning add-->
+        <!-- 上传的rfq历史记录列表视图-->
+        <record id="view_iac_rfq_import_buyer_list" model="ir.ui.view">
+            <field name="name">AS Uploaded History</field>
+            <field name="type">tree</field>
+            <field name="model">iac.rfq.import.buyer</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false" edit="false">
+                    <field name="state"/>
+                    <field name="plant_id"/>
+                    <field name="vendor_id"/>
+                    <field name="part_id"/>
+                    <field name="buyer_code"/>
+                    <field name="currency_id"/>
+                    <field name="input_price"/>
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                    <field name="price_control"/>
+                    <field name="note"/>
+                    <field name="vendor_part_no"/>
+                    <field name="create_date"/>
+                    <field name="create_uid"/>
+                </tree>
+            </field>
+        </record>
+        <!--end-->
+        <!--AS 上传rfq的动作-->
+        <record model="ir.actions.act_window" id="action_iac_rfq_import_as">
+            <field name="name">AS Upload Info record</field>
+            <field name="res_model">iac.rfq.import.as</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_iac_rfq_import_as_list"/>
+        </record>
+
+        <!--Ning add-->
+        <!--Buyer 上传rfq的动作-->
+        <record model="ir.actions.act_window" id="action_iac_rfq_import_buyer">
+            <field name="name">MM Upload Info record</field>
+            <field name="res_model">iac.rfq.import.buyer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_iac_rfq_import_buyer_list"/>
+        </record>
+        <!--end-->
+
+        <!-- 单笔和批量设置上传的记录为cancel状态 -->
+        <record id="action_server_iac_rfq_import_as_set_cancel" model="ir.actions.server">
+            <field name="name">set to cancel</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_rfq_import_as"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.set_to_cancel()
+            </field>
+        </record>
+
+        <record id="ir_values_iac_rfq_import_as_set_cancel" model="ir.values">
+            <field name="name">set to cancel</field>
+            <field name="model_id" ref="model_iac_rfq_import_as"/>
+            <field name="model">iac.rfq.import.as</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%action_server_iac_rfq_import_as_set_cancel" name="value"/>
+        </record>
+
+        <!-- 单笔和批量保存涨价原因 -->
+        <record id="action_server_iac_rfq_import_as_save_costup_reason" model="ir.actions.server">
+            <field name="name">保存价格不同原因后送MM下载</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_rfq_import_as"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.save_costup_reason()
+            </field>
+        </record>
+
+        <record id="ir_values_iac_rfq_import_as_save_costup_reason" model="ir.values">
+            <field name="name">保存价格不同原因后送MM下载</field>
+            <field name="model_id" ref="model_iac_rfq_import_as"/>
+            <field name="model">iac.rfq.import.as</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%action_server_iac_rfq_import_as_save_costup_reason" name="value"/>
+        </record>
+
+
+
+        <!--rfq quote As 的视图-->
+        <record id="view_iac_rfq_quote_as_list" model="ir.ui.view">
+            <field name="name">AS Review</field>
+            <field name="type">tree</field>
+            <field name="model">iac.rfq.quote.as</field>
+            <field name="arch" type="xml">
+                <tree create="false" edit="true" editable="top">
+                    <button name="button_search_other_price" string="Other Price" type="object" class="oe_highlight"/>
+                    <field name="state" readonly="1"/>
+                    <field name="name" string="Sequence #" readonly="1"/>
+                    <field name="plant_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="cost_up_reason_id" string="Costup Reason" options="{'no_create': True, 'no_edit': True,'no_open':True}" attrs="{'readonly': [('state','!=', 'replay')]}"/>
+                    <field name="vendor_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="part_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="currency_id" readonly="1" options="{'no_open': True}"/>
+                    <field name="input_price" readonly="1"/>
+                    <field name="valid_from" readonly="1"/>
+                    <field name="valid_to" readonly="1"/>
+                    <field name="price_control" readonly="1"/>
+                    <field name="vendor_part_no" readonly="1"/>
+                    <field name="lt" readonly="1"/>
+                    <field name="moq" readonly="1"/>
+                    <field name="mpq" readonly="1"/>
+                    <field name="rw" readonly="1"/>
+                    <field name="cw" readonly="1"/>
+                    <field name="tax" readonly="1"/>
+                    <field name="note" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_iac_rfq_quote_as_form" model="ir.ui.view">
+            <field name="name">rfq.form</field>
+            <field name="type">form</field>
+            <field name="model">iac.rfq.quote.as</field>
+            <field name="arch" type="xml">
+                <form string="IAC RFQ" create="false" edit="false">
+                    <header>
+                        <button String="Send" states="draft" type="object" class="oe_highlight" name="action_quotation_send"/>
+                        <button String="Submit" states="sent" type="object" class="oe_highlight" confirm="Are you sure sent the quote terms to IAC？" name="buttonSubmit"/>
+                        <button String="Create Info record" states="replay" type="object" class="oe_highlight" name="action_replay_as_confirm" />
+                        <button String="Reset" states="wf_fail,sap_fail" type="object" class="oe_highlight" name="action_restate_rfq"/>
+                        <button String="Delete" states="replay,draft" type="object" class="oe_highlight" name="action_cancel" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,rfq,cancel" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="plant_id" options="{'no_create': True}"/>
+                                <field name="part_id" options="{'no_create': True}" invisible="1"/>
+                                <field name="vendor_id" options="{'no_create': False}"/>
+                                <field name="part_code"/>
+                                <field name="buyer_code" options="{'no_create': True}"/>
+                                <field name="division_id" options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="currency_id" options="{'no_create': True, 'no_edit': True,'on_change': 'onchange_currency_id'}" required="1"/>
+                                <field name="price_control"/>
+                                <field name="vendor_part_no"/>
+                                <field name="reason_code"/>
+                                <field name="note"/>
+                            </group>
+                            <group>
+                                <field name="input_price" required="1"/>
+                                <field name="lt" required="1"/>
+                                <field name="moq" required="1"/>
+                                <field name="mpq" required="1"/>
+                                <field name="rw" required="1"/>
+                                <field name="cw" required="1"/>
+                                <field name="tax" required="1"/>
+                                <field name="valid_from" required="1"/>
+                                <field name="valid_to" required="1"/>
+                            </group>
+                            <group>
+                                <field name="last_rfq_id" invisible="1"/>
+                                <field name="orig_price"/>
+                                <field name="orig_lt"/>
+                                <field name="orig_moq"/>
+                                <field name="orig_mpq"/>
+                                <field name="orig_rw"/>
+                                <field name="orig_cw"/>
+                                <field name="orig_tax"/>
+                                <field name="orig_valid_from"/>
+                                <field name="orig_valid_to"/>
+                            </group>
+                        </group>
+                    </sheet>
+
+                    <!--
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                    -->
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_iac_rfq_quote_as">
+            <field name="name">AS Review</field>
+            <field name="res_model">iac.rfq.quote.as</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain" eval="[('type','=','quote'),('state','in',['draft','replay'])]"/>
+            <field name="view_id" ref="view_iac_rfq_quote_as_list"/>
+        </record>
+
+        <!--begin AS查看CM上传的RFQ所有有效的历史记录_by_jiangjun-->
+        <record id="view_iac_rfq_quote_other_price_form" model="ir.ui.view">
+            <field name="name">CM Uploaded Other Price</field>
+            <field name="type">form</field>
+            <field name="model">iac.rfq.quote.as</field>
+            <field name="arch" type="xml">
+                <form string="Info record History" create="false" edit="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <!--<field name="name" readonly="1"/>-->
+                                <field name="vendor_id" options="{'no_create': True,'no_open': True}"/>
+                                <field name="part_id" options="{'no_create': True,'no_open': True}"/>
+                                <field name="plant_id" options="{'no_create': True,'no_open': True}"/>
+                                <!--<field name="part_code"/>-->
+                                <field name="buyer_code" options="{'no_create': True,'no_open': True}"/>
+                                <!--<field name="buyer_name"/>-->
+                                <field name="division_id" options="{'no_create': True,'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="valid_from" required="1"/>
+                                <field name="valid_to"/>
+                                <field name="price_control"/>
+                                <field name="input_price"/>
+                                <field name="currency_id" options="{'no_create': True,'no_open': True}"/>
+                                <field name="tax"/>
+                            </group>
+                        </group>
+
+                        <notebook options="{'no_create': True,'no_open': True}" readonly="1">
+                              <page string="Other Price" options="{'no_create': True,'no_open': True}" readonly="1">
+                                  <field name="new_vs_old_ids">
+                                      <tree string="Other Price" delete="false" create="false" edit="false">
+                                          <field name="old_rfq_plant_id"/>
+                                          <field name="old_rfq_vendor_id"/>
+                                          <field name="old_rfq_part_id"/>
+                                          <field name="old_rfq_buy_id" />
+                                          <field name="old_rfq_division_id" />
+                                          <field name="old_rfq_valid_from" />
+                                          <field name="old_rfq_valid_to"/>
+                                          <field name="old_rfq_price_control"/>
+                                          <field name="old_rfq_price_unit"/>
+                                          <field name="old_rfq_currency_id"/>
+                                          <field name="old_rfq_tax"/>
+                                          <field name="price_compare" string="最新价格变动"/>
+                                          <!--<field name="secd_lawf_unit_id" string="法2单位名称"/>-->
+                                          <!--<field name="natcd"/>-->
+                                          <!--<field name="destination_natcd"/>-->
+                                          <!--<field name="dcl_uprc_amt"/>-->
+                                          <!--<field name="dcl_total_amt"/>-->
+                                          <!--<field name="dcl_currcd"/>-->
+                                          <!--<field name="lawf_qty"/>-->
+                                          <!--<field name="secd_lawf_qty"/>-->
+                                          <!--<field name="dcl_qty"/>-->
+                                          <!--<field name="lvyrlf_modecd"/>-->
+                                          <!--<field name="open_asn_qty"/>-->
+                                          <!--<field name="usetocod"/>-->
+                                      </tree>
+                                  </field>
+                              </page>
+                          </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--点击other price按钮跳转的form视图-->
+        <record model="ir.actions.act_window" id="action_iac_rfq_quote_other_price_form">
+            <field name="name">CM Upload Info record History</field>
+            <field name="res_model">iac.rfq.quote.as</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_iac_rfq_quote_other_price_form"/>
+        </record>
+        <!--end-->
+
+
+        <record id="action_server_iac_rfq_quote_as_create_rfq" model="ir.actions.server">
+            <field name="name">Create RFQ</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_quote_as"></field>
+            <field name="state">code</field>
+            <field name="code">
+                if env.context.get('active_ids'):
+                model.browse(context['active_ids']).action_replay_as_confirm()
+            </field>
+            <field name="usage">model</field>
+        </record>
+
+
+        <record model="ir.values" id="ir_values_iac_rfq_quote_as_create_rfq">
+            <field name="name">Create RFQ</field>
+            <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_quote_as_create_rfq" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_quote_as" />
+            <field name="model">iac.rfq.quote.as</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+
+
+        <!--rfq delete(cancel)-->
+        <record id="action_server_iac_rfq_quote_as_delete_quote" model="ir.actions.server">
+            <field name="name">No Action Required</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_quote_as"></field>
+            <field name="state">code</field>
+            <field name="code">
+                if env.context.get('active_ids'):
+                model.browse(context['active_ids']).action_cancel()
+            </field>
+            <field name="usage">model</field>
+        </record>
+
+        <record model="ir.values" id="ir_values_iac_rfq_quote_as_delete_quote">
+            <field name="name">No Action Required</field>
+            <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_quote_as_delete_quote" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_quote_as" />
+            <field name="model">iac.rfq.quote.as</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+
+
+        <record id="action_server_iac_rfq_quote_as_sent_to_vendor" model="ir.actions.server">
+            <field name="name">Send To Vendor</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_quote_as"></field>
+            <field name="state">code</field>
+            <field name="code">
+                if env.context.get('active_ids'):
+                model.browse(context['active_ids']).action_quotation_send()
+            </field>
+            <field name="usage">model</field>
+        </record>
+
+        <record model="ir.values" id="ir_values_iac_rfq_quote_as_sent_to_vendor">
+            <field name="name">Send To Vendor</field>
+            <field name="value" eval="'ir.actions.server,%d'%action_server_iac_rfq_quote_as_sent_to_vendor" />
+            <field name="key">action</field>
+            <field name="model_id" ref="oscg_rfq.model_iac_rfq_quote_as" />
+            <field name="model">iac.rfq.quote.as</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+
+        <!--
+        <record model="ir.actions.act_window"  id="action_rfq_as_import">
+            <field name="name">RFQ AS Import</field>
+            <field name="res_model">iac.document.upload</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context" eval="{'default_res_model': 'iac.rfq.import','default_code': '2'}"/>
+        </record>
+        -->
+
+        <record id="view_iac_rfq_import_as_wizard" model="ir.ui.view">
+            <field name="name">Quote Cm Import</field>
+            <field name="model">iac.rfq.import.as.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Wizard tools">
+                    <group>
+                        <field name="file_name" invisible="0"/>
+                        <field name="res_model" invisible="1"/>
+                        <field name="file" filename="file_name"/>
+                    </group>
+                    <footer>
+                        <button name="action_upload_file" string="Confirm" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                        or
+                        <button name="action_download_file" string="Download Template" type="object"  class="oe_highlight"  />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"  id="action_iac_rfq_import_as_wizard">
+            <field name="name">Info record AS Import</field>
+            <field name="res_model">iac.rfq.import.as.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context" eval="{'default_res_model': 'iac.rfq.import.as'}"/>
+        </record>
+
+
+        <!-- Upload List AS search view -->
+        <record model="ir.ui.view" id="as_rfq_search_view">
+            <field name="name">Rfq Import Search</field>
+            <field name="model">iac.rfq.import.as</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="vendor_id"/>
+                    <field name="part_id"/>
+                </search>
+            </field>
+        </record>
+
+
+        <!-- Upload List MM search view -->
+        <record model="ir.ui.view" id="buyer_rfq_search_view">
+            <field name="name">Rfq Import Search</field>
+            <field name="model">iac.rfq.import.buyer</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="vendor_id"/>
+                    <field name="part_id"/>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</odoo>

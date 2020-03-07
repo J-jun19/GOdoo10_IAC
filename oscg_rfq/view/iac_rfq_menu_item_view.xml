@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <!-- Top Level Menu -->
+      <menuitem id="menu_rfq" name="Info Record"/>
+
+      <!-- Level 1 Menu -->
+      <menuitem id="menu_rfq_view" name="Quote" parent="menu_rfq" sequence="10"/>
+      <menuitem id="menu_rfq_rfq" name="Info Record" parent="menu_rfq" sequence="20"/>
+      <!--
+      <menuitem id="menu_rfq_group" name="Group" parent="menu_rfq" sequence="30"/>
+      -->
+      <menuitem id="menu_01_administrator" name="Administration" parent="menu_rfq" sequence="30"/>
+
+      <!--Level 3 Menu Quote-->
+      <menuitem id="menu_iac_rfq_quote_default" name="Quote List" sequence="1010" parent="menu_rfq_view" action="action_iac_rfq_quote"/>
+      <menuitem id="menu_iac_rfq_quote_import" name="CM Import" sequence="1020" parent="menu_rfq_view" action="action_iac_rfq_import_quote_cm_wizard" />
+      <menuitem id="menu_iac_rfq_quote_as" name="AS Review" sequence="1030" parent="menu_rfq_view" action="action_iac_rfq_quote_as"/>
+      <menuitem id="menu_iac_rfq_quote_vendor" name="Vendor Confirm" sequence="1040" parent="menu_rfq_view" action="action_rfq_quote_vendor" />
+
+      <!--Level 3 Menu RFQ-->
+      <menuitem id="menu_iac_rfq_create" name="Create" sequence="2010" parent="menu_rfq_rfq" action="action_iac_rfq_create" />
+      <menuitem id="menu_iac_rfq_change_term" name="Change Term" sequence="2020" parent="menu_rfq_rfq" action="action_iac_rfq_change_term" />
+
+      <menuitem id="menu_iac_rfq_as_upload" name="Batch: AS Upload" sequence="2030" parent="menu_rfq_rfq" action="action_iac_rfq_import_as_wizard" />
+
+      <menuitem id="menu_iac_rfq_as_uploaded" name="Upload List: AS" sequence="2040" parent="menu_rfq_rfq" action="action_iac_rfq_import_as"/>
+
+      <menuitem id="menu_iac_rfq_as_uploaded_buyer" name="Upload List: MM" sequence="2045" parent="menu_rfq_rfq" action="action_iac_rfq_import_buyer"/>
+
+      <menuitem id="menu_iac_rfq_mm_download" name="Batch: MM Download" sequence="2050" parent="menu_rfq_rfq" action="action_iac_rfq_import_mm_form" />
+      <menuitem id="menu_iac_rfq_mm_upload" name="Batch: MM Upload" sequence="2060" parent="menu_rfq_rfq" action="action_iac_rfq_import_mm_wizard" />
+
+      <menuitem id="menu_iac_rfq_mass_line_cm" name="Idle: CM Maintain" parent="menu_rfq_rfq" sequence="2070" action="action_iac_rfq_mass_line_cm_list"/>
+      <menuitem id="menu_iac_rfq_mass_line_buyer" name="Idle: MM Maintain" parent="menu_rfq_rfq" sequence="2080" action="action_iac_rfq_mass_line_buyer_list"/>
+      <menuitem id="menu_iac_rfq_rfq" name="MM Release" sequence="2090" parent="menu_rfq_rfq" action="action_iac_rfq_mm_release" />
+
+
+      <!--level 3 Administrator -->
+      <menuitem id="menu_iac_rfq_mass_job_log" name="Idle Info record Job Log" parent="menu_01_administrator" sequence="3010" action="action_iac_rfq_mass_job_list"/>
+      <menuitem id="menu_iac_rfq_mass_variant" name="Idle Info record Job Variant" parent="menu_01_administrator" sequence="3020" action="action_iac_rfq_mass_variant_list"/>
+      <menuitem id="menu_iac_rfq_user_group" name="Create Autherization " sequence="3030" parent="menu_01_administrator" action="action_iac_rfq_user_group_list"/>
+      <menuitem id="menu_iac_rfq_mm_uploaded_history" name="Release List" sequence="3040" parent="menu_01_administrator" action="action_iac_rfq_import_mm_list" />
+      <menuitem id="menu_iac_rfq_qh" name="Approve Rule Setting" sequence="3050" parent="menu_01_administrator" action="action_rfq_qh"/>
+      <menuitem id="menu_iac_rfq_cost_up_reason" name="Maintain Cost Up Reason" sequence="3060" parent="menu_01_administrator" action="action_rfq_cost_up_reason"/>
+
+      <!--
+      <menuitem id="menu_iac_rfq_grouping" name="RFQ Groups" sequence="20" parent="menu_rfq_group" action="action_rfq_grouping" />
+     -->
+
+      <!--Level 3 Group -->
+
+
+
+
+  </data>
+</odoo>
