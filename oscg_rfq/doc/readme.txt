@@ -1,4 +1,4 @@
----------------存疑问题
+﻿---------------存疑问题
 1	手动新增rfq的价格和交易条件的来源是什么
     与供应商协商的结果
 2	修改已经存在的rfq的限制条件是什么
@@ -111,3 +111,5 @@ select * from iac_rfq_mass_job_ex order by id desc;
 po 导入
 po change 导入
 asn 导入
+
+hahaha
