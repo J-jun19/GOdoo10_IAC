@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_list_iac_supplier_company_delete">
+            <field name="name">Supplier Company Delete List</field>
+            <field name="res_model">iac.supplier.company.delete.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.ui.view" id="form_iac_supplier_company_delete_wizard">
+            <field name="name">iac.supplier.company.delete.wizard.form</field>
+            <field name="model">iac.supplier.company.delete.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Company Delete Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="plant_id" options="{'no_create':True,'no_edit':True,'no_open':True}" required="1"/>
+                                <field name="supplier_company_id" options="{'no_create':True,'no_edit':True,'no_open':True}" required="1"/>
+                                <field name="date_begin" required="1"/>
+                                <field name="date_end" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name='search_supplier_company_delete'
+                                string='Search'
+                                class='btn-primary'
+                                type='object'/>
+                        or
+                        <button string='Cancel'
+                                class='btn-default'
+                                special='cancel'/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="iac_supplier_company_delete_action_server" model="ir.actions.server">
+            <field name="name">Delete SC</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_score_list_inherit"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.delete_supplier_company()
+            </field>
+        </record>
+
+        <record id="action_iac_supplier_company_delete" model="ir.values">
+            <field name="name">Delete SC</field>
+            <field name="model_id" ref="model_iac_score_list_inherit"/>
+            <field name="model">iac.score.list.inherit</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_supplier_company_delete_action_server" name="value"/>
+        </record>
+
+        <record id="list_iac_score_list_inherit" model="ir.ui.view">
+            <field name="name">iac.score.list.inherit.list</field>
+            <field name="model">iac.score.list.inherit</field>
+            <field name="arch" type="xml">
+                <tree string="Score List">
+                    <field name="plant_id"/>
+                    <field name="supplier_company_id"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

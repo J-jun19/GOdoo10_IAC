@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- SCM User选择D class处理方式-->
+        <record model="ir.ui.view" id="view_scm_user_dclass_part_category_list">
+            <field name="name">scm_user_dclass_part_category.list</field>
+            <field name="model">iac.dclass.part_category.scm_user</field>
+            <field name="arch" type="xml">
+                <tree string="Part Category Class" create="false" editable="bottom">
+                    <button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('state','not in', ('scoring','disapprove'))]}"/>
+                    <field name="supplier_company_id" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="calculate_part_class"/>
+                    <field name="final_part_class"/>
+                    <field name="scm_memo" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="qm_memo" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_type" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_remark" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="disapproval_memo" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="plm_number" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="plm_remark" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_scm_user_dclass_part_category_form">
+            <field name="name">scm_user_dclass_part_category.form</field>
+            <field name="model">iac.dclass.part_category.scm_user</field>
+            <field name="arch" type="xml">
+                <form string="Part Category Class" create="false">
+                    <sheet>
+                        <group>
+                            <field name="supplier_company_id" readonly="1"/>
+                            <field name="part_category_id" readonly="1"/>
+                            <field name="calculate_part_class"/>
+                            <field name="final_part_class"/>
+                            <field name="scm_memo"/>
+                            <field name="qm_memo" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_type" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_remark" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="state"/>
+                        </group>
+                        <notebook>
+                            <page name="part_category" string="Part Category">
+                                <field name="score_part_category_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- SCM Controller做D class处理-->
+        <record model="ir.ui.view" id="view_scm_controller_dclass_part_category_list">
+            <field name="name">scm_controller_dclass_part_category.list</field>
+            <field name="model">iac.dclass.part_category.scm_controller</field>
+            <field name="arch" type="xml">
+                <tree string="Part Category Class" create="false" editable="bottom">
+                    <button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('state','not in', ('scoring','disapprove'))]}"/>
+                    <field name="supplier_company_id" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="calculate_part_class"/>
+                    <field name="final_part_class"/>
+                    <field name="scm_memo" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="qm_memo" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="file_id" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_type" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_remark" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="disapproval_memo" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="plm_number" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="plm_remark" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_scm_controller_dclass_part_category_form">
+            <field name="name">scm_controller_dclass_part_category.form</field>
+            <field name="model">iac.dclass.part_category.scm_controller</field>
+            <field name="arch" type="xml">
+                <form string="Part Category Class" create="false">
+                    <sheet>
+                        <group>
+                            <field name="supplier_company_id" readonly="1"/>
+                            <field name="part_category_id" readonly="1"/>
+                            <field name="calculate_part_class"/>
+                            <field name="final_part_class"/>
+                            <field name="scm_memo"/>
+                            <field name="qm_memo" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_type" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_remark" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="state"/>
+                        </group>
+                        <notebook>
+                            <page name="part_category" string="Part Category">
+                                <field name="score_part_category_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- SCM Leader做D class处理-->
+        <record model="ir.ui.view" id="view_scm_leader_dclass_part_category_list">
+            <field name="name">scm_leader_dclass_part_category.list</field>
+            <field name="model">iac.dclass.part_category.scm_leader</field>
+            <field name="arch" type="xml">
+                <tree string="Part Category Class" create="false" editable="bottom">
+                    <button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('state','not in', ('scoring','disapprove'))]}"/>
+                    <field name="supplier_company_id" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="calculate_part_class"/>
+                    <field name="final_part_class"/>
+                    <field name="scm_memo" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="qm_memo" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="file_id" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_type" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_remark" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="disapproval_memo" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="plm_number" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="plm_remark" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_scm_leader_dclass_part_category_form">
+            <field name="name">scm_leader_dclass_part_category.form</field>
+            <field name="model">iac.dclass.part_category.scm_leader</field>
+            <field name="arch" type="xml">
+                <form string="Part Category Class" create="false">
+                    <sheet>
+                        <group>
+                            <field name="supplier_company_id" readonly="1"/>
+                            <field name="part_category_id" readonly="1"/>
+                            <field name="calculate_part_class"/>
+                            <field name="final_part_class"/>
+                            <field name="scm_memo"/>
+                            <field name="qm_memo" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_type" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_remark" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="state"/>
+                        </group>
+                        <notebook>
+                            <page name="part_category" string="Part Category">
+                                <field name="score_part_category_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- QM Controller做D class处理-->
+        <record model="ir.ui.view" id="view_qm_controller_dclass_part_category_list">
+            <field name="name">qm_controller_dclass_part_category.list</field>
+            <field name="model">iac.dclass.part_category.qm_controller</field>
+            <field name="arch" type="xml">
+                <tree string="Part Category Class" create="false" editable="bottom">
+                    <button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('state','not in', ('scoring','disapprove'))]}"/>
+                    <field name="supplier_company_id" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="calculate_part_class"/>
+                    <field name="final_part_class"/>
+                    <field name="scm_memo" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="qm_memo" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="file_id" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_type" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_remark" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="disapproval_memo" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="plm_number" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="plm_remark" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_qm_controller_dclass_part_category_form">
+            <field name="name">qm_controller_dclass_part_category.form</field>
+            <field name="model">iac.dclass.part_category.qm_controller</field>
+            <field name="arch" type="xml">
+                <form string="Part Category Class" create="false">
+                    <sheet>
+                        <group>
+                            <field name="supplier_company_id" readonly="1"/>
+                            <field name="part_category_id" readonly="1"/>
+                            <field name="calculate_part_class"/>
+                            <field name="final_part_class"/>
+                            <field name="scm_memo"/>
+                            <field name="qm_memo" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_type" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_remark" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="state"/>
+                        </group>
+                        <notebook>
+                            <page name="part_category" string="Part Category">
+                                <field name="score_part_category_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- QM Leader做D class处理-->
+        <record model="ir.ui.view" id="view_qm_leader_dclass_part_category_list">
+            <field name="name">qm_leader_dclass_part_category.list</field>
+            <field name="model">iac.dclass.part_category.qm_leader</field>
+            <field name="arch" type="xml">
+                <tree string="Part Category Class" create="false" editable="bottom">
+                    <button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('state','not in', ('scoring','disapprove'))]}"/>
+                    <field name="supplier_company_id" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="calculate_part_class"/>
+                    <field name="final_part_class"/>
+                    <field name="scm_memo" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="qm_memo" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="file_id" readonly="1" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_type" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="dclass_remark" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="disapproval_memo" attrs="{'invisible':[('state','not in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                    <field name="plm_number" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="plm_remark" attrs="{'invisible': [('state', '!=', 'd done')]}"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_qm_leader_dclass_part_category_form">
+            <field name="name">qm_leader_dclass_part_category.form</field>
+            <field name="model">iac.dclass.part_category.qm_leader</field>
+            <field name="arch" type="xml">
+                <form string="Part Category Class" create="false">
+                    <sheet>
+                        <group>
+                            <field name="supplier_company_id" readonly="1"/>
+                            <field name="part_category_id" readonly="1"/>
+                            <field name="calculate_part_class"/>
+                            <field name="final_part_class"/>
+                            <field name="scm_memo"/>
+                            <field name="qm_memo" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="dclass_file_id" widget="dms_file" string="D Class File" directory="model_muk_dms_directory.3"
+                                   attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_type" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="dclass_remark" attrs="{'invisible':[('state','in',['d class', 'to scm leader approve', 'to qm controller approve', 'to qm leader approve', 'd done'])]}"/>
+                            <field name="state"/>
+                        </group>
+                        <notebook>
+                            <page name="part_category" string="Part Category">
+                                <field name="score_part_category_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"  id="action_view_dclass_part_category_scm_controller_list">
+            <field name="name">Part Category Class</field>
+            <field name="res_model">iac.dclass.part_category.scm_controller</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_scm_controller_dclass_part_category_list"/>
+        </record>
+
+        <record model="ir.actions.act_window"  id="action_view_dclass_part_category_scm_leader_list">
+            <field name="name">Part Category Class</field>
+            <field name="res_model">iac.dclass.part_category.scm_leader</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_scm_leader_dclass_part_category_list"/>
+        </record>
+
+        <record model="ir.actions.act_window"  id="action_view_dclass_part_category_qm_controller_list">
+            <field name="name">Part Category Class</field>
+            <field name="res_model">iac.dclass.part_category.qm_controller</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_qm_controller_dclass_part_category_list"/>
+        </record>
+
+        <record model="ir.actions.act_window"  id="action_view_dclass_part_category_qm_leader_list">
+            <field name="name">Part Category Class</field>
+            <field name="res_model">iac.dclass.part_category.qm_leader</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_qm_leader_dclass_part_category_list"/>
+        </record>
+
+        <!-- SCM User提交D Class处理方式 -->
+        <record id="iac_d_class_scm_user_submit_action_server" model="ir.actions.server">
+            <field name="name">D Class Type Submit</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_scm_user"/>
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    action = records.action_batch_d_class_submit()
+            </field>
+        </record>
+
+        <record id="action_iac_d_class_scm_user_submit" model="ir.values">
+            <field name="name">D Class Type Submit</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_scm_user"/>
+            <field name="model">iac.dclass.part_category.scm_user</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_d_class_scm_user_submit_action_server" name="value"/>
+        </record>
+
+        <!-- QM Controller审核D Class处理方式 -->
+        <record id="iac_d_class_qm_controller_approval_action_server" model="ir.actions.server">
+            <field name="name">Approval</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_qm_controller"/>
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    action = records.action_batch_d_class_qm_controller_approve()
+            </field>
+        </record>
+
+        <record id="action_iac_d_class_qm_controller_approval" model="ir.values">
+            <field name="name">Approval</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_qm_controller"/>
+            <field name="model">iac.dclass.part_category.qm_controller</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_d_class_qm_controller_approval_action_server" name="value"/>
+        </record>
+
+        <!-- QM Controller拒绝D Class处理方式 -->
+        <record id="iac_d_class_qm_controller_disapproval_action_server" model="ir.actions.server">
+            <field name="name">Disapproval</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_qm_controller"/>
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    action = records.action_batch_d_class_qm_controller_disapprove()
+            </field>
+        </record>
+
+        <record id="action_iac_d_class_qm_controller_disapproval" model="ir.values">
+            <field name="name">Disapproval</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_qm_controller"/>
+            <field name="model">iac.dclass.part_category_qm_controller</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_d_class_qm_controller_disapproval_action_server" name="value"/>
+        </record>
+
+        <!-- SCM leader审核D Class处理方式 -->
+        <record id="iac_d_class_scm_leader_approval_action_server" model="ir.actions.server">
+            <field name="name">Approval</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_scm_leader"/>
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    action = records.action_batch_d_class_scm_leader_approve()
+            </field>
+        </record>
+
+        <record id="action_iac_d_class_scm_leader_approval" model="ir.values">
+            <field name="name">Approval</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_scm_leader"/>
+            <field name="model">iac.dclass.part_category.scm_leader</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_d_class_scm_leader_approval_action_server" name="value"/>
+        </record>
+
+        <!-- SCM leader拒绝D Class处理方式 -->
+        <record id="iac_d_class_scm_leader_disapproval_action_server" model="ir.actions.server">
+            <field name="name">Disapproval</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_scm_leader"/>
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    action = records.action_batch_d_class_scm_leader_disapprove()
+            </field>
+        </record>
+
+        <record id="action_iac_d_class_scm_leader_disapproval" model="ir.values">
+            <field name="name">Disapproval</field>
+            <field name="model_id" ref="model_iac_dclass_part_category_scm_leader"/>
+            <field name="model">iac.dclass.part_category.scm_leader</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_d_class_scm_leader_disapproval_action_server" name="value"/>
+        </record>
+    </data>
+</odoo>

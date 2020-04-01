@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+        <!-- muk目录 -->
+        <!--<record model="muk_dms.directory" id="directory_vendor_score">-->
+            <!--<field name="id">9</field>-->
+            <!--<field name="name">vendor_score</field>-->
+        <!--</record>-->
+        <!-- 供应商评鉴，评分项目 -->
+        <record model="ir.config_parameter" id="score_score_type_gr_ma">
+            <field name="key">score_score_type_入料MA</field>
+            <field name="value">入料MA</field>
+        </record>
+        <record model="ir.config_parameter" id="score_score_type_gr_mi">
+            <field name="key">score_score_type_入料MI</field>
+            <field name="value">入料MI</field>
+        </record>
+        <record model="ir.config_parameter" id="score_score_type_return_ppm">
+            <field name="key">score_score_type_退料PPM</field>
+            <field name="value">退料PPM</field>
+        </record>
+        <record model="ir.config_parameter" id="score_score_type_lrr">
+            <field name="key">score_score_type_LRR</field>
+            <field name="value">LRR</field>
+        </record>
+        <record model="ir.config_parameter" id="score_score_type_tc">
+            <field name="key">score_score_type_特採率</field>
+            <field name="value">特採率</field>
+        </record>
+
+        <!-- 供应商评鉴，失败成本类别 -->
+        <!--<record model="ir.config_parameter" id="score_fail_type_general">-->
+            <!--<field name="key">score_fail_type_失敗成本</field>-->
+            <!--<field name="value">失敗成本</field>-->
+        <!--</record>-->
+        <record model="ir.config_parameter" id="score_score_type_general">
+            <field name="key">score_score_type_失败成本</field>
+            <field name="value">失败成本</field>
+        </record>
+	</data>
+</odoo>

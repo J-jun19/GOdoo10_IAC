@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- SCM User 选择D Class处理方式 -->
+        <record id='iac_score_d_class_do_wizard_form' model='ir.ui.view'>
+          <field name='name'>D Class处理作业程式</field>
+          <field name='model'>iac.vendor.score.d_class.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="D Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='part_category_id' options="{'no_create_edit': True}"/>
+                            <field name='final_part_class' eval="D"/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_part_category_class_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_d_class_do"
+                    name="D Class处理作业程式"
+                    res_model="iac.vendor.score.d_class.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- SCM Controller审核D Class处理方式 -->
+        <record id='iac_score_scm_controller_d_class_approval_wizard_form' model='ir.ui.view'>
+          <field name='name'>审核D Class处理方式</field>
+          <field name='model'>iac.vendor.score.scm_controller.d_class_approval.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="D Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='part_category_id' options="{'no_create_edit': True}"/>
+                            <field name='dclass_type'/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_part_category_class_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_scm_controller_d_class_approval"
+                    name="审核D Class处理方式"
+                    res_model="iac.vendor.score.scm_controller.d_class_approval.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- SCM Leader审核D Class处理方式 -->
+        <record id='iac_score_scm_leader_d_class_approval_wizard_form' model='ir.ui.view'>
+          <field name='name'>审核D Class处理方式</field>
+          <field name='model'>iac.vendor.score.scm_leader.d_class_approval.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="D Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='part_category_id' options="{'no_create_edit': True}"/>
+                            <field name='dclass_type'/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_part_category_class_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_scm_leader_d_class_approval"
+                    name="审核D Class处理方式"
+                    res_model="iac.vendor.score.scm_leader.d_class_approval.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- QM Controller审核D Class处理方式 -->
+        <record id='iac_score_qm_controller_d_class_approval_wizard_form' model='ir.ui.view'>
+          <field name='name'>审核D Class处理方式</field>
+          <field name='model'>iac.vendor.score.qm_controller.d_class_approval.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="D Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='part_category_id' options="{'no_create_edit': True}"/>
+                            <field name='dclass_type'/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_part_category_class_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_qm_controller_d_class_approval"
+                    name="审核D Class处理方式"
+                    res_model="iac.vendor.score.qm_controller.d_class_approval.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- QM Leader审核D Class处理方式 -->
+        <record id='iac_score_qm_leader_d_class_approval_wizard_form' model='ir.ui.view'>
+          <field name='name'>审核D Class处理方式</field>
+          <field name='model'>iac.vendor.score.qm_leader.d_class_approval.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="D Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='part_category_id' options="{'no_create_edit': True}"/>
+                            <field name='dclass_type'/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_part_category_class_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_qm_leader_d_class_approval"
+                    name="审核D Class处理方式"
+                    res_model="iac.vendor.score.qm_leader.d_class_approval.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- 输入PLM申请单号 -->
+        <record id='iac_score_input_plm_number_wizard_form' model='ir.ui.view'>
+          <field name='name'>输入PLM申请单号</field>
+          <field name='model'>iac.vendor.score.input_plm_number.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="D Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='part_category_id' options="{'no_create_edit': True}"/>
+                            <field name='dclass_type'/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_part_category_class_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_input_plm_number"
+                    name="输入PLM申请单号"
+                    res_model="iac.vendor.score.input_plm_number.wizard"
+                    view_mode="form"
+                    target="new"/>
+    </data>
+</odoo>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id='iac_score_setuser_wizard_form' model='ir.ui.view'>
+          <field name='name'>score list set user view</field>
+          <field name='model'>iac.vendor.score.setuser.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="Vendor List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='plant_id' options="{'no_create_edit': True}"/>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="part_category_id" options="{'no_create_edit': True}"/>
+                            <field name="only_unset"/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_vendor_score_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_score_setuser"
+                    name="指定评核人员"
+                    res_model="iac.vendor.score.setuser.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <record id='iac_score_user_scoring_wizard_form' model='ir.ui.view'>
+          <field name='name'>score list user scoring view</field>
+          <field name='model'>iac.vendor.score.user_scoring.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="Vendor List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='plant_id' options="{'no_create_edit': True}"/>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_vendor_score_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_score_user_scoring"
+                    name="评核人员打分"
+                    res_model="iac.vendor.score.user_scoring.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- SCM controller 評定part category class  -->
+        <record id='iac_score_scm_scoring_pc_class_wizard_form' model='ir.ui.view'>
+          <field name='name'>scm scoring part category class view</field>
+          <field name='model'>iac.vendor.score.scm_pc_class.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="SCM Scoring Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='part_category_id' options="{'no_create_edit': True}"/>
+                            <field name='calculate_part_class'/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_vendor_score_part_category_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_score_scm_pc_class"
+                    name="SCM controller评定Part class"
+                    res_model="iac.vendor.score.scm_pc_class.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- SCM controller 評定supplier company class  -->
+        <record id='iac_score_scm_scoring_sc_class_wizard_form' model='ir.ui.view'>
+          <field name='name'>scm scoring SC class view</field>
+          <field name='model'>iac.vendor.score.scm_sc_class.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="SCM Scoring SC Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='calculate_class' readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_supplier_company_class_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_score_scm_sc_class"
+                    name="SCM controller评定SC class"
+                    res_model="iac.vendor.score.scm_sc_class.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- QM leader核准part category class调整 -->
+        <record id='iac_score_qm_approve_pc_class_wizard_form' model='ir.ui.view'>
+          <field name='name'>qm leader scoring part category class view</field>
+          <field name='model'>iac.vendor.score.qm_approve_pc_class.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="QM Leader Approve Part Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='part_category_id' options="{'no_create_edit': True}"/>
+                            <field name='final_part_class'/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_vendor_score_part_category_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_score_qm_approve_pc_class"
+                    name="QM leader核准Part Class调整"
+                    res_model="iac.vendor.score.qm_approve_pc_class.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- QM leader核准supplier company class调整 -->
+        <record id='iac_score_qm_approve_sc_class_wizard_form' model='ir.ui.view'>
+          <field name='name'>qm leader scoring supplier company class view</field>
+          <field name='model'>iac.vendor.score.qm_approve_sc_class.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="QM Leader Approve SC Class List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create_edit': True}"/>
+                            <field name='final_class'/>
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_supplier_company_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_score_qm_approve_sc_class"
+                    name="QM leader核准SC Class调整"
+                    res_model="iac.vendor.score.qm_approve_sc_class.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- 手动产生评核名单 -->
+        <record id='iac_score_gen_score_list_wizard_form' model='ir.ui.view'>
+          <field name='name'>gen score list view</field>
+          <field name='model'>iac.vendor.score.gen_score_list.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="Gen Score List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='supplier_company_id' options="{'no_create': True,'no_edit':True,'no_open':True}" required="1"/>
+                            <field name='final_part_class'/>
+                            <!--<field name='qvl_date'/>-->
+                        </group>
+                    </group>
+                </sheet>
+                  <footer>
+                <button name='search_supplier_company_class_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_score_gen_score_list"
+                    name="手动产生评核名单"
+                    res_model="iac.vendor.score.gen_score_list.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+        <!-- d class return,SCM Controller申请D Class返回，根据vendor code查找D Class状态的SC -->
+        <record id='iac_dclass_return_wizard_form' model='ir.ui.view'>
+          <field name='name'>申请D Class返回</field>
+          <field name='model'>iac.dclass.return.wizard</field>
+          <field name='arch' type='xml'>
+              <form string="D Class Return">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='vendor_id' options="{'no_create_edit': True}"/>
+                            <field name='final_class'/>
+                        </group>
+                    </group>
+                </sheet>
+              <footer>
+                <button name='search_supplier_company_list'
+                        string='Search'
+                        class='btn-primary'
+                        type='object'/>
+                or
+                <button string='Cancel'
+                        class='btn-default'
+                        special='cancel'/>
+              </footer>
+            </form>
+          </field>
+        </record>
+
+        <act_window id="action_wizard_dclass_return"
+                    name="申请D Class返回"
+                    res_model="iac.dclass.return.wizard"
+                    view_mode="form"
+                    target="new"/>
+    </data>
+</odoo>

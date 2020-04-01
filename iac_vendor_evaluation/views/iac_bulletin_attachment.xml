@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <!-- Currency Exchange-->
+
+      <record id="view_form_iac_bulletin_attachment" model="ir.ui.view">
+          <field name="name">muk_dms_file.form</field>
+          <field name="model">iac.bulletin.attachment</field>
+          <field name="arch" type="xml">
+              <form string="File">
+                  <sheet>
+                      <group>
+                          <group>
+                              <field name="filename"/>
+                              <field name="file" filename="filename" widget="preview_file"/>
+                              <field name="link_download" widget="url" />
+                              <field name="file_desc"/>
+                              <field name="bulletin_id" invisible="1"/>
+                              <field name="directory" invisible="1"/>
+                              <field name="create_date" invisible="1"/>
+                          </group>
+
+                      </group>
+                  </sheet>
+                  <footer attrs="{'invisible': [('create_date', '!=', False)]}">
+                      <button string='Save And Return' name="button_to_return" type="object" class="btn-primary"/>
+                      <button string="Cancel" class="btn-default" special="cancel"/>
+                  </footer>
+              </form>
+          </field>
+      </record>
+
+
+      <record id="action_view_form_iac_bulletin_attachment" model="ir.actions.act_window">
+          <field name="name">Bulletin  Attachment</field>
+          <field name="view_mode">form</field>
+          <field name="res_model">iac.bulletin.attachment</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form</field>
+          <field name="target">new</field>
+      </record>
+
+
+      <record id="view_form_iac_bulletin_publish_attachment" model="ir.ui.view">
+          <field name="name">Bulletin Attachment</field>
+          <field name="model">iac.bulletin.publish.attachment</field>
+          <field name="arch" type="xml">
+              <form string="File">
+                  <sheet>
+                      <group>
+                          <group>
+                              <field name="filename"/>
+                              <field name="file" filename="filename" widget="preview_file"/>
+                              <field name="link_download" widget="url" />
+                              <field name="file_desc"/>
+                              <field name="bulletin_id" invisible="1"/>
+                              <field name="publish_id" invisible="1"/>
+                              <field name="directory" invisible="1"/>
+                              <field name="create_date" invisible="1"/>
+                          </group>
+
+                      </group>
+                  </sheet>
+                  <footer attrs="{'invisible': [('create_date', '!=', False)]}">
+                      <button string='Save And Return' name="button_to_return" type="object" class="btn-primary"/>
+                      <button string="Cancel" class="btn-default" special="cancel"/>
+                  </footer>
+              </form>
+          </field>
+      </record>
+
+  </data>
+</odoo>

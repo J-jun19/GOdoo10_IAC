@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 公告信息管理,编辑公告,发布公告 -->
+        <record id="view_form_iac_bulletin" model="ir.ui.view">
+            <field name="name">iac.bulletin.form</field>
+            <field name="model">iac.bulletin</field>
+            <field name="arch" type="xml">
+                <form string="IAC bulletin List" >
+                    <header>
+                        <button String="Publish"
+                                states="draft"
+                                type="object" class="oe_highlight" name="button_to_publish"
+                                />
+
+                        <button String="Attach Files"  type="object" class="oe_highlight"
+                                states="draft"
+                                name="button_attach_file"
+                                />
+
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,published" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <group colspan="4">
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="start_date" required="1"/>
+                                <field name="is_all" />
+                                <field name="send_mail_freq" />
+                            </group>
+                            <group>
+                                <field name="white_id"  options="{'no_create': True, 'no_edit': True,'no_create': True,'no_open':True}"/>
+                                <field name="end_date" required="1"/>
+                                <field name="send_mail" />
+                            </group>
+                        </group>
+                        <group colspan="4">
+                            <field name="subject" required="1"/>
+                            <field name="body" required="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Attachment">
+                                <field name="attachment_line_ids"  readonly="1" >
+                                    <tree string="Attachment">
+                                        <field name="file_id"/>
+                                        <field name="file_desc"/>
+                                        <field name="memo"/>
+                                        <button name="button_to_unlink" type="object"
+                                                confirm="File will be deleted. Do you want to proceed?"
+                                                class="oe_stat_button" icon="fa-remove"></button>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_list_iac_bulletin" model="ir.ui.view">
+            <field name="name">iac.bulletin.tree</field>
+            <field name="model">iac.bulletin</field>
+            <field name="arch" type="xml" >
+                <tree string="Bulletin Info">
+                                <field name="name" />
+                                <field name="white_id" options="{'no_create': True, 'no_edit': True}"/>
+                                <field name="is_all" />
+                                <field name="subject" />
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_list_iac_bulletin">
+            <field name="name">Bulletin Info</field>
+            <field name="res_model">iac.bulletin</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_list_iac_bulletin" />
+        </record>
+
+
+        <record id="action_server_iac_bulletin_publish" model="ir.actions.server">
+            <field name="name">Publish</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_bulletin"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_publish()
+            </field>
+        </record>
+
+        <record id="action_value_iac_bulletin_publish" model="ir.values">
+            <field name="name">Publish</field>
+            <field name="model_id" ref="model_iac_bulletin"/>
+            <field name="model">iac.bulletin</field>
+            <field name="key2">client_action_multi</field> <!--菜单出现的位置-->
+            <field eval="'ir.actions.server,%d'%action_server_iac_bulletin_publish" name="value"/>
+        </record>
+
+
+
+        <!---公告白名单 -->
+        <record id="view_form_iac_bulletin_white" model="ir.ui.view">
+            <field name="name">iac.bulletin.white.form</field>
+            <field name="model">iac.bulletin.white</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Score List" >
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <field name="description" />
+                                <field name="active" />
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Bulletin White Line">
+                                <field name="line_ids" >
+                                    <tree string="Line">
+                                        <field name="vendor_id" options="{'no_create': True, 'no_edit': True,'no_create': True,'no_open':True}"/>
+                                        <field name="vendor_code"/>
+                                        <field name="vendor_name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_list_iac_bulletin_white" model="ir.ui.view">
+            <field name="name">iac.bulletin.white.tree</field>
+            <field name="model">iac.bulletin.white</field>
+            <field name="arch" type="xml" >
+                <tree string="Bulletin Info">
+                                <field name="name" />
+                                <field name="description" />
+                                <field name="active" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_form_iac_bulletin_white_line" model="ir.ui.view">
+            <field name="name">iac.bulletin.white.line.form</field>
+            <field name="model">iac.bulletin.white.line</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Info" >
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="vendor_id" domain="[('state','in',['done'])]" options="{'no_create':True,'no_edit':True,'no_open':True}" />
+
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_list_iac_bulletin_white">
+            <field name="name">Bulletin Info</field>
+            <field name="res_model">iac.bulletin.white</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_list_iac_bulletin_white" />
+        </record>
+
+        <!--已经发布的公告信息 -->
+        <record id="view_form_iac_bulletin_publish" model="ir.ui.view">
+            <field name="name">iac.bulletin.publish.form</field>
+            <field name="model">iac.bulletin.publish</field>
+            <field name="arch" type="xml">
+                <form string="Bulletin Published" create="false" edit="false" delete="false">
+                    <sheet>
+                        <group colspan="4">
+                            <group>
+                                <field name="vendor_id" options="{'no_open':True}" required="1"/>
+                                <field name="start_date" required="1"/>
+                                <field name="send_mail" />
+                            </group>
+                            <group>
+                                <field name="bulletin_id" options="{'no_open':True}"/>
+                                <field name="end_date" required="1"/>
+                                <field name="send_mail_freq" />
+                            </group>
+                        </group>
+                        <group colspan="4">
+                            <field name="subject" required="1"/>
+                            <field name="body" required="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Line">
+                                <field name="attachment_line_ids" >
+                                    <tree string="Line">
+                                        <field name="file_id"/>
+                                        <field name="file_desc"/>
+                                        <field name="memo"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_list_iac_bulletin_publish" model="ir.ui.view">
+            <field name="name">iac.bulletin.publish.tree</field>
+            <field name="model">iac.bulletin.publish</field>
+            <field name="arch" type="xml" >
+                <tree string="Bulletin Info" create="false" edit="false" delete="false">
+                                <field name="vendor_id" groups="oscg_vendor.IAC_vendor_groups,oscg_vendor.group_set_bulletin"/>
+                                <field name="bulletin_id" groups="oscg_vendor.IAC_vendor_groups,oscg_vendor.group_set_bulletin"/>
+                                <field name="subject" groups="oscg_vendor.IAC_vendor_groups,oscg_vendor.group_set_bulletin"/>
+                                <field name="start_date" groups="oscg_vendor.IAC_vendor_groups,oscg_vendor.group_set_bulletin"/>
+                                <field name="end_date" groups="oscg_vendor.IAC_vendor_groups,oscg_vendor.group_set_bulletin"/>
+                                <field name="send_mail" groups="oscg_vendor.IAC_vendor_groups,oscg_vendor.group_set_bulletin"/>
+                                <field name="send_mail_freq" groups="oscg_vendor.IAC_vendor_groups,oscg_vendor.group_set_bulletin"/>
+
+                                <!--<field name="vendor_id" />-->
+                                <!--<field name="bulletin_id" />-->
+                                <!--<field name="subject" />-->
+                                <!--<field name="start_date" />-->
+                                <!--<field name="end_date" />-->
+                                <!--<field name="send_mail" />-->
+                                <!--<field name="send_mail_freq" />-->
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_list_iac_bulletin_publish">
+            <field name="name">Bulletin Info Published</field>
+            <field name="res_model">iac.bulletin.publish</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_list_iac_bulletin_publish" />
+        </record>
+
+
+        <!-- 白名单上传向导 -->
+        <record id="view_wizard_bulletin_white_upload" model="ir.ui.view">
+              <field name="name">Recipient Upload</field>
+              <field name="model">iac.bulletin.white.upload</field>
+              <field name="arch" type="xml">
+                  <form string="Wizard tools">
+                      <group>
+                          <field name="name"/>
+                          <field name="description"/>
+                          <field name="file_name" invisible="0"/>
+                          <field name="res_model" invisible="1"/>
+                          <field name="file" filename="file_name"/>
+                      </group>
+                      <footer>
+                          <button name="action_confirm" string="确定" type="object"  class="oe_highlight"  />
+                          or
+                          <button string="取消" class="oe_link" special="cancel" />
+                          or
+                          <button name="action_download_file" string="Download Template" type="object"  class="oe_highlight"  />
+                      </footer>
+                  </form>
+              </field>
+          </record>
+
+          <record model="ir.actions.act_window"  id="action_iac_bulletin_white_import">
+              <field name="name">Recipient Import</field>
+              <field name="res_model">iac.bulletin.white.upload</field>
+              <field name="view_type">form</field>
+              <field name="view_mode">form</field>
+              <field name="target">new</field>
+              <field name="context" eval="{'default_res_model': 'iac.bulletin.white.line'}"/>
+          </record>
+  </data>
+</odoo>

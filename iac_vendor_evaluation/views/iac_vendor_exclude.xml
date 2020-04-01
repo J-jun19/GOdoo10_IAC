@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 所有厂区免评Supplier Company-->
+        <record id="view_score_exclude_form" model="ir.ui.view">
+            <field name="name">iac.score.exclude.form</field>
+            <field name="model">iac.score.exclude</field>
+            <field name="arch" type="xml">
+                <form string="Score Exclude">
+                    <sheet>
+                        <group>
+                            <field name="supplier_company_id" options="{'no_create_edit': True}"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_score_exclude_list" model="ir.ui.view">
+            <field name="name">iac.score.exclude.list</field>
+            <field name="model">iac.score.exclude</field>
+            <field name="arch" type="xml">
+                <tree string="Score Exclude">
+                    <field name="supplier_company_id"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_score_exclude_list">
+            <field name="name">Score Exclude</field>
+            <field name="res_model">iac.score.exclude</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_score_exclude_list" />
+        </record>
+		
+        <!-- 按厂区免评Supplier Company -->
+        <record id="view_score_exclude_plant_form" model="ir.ui.view">
+            <field name="name">iac.score.exclude.plant.form</field>
+            <field name="model">iac.score.exclude.plant</field>
+            <field name="arch" type="xml">
+                <form string="Score Exclude Plant">
+                    <sheet>
+                        <group>
+							<field name="plant_id" options="{'no_create_edit': True}"/>
+                            <field name="supplier_company_id" options="{'no_create_edit': True}"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_score_exclude_plant_list" model="ir.ui.view">
+            <field name="name">iac.score.exclude.plant.list</field>
+            <field name="model">iac.score.exclude.plant</field>
+            <field name="arch" type="xml">
+                <tree string="Score Exclude Plant">
+					<field name="plant_id"/>
+                    <field name="supplier_company_id"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_score_exclude_plant_list">
+            <field name="name">Score Exclude Plant</field>
+            <field name="res_model">iac.score.exclude.plant</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_score_exclude_plant_list" />
+        </record>
+
+	</data>
+</odoo>

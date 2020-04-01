@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 材料类别 -->
+        <record id="view_part_category_form" model="ir.ui.view">
+            <field name="name">iac.part.category.form</field>
+            <field name="model">iac.part.category</field>
+            <field name="arch" type="xml">
+                <form string="Part Category">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="part_class"/>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="material_group_ids" widget="many2many_tags" options="{'no_create': True, 'no_edit': True}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_part_category_list" model="ir.ui.view">
+            <field name="name">iac.part.category.list</field>
+            <field name="model">iac.part.category</field>
+            <field name="arch" type="xml">
+                <tree string="Part Category">
+                    <field name="part_class"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_part_category_list">
+            <field name="name">Part Category</field>
+            <field name="res_model">iac.part.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_part_category_list" />
+        </record>
+
+        <!-- 材料类别history -->
+        <record id="view_part_category_material_group_history_form" model="ir.ui.view">
+            <field name="name">iac.part_category.material_group.history</field>
+            <field name="model">iac.part_category.material_group.history</field>
+            <field name="arch" type="xml">
+                <form string="Part Category" create="false">
+                    <sheet>
+                        <group>
+                            <field name="part_category_id" readonly="1"/>
+                            <field name="material_group_id" readonly="1"/>
+                            <field name="score_snapshot" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_part_category_material_group_history_list" model="ir.ui.view">
+            <field name="name">iac.part_category.material_group.history</field>
+            <field name="model">iac.part_category.material_group.history</field>
+            <field name="arch" type="xml">
+                <tree string="Part Category" create="false">
+                    <field name="part_category_id"/>
+                    <field name="material_group_id"/>
+                    <field name="score_snapshot"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_part_category_material_group_history_list">
+            <field name="name">Part Category History</field>
+            <field name="res_model">iac.part_category.material_group.history</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_part_category_material_group_history_list" />
+        </record>
+
+        <!-- 评分区间 -->
+        <record id="view_score_iqc_mprma_form" model="ir.ui.view">
+            <field name="name">iac.score.iqc.mprma.form</field>
+            <field name="model">iac.score.iqc.mprma</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Scoring Section">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="part_category_id" options="{'no_create': True}"/>
+                                <field name="score_type"/>
+                                <field name="score"/>
+                            </group>
+                            <group>
+                                <field name="lower_limit"/>
+                                <field name="high_limit"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_score_iqc_mprma_list" model="ir.ui.view">
+            <field name="name">iac.score.iqc.mprma.list</field>
+            <field name="model">iac.score.iqc.mprma</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Scoring Section">
+                    <field name="part_category_id"/>
+                    <field name="score_type"/>
+                    <field name="score"/>
+                    <field name="lower_limit"/>
+                    <field name="high_limit"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_score_iqc_mprma_list">
+            <field name="name">Vendor Scoring Section</field>
+            <field name="res_model">iac.score.iqc.mprma</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_score_iqc_mprma_list" />
+        </record>
+
+        <!-- 评分区间history -->
+        <record id="view_score_iqc_mprma_history_form" model="ir.ui.view">
+            <field name="name">iac.score.iqc.mprma.history.form</field>
+            <field name="model">iac.score.iqc.mprma.history</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Scoring Section" create="false">
+                    <sheet>
+                        <group>
+                            <field name="part_category_id" readonly="1"/>
+                            <field name="score_type" readonly="1"/>
+                            <field name="score" readonly="1"/>
+                            <field name="lower_limit" readonly="1"/>
+                            <field name="high_limit" readonly="1"/>
+                            <field name="score_snapshot" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_score_iqc_mprma_history_list" model="ir.ui.view">
+            <field name="name">iac.score.iqc.mprma.history.list</field>
+            <field name="model">iac.score.iqc.mprma.history</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Scoring Section" create="false">
+                    <field name="part_category_id"/>
+                    <field name="score_type"/>
+                    <field name="score"/>
+                    <field name="lower_limit"/>
+                    <field name="high_limit"/>
+                    <field name="score_snapshot"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_score_iqc_mprma_history_list">
+            <field name="name">Vendor Scoring Section</field>
+            <field name="res_model">iac.score.iqc.mprma.history</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_score_iqc_mprma_history_list" />
+        </record>
+
+        <!-- 失败成本区间 -->
+        <record id="view_fail_cost_section_form" model="ir.ui.view">
+            <field name="name">iac.fail.cost.section.form</field>
+            <field name="model">iac.fail.cost.section</field>
+            <field name="arch" type="xml">
+                <form string="Fail Cost Section">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="fail_type"/>
+                                <field name="score"/>
+                            </group>
+                            <group>
+                                <field name="lower_limit"/>
+                                <field name="high_limit"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_fail_cost_section_list" model="ir.ui.view">
+            <field name="name">iac.fail.cost.section.list</field>
+            <field name="model">iac.fail.cost.section</field>
+            <field name="arch" type="xml">
+                <tree string="Fail Cost Section">
+                    <field name="fail_type"/>
+                    <field name="score"/>
+                    <field name="lower_limit"/>
+                    <field name="high_limit"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_fail_cost_section_list">
+            <field name="name">Fail Cost Section</field>
+            <field name="res_model">iac.fail.cost.section</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_fail_cost_section_list" />
+        </record>
+
+        <!-- 失败成本区间history -->
+        <record id="view_fail_cost_section_history_form" model="ir.ui.view">
+            <field name="name">iac.fail.cost.section.history.form</field>
+            <field name="model">iac.fail.cost.section.history</field>
+            <field name="arch" type="xml">
+                <form string="Fail Cost Section" create="false">
+                    <sheet>
+                        <group>
+                            <field name="fail_type" readonly="1"/>
+                            <field name="score" readonly="1"/>
+                            <field name="lower_limit" readonly="1"/>
+                            <field name="high_limit" readonly="1"/>
+                            <field name="score_snapshot" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_fail_cost_section_history_list" model="ir.ui.view">
+            <field name="name">iac.fail.cost.section.history.list</field>
+            <field name="model">iac.fail.cost.section.history</field>
+            <field name="arch" type="xml">
+                <tree string="Fail Cost Section" create="false">
+                    <field name="fail_type"/>
+                    <field name="score"/>
+                    <field name="lower_limit"/>
+                    <field name="high_limit"/>
+                    <field name="score_snapshot"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_fail_cost_section_history_list">
+            <field name="name">Fail Cost section.history</field>
+            <field name="res_model">iac.fail.cost.section.history</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_fail_cost_section_history_list" />
+        </record>
+
+        <!-- 排除Supplier Company -->
+        <record id="view_score_exclude_form" model="ir.ui.view">
+            <field name="name">iac.score.exclude.form</field>
+            <field name="model">iac.score.exclude</field>
+            <field name="arch" type="xml">
+                <form string="Score Exclude">
+                    <sheet>
+                        <group>
+                            <field name="supplier_company_id"/>
+                            <field name="memo"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_score_exclude_list" model="ir.ui.view">
+            <field name="name">iac.score.exclude.list</field>
+            <field name="model">iac.score.exclude</field>
+            <field name="arch" type="xml">
+                <tree string="Score Exclude">
+                    <field name="supplier_company_id"/>
+                    <field name="memo"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_score_exclude_list">
+            <field name="name">Score Exclude</field>
+            <field name="res_model">iac.score.exclude</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_score_exclude_list" />
+        </record>
+
+        <!-- Vendor评鉴定义 -->
+        <record id="view_score_definition_form" model="ir.ui.view">
+            <field name="name">iac.score.definition.form</field>
+            <field name="model">iac.score.definition</field>
+            <field name="arch" type="xml">
+                <form string="Score Definition">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="group_code"/>
+                                <field name="seq_no"/>
+                                <field name="code"/>
+                                <field name="display_label"/>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="score_standard"/>
+                                <field name="ratio"/>
+                                <field name="part_class"/>
+                                <field name="active"/>
+                                <field name="memo"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_score_definition_list" model="ir.ui.view">
+            <field name="name">iac.score.definition.list</field>
+            <field name="model">iac.score.definition</field>
+            <field name="arch" type="xml">
+                <tree string="Score Definition">
+                    <field name="group_code"/>
+                    <field name="seq_no"/>
+                    <field name="code"/>
+                    <field name="display_label"/>
+                    <field name="description"/>
+                    <field name="ratio"/>
+                    <field name="part_class"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_score_definition_list">
+            <field name="name">Score Definition</field>
+            <field name="res_model">iac.score.definition</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_score_definition_list" />
+        </record>
+
+        <!-- Score Range -->
+        <record id="view_score_range_form" model="ir.ui.view">
+            <field name="name">iac.score.range.form</field>
+            <field name="model">iac.score.range</field>
+            <field name="arch" type="xml">
+                <form string="Score Range" create="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="log_type"/>
+                                <field name="level_t"/>
+                            </group>
+                            <group>
+                                <field name="range_from"/>
+                                <field name="range_to"/>
+                                <field name="score"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_score_range_list" model="ir.ui.view">
+            <field name="name">iac.score.range.list</field>
+            <field name="model">iac.score.range</field>
+            <field name="arch" type="xml">
+                <tree string="Score Range">
+                    <field name="id"/>
+                    <field name="log_type"/>
+                    <field name="level_t"/>
+                    <field name="range_from"/>
+                    <field name="range_to"/>
+                    <field name="score"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_score_range_list">
+            <field name="name">Score Range</field>
+            <field name="res_model">iac.score.range</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_score_range_list" />
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 供应商评鉴SCM Controler,QM Controler发送邮件 -->
+        <record id="vendor_score_scm_controller_email" model="mail.template">
+            <field name="name">Vendor Scoring SCM Controler</field>
+            <field name="model_id" ref="iac_vendor_evaluation.model_iac_score_plant"/>
+            <field name="email_from">iac-ep_support@iac.com.tw</field>
+            <field name="subject">(系統通知) 請SCM Controller進入e-Procurement system指定評分人員</field>
+            <field name="email_to">${(object.scm_controller_id.email or '')|safe}</field>
+            <field name="body_html"><![CDATA[
+            <div style="padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777">
+                <table style="width:600px;margin:5px auto;">
+                    <tbody>
+                        <tr>
+                            <td>
+                                SC Code
+                            </td>
+                            <td>
+                                SC Name
+                            </td>
+                            <td>
+                                Plant
+                            </td>
+                            <td>
+                                QVL Date
+                            </td>
+                            <td>
+                                Status
+                            </td>
+                        </tr>
+                        % for list_id in object.list_ids:
+                        <tr>
+                            <td>
+                            ${list_id.supplier_company_id.company_no}
+                            </td>
+                            <td>
+                            ${list_id.supplier_company_id.name}
+                            </td>
+                            <td>
+                            ${list_id.plant_id.plant_code}
+                            </td>
+                            <td>
+                            ${list_id.create_date}
+                            </td>
+                            <td>
+                            ${list_id.state}
+                            </td>
+                        </tr>
+                        % endfor
+                    </tbody>
+                </table>
+            </div>
+            ]]>
+            </field>
+        </record>
+        <record id="vendor_score_qm_controller_email" model="mail.template">
+            <field name="name">Vendor Scoring QM Controler</field>
+            <field name="model_id" ref="iac_vendor_evaluation.model_iac_score_plant"/>
+            <field name="email_from">iac-ep_support@iac.com.tw</field>
+            <field name="subject">(系統通知) 請QM Controller進入e-Procurement system指定評分人員</field>
+            <field name="email_to">${(object.qm_controller_id.email or '')|safe}</field>
+            <field name="body_html"><![CDATA[
+            <div style="padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777">
+                <table style="width:600px;margin:5px auto;">
+                    <tbody>
+                        <tr>
+                            <td>
+                                SC Code
+                            </td>
+                            <td>
+                                SC Name
+                            </td>
+                            <td>
+                                Plant
+                            </td>
+                            <td>
+                                QVL Date
+                            </td>
+                            <td>
+                                Status
+                            </td>
+                        </tr>
+                        % for list_id in object.list_ids:
+                        <tr>
+                            <td>
+                            ${list_id.supplier_company_id.company_no}
+                            </td>
+                            <td>
+                            ${list_id.supplier_company_id.name}
+                            </td>
+                            <td>
+                            ${list_id.plant_id.plant_code}
+                            </td>
+                            <td>
+                            ${list_id.create_date}
+                            </td>
+                            <td>
+                            ${list_id.state}
+                            </td>
+                        </tr>
+                        % endfor
+                    </tbody>
+                </table>
+            </div>
+            ]]>
+            </field>
+        </record>
+
+
+        <!-- 当公告发布的情况下发送邮件给相应的vendor-->
+        <record id="iac_bulletin_publish_notify_email" model="mail.template">
+            <field name="name">Bulletin Publish Notify Email</field>
+            <field name="model_id" ref="iac_vendor_evaluation.model_iac_bulletin_publish"/>
+            <field name="email_from">iac-ep_support@iac.com.tw</field>
+            <field name="email_to">${object.vendor_id.vendor_reg_id.sales_email|safe};${object.vendor_id.vendor_reg_id.other_emails|safe}</field>
+            <field name="subject">(系統通知) IAC Bulletin Info;${object.title}</field>
+            <field name="lang">${object.vendor_id.user_id.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+            <div style="padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777">
+                ${object.body}
+            </div>
+            ]]>
+            </field>
+
+        </record>
+
+    </data>
+</odoo>

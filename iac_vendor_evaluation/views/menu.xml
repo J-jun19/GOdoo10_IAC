@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--一級菜單-->
+        <menuitem id="menu_vendor_evaluation" name="Vendor Evaluation" sequence="1"/>
+
+        <!--二級菜單-->
+        <menuitem id="menu_vendor_base_data" name="基礎資料" parent="menu_vendor_evaluation" sequence="1"/>
+        <menuitem id="menu_vendor_evaluation_operation" name="評核作業" parent="menu_vendor_evaluation" sequence="2"/>
+        <!--废弃D Class处理二级菜单-->
+        <!--<menuitem id="menu_vendor_class" name="D Class 處理" parent="menu_vendor_evaluation" sequence="3"/>-->
+
+        <!--三級菜單-->
+        <menuitem id="menu_vendor_material_type" name="材料類別設定" parent="menu_vendor_base_data" sequence="1" action="action_view_part_category_list"/>
+        <menuitem id="menu_vendor_grading_project" name="評分項目維護" parent="menu_vendor_base_data" sequence="2" action="action_view_score_definition_list"/>
+        <menuitem id="menu_vendor_maintenance" name="評分區間資料維護" parent="menu_vendor_base_data" sequence="3" action="action_view_score_iqc_mprma_list"/>
+        <!--<menuitem id="menu_vendor_failure_cost" name="失敗成本區間資料維護" parent="menu_vendor_base_data" sequence="4" action="action_view_fail_cost_section_list"/>-->
+        <menuitem id="menu_vendor_score_range_list" name="评分参考区间(score_range)" parent="menu_vendor_base_data" sequence="4" action="action_view_score_range_list"/>
+        <menuitem id="menu_vendors_free_sc_maintenance" name="所有廠區免評SC維護" parent="menu_vendor_base_data" sequence="6" action="action_view_score_exclude_list"/>
+        <menuitem id="menu_vendor_exclude_sc_maintenance" name="按廠區排除評鑒SC" parent="menu_vendor_base_data" sequence="7" action="action_view_score_exclude_plant_list"/>
+
+
+        <menuitem id="menu_vendor_designated_personnel" name="QM/SCM CTL提交或调整分数" parent="menu_vendor_evaluation_operation" sequence="1" action="action_view_qm_scm_submit_score"/>
+        <menuitem id="menu_vendor_judges_score" name="QM/SCM Leader核准" parent="menu_vendor_evaluation_operation" sequence="2" action="action_view_leader_approve_score"/>
+        <!--<menuitem id="menu_vendor_scm_controller_pc" name="評定Part Class" parent="menu_vendor_evaluation_operation" sequence="3" action="action_wizard_score_scm_pc_class"/>-->
+        <!--<menuitem id="menu_vendor_qm_leader_pc" name="核准Part Class調整" parent="menu_vendor_evaluation_operation" sequence="4" action="action_wizard_score_qm_approve_pc_class"/>-->
+        <menuitem id="menu_vendor_scm_controller_sc" name="SCM CTL 確認D Class SC" parent="menu_vendor_evaluation_operation" sequence="5" action="action_wizard_score_scm_sc_class"/>
+        <menuitem id="menu_vendor_qm_leader_sc" name="QM Leader 核准D Class SC" parent="menu_vendor_evaluation_operation" sequence="6" action="action_wizard_score_qm_approve_sc_class"/>
+        <menuitem id="menu_vendor_manual_production" name="手動產生評核名單" parent="menu_vendor_evaluation_operation" sequence="7" action="action_wizard_score_gen_score_list"/>
+        <!--<menuitem id="menu_vendor_dclass_return" name="申請D Class返回" parent="menu_vendor_evaluation_operation" sequence="8" action="action_wizard_dclass_return"/>-->
+        <!--<menuitem id="menu_vendor_dclass_return_approve" name="核准D Class返回" parent="menu_vendor_evaluation_operation" sequence="9" action="action_view_dclass_return_qm_leader_form"/>-->
+        <menuitem id="menu_vendor_sc_class" name="評核歷史記錄查詢" parent="menu_vendor_evaluation_operation" sequence="10" action="action_view_class_supplier_company_list"/>
+        <menuitem id="menu_vendor_set_risk_level" name="风险等级查询" parent="menu_vendor_evaluation_operation" sequence="11" action="action_view_list_iac_supplier_company_risk"/>
+        <menuitem id="menu_supplier_company_delete" name="By Plant删除不评核的SC" parent="menu_vendor_evaluation_operation" sequence="12" action="action_view_list_iac_supplier_company_delete"/>
+
+        <!--<menuitem id="menu_vendor_dclass_processing_operation" name="D Class處理作業" parent="menu_vendor_class" sequence="1" action="action_wizard_d_class_do"/>-->
+        <!--<menuitem id="menu_vendor_audit_scm_controller_dclass" name="SCM Controller審核D Class處理方式" parent="menu_vendor_class" sequence="2" action="action_wizard_scm_controller_d_class_approval"/>-->
+        <!--<menuitem id="menu_vendor_audit_scm_leader_dclass" name="SCM Leader審核D Class處理方式" parent="menu_vendor_class" sequence="2" action="action_wizard_scm_leader_d_class_approval"/>-->
+        <!--<menuitem id="menu_vendor_audit_qm_controller_dclass" name="QM Controller審核D Class處理方式" parent="menu_vendor_class" sequence="3" action="action_wizard_qm_controller_d_class_approval"/>-->
+        <!--<menuitem id="menu_vendor_audit_qm_leader_dclass" name="QM Leader審核D Class處理方式" parent="menu_vendor_class" sequence="4" action="action_wizard_qm_leader_d_class_approval"/>-->
+        <!--<menuitem id="menu_vendor_plm" name="輸入PLM申請單號" parent="menu_vendor_class" sequence="3" action="action_wizard_input_plm_number"/>-->
+
+        <!-- 公告相关菜单-->
+        <menuitem id="menu_vendor_bulletin_new" name="Bulletin New" parent="oscg_vendor.menu_vendor" sequence="6"/>
+        <menuitem id="menu_vendor_bulletin_publish" name="Publish" parent="menu_vendor_bulletin_new" action="action_view_list_iac_bulletin" sequence="1"/>
+        <menuitem id="menu_vendor_bulletin_publish_his" name="Publish History" parent="menu_vendor_bulletin_new" action="action_view_list_iac_bulletin_publish" sequence="2"/>
+        <menuitem id="menu_vendor_bulletin_white_list_new" name="Recipient" parent="menu_vendor_bulletin_new" action="action_view_list_iac_bulletin_white" sequence="3"/>
+        <menuitem id="menu_vendor_bulletin_white_upload_new" name="Import Recipient" parent="menu_vendor_bulletin_new" action="action_iac_bulletin_white_import" sequence="4"/>
+
+    </data>
+</odoo>

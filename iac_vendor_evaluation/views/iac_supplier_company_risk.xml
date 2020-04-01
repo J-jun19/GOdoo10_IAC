@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 评核supplier_company 风险等级 -->
+        <record id="view_form_iac_supplier_company_risk" model="ir.ui.view">
+            <field name="name">iac.supplier.company.risk.form</field>
+            <field name="model">iac.supplier.company.risk</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Score List" create="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="supplier_company_id" options="{'no_create': True, 'no_edit': True}" readonly="1"/>
+                                <field name="score_snapshot" readonly="1"/>
+                                <field name="calculate_level" readonly="1"/>
+                                <field name="user_level"/>
+                                <field name="state" readonly="1" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_list_iac_supplier_company_risk" model="ir.ui.view">
+            <field name="name">iac.supplier.company.risk.form</field>
+            <field name="model">iac.supplier.company.risk</field>
+            <field name="arch" type="xml" >
+                <tree string="Supplier Company Risk List" create="false">
+                     <field name="supplier_company_code" />
+                     <field name="supplier_company_name" />
+                     <field name="score_snapshot" />
+                     <field name="calculate_level" />
+                     <field name="user_level" />
+                    <field name="state" readonly="1" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_search_iac_supplier_company_risk">
+            <field name="name">Company Risk Search</field>
+            <field name="model">iac.supplier.company.risk</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="supplier_company_code"/>
+                    <group string="Group By">
+                        <filter name="by_state" string="State"
+                                context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="action_view_list_iac_supplier_company_risk">
+            <field name="name">Supplier Company Risk List</field>
+            <field name="res_model">iac.supplier.company.risk</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_list_iac_supplier_company_risk" />
+        </record>
+
+
+        <!--<record id="action_server_iac_supplier_company_risk_submit" model="ir.actions.server">-->
+            <!--<field name="name">Submit</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_supplier_company_risk"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.action_submit_supplier_company_risk()-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_value_iac_supplier_company_risk_submit" model="ir.values">-->
+            <!--<field name="name">Submit</field>-->
+            <!--<field name="model_id" ref="model_iac_supplier_company_risk"/>-->
+            <!--<field name="model">iac.supplier.company.risk</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field eval="'ir.actions.server,%d'%action_server_iac_supplier_company_risk_submit" name="value"/>-->
+        <!--</record>-->
+
+  </data>
+</odoo>

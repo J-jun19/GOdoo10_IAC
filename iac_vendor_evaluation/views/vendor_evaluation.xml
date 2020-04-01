@@ -1,0 +1,1486 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--==================================================================================================-->
+        <!--QM/SCM CTL提交或调整分数form视图 vendor材料类别分数-->
+        <record id="view_qm_scm_ctl_submit_vendor_part_form" model="ir.ui.view">
+            <field name="name">QM/SCM CTL Submit Score</field>
+            <field name="model">iac.score.part_category</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Part Score List" create="false" editable="bottom">
+                    <sheet>
+                        <group string="Vendor Part Score List">
+                            <group>
+                                <field name="plant_id" readonly="1"/>
+                                <field name="supplier_code" readonly="1"/>
+                                <field name="supplier_name" readonly="1"/>
+                                <field name="supplier_class" readonly="1"/>
+                                <field name="part_category_id" readonly="1"/>
+                                <field name="part_class" readonly="1"/>
+                                <field name="gr_qty" readonly="1"/>
+                                <field name="gr_amount" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="user_score" readonly="1"/>
+                                <field name="weight" readonly="1"/>
+                                <!--<field name="weight_score" readonly="1"/>-->
+                                <field name="state" readonly="1"/>
+                                <field name="score_snapshot" readonly="1"/>
+                                <field name="scm_user_score_cal" string="SCM Score Tol" readonly="1" groups="oscg_vendor.group_scm_controller"/>
+                                <field name="qm_user_score_cal" string="QM Score Tol" readonly="1" groups="oscg_vendor.group_qm_controller"/>
+                                <field name="scm_memo" string="SCM leader memo" readonly="1" groups="oscg_vendor.group_scm_controller"/>
+                                <field name="qm_memo" string="QM leader memo" readonly="1" groups="oscg_vendor.group_qm_controller"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                              <page string="Score part category lines">
+                                  <field name="line_ids">
+                                      <tree string="Score part category line" create="false" delete="false" editable="bottom" default_order="seq_no">
+                                          <field name="group_code" readonly="1"/>
+                                          <field name="code" readonly="1"/>
+                                          <field name="seq_no" readonly="1"/>
+                                          <field name="description" readonly="1"/>
+                                          <field name="score_standard" readonly="1"/>
+                                          <field name="ratio" readonly="1"/>
+                                          <field name="calculate_score" readonly="1"/>
+                                          <field name="user_score"/>
+                                          <field name="memo"/>
+                                      </tree>
+                                  </field>
+                              </page>
+                          </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--QM/SCM CTL提交或调整分数tree视图 vendor材料类别分数-->
+        <record id="view_qm_scm_ctl_submit_vendor_part_list" model="ir.ui.view">
+            <field name="name">QM/SCM CTL Submit Score</field>
+            <field name="model">iac.score.part_category</field>
+            <field name="arch" type="xml" >
+                <tree string="Vendor Part Score List" create="false">
+                     <!--attrs="{'invisible': [('scm_state','not in', ['scoring','disapprove'])]}"-->
+                    <button name="button_search_log" string="Log" type="object"/>
+                    <!--<field name="state" readonly="1"/>-->
+                    <field name="scm_state" readonly="1"/>
+                    <field name="qm_state" readonly="1"/>
+                    <field name="plant_id" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="supplier_code" readonly="1"/>
+                    <field name="supplier_class" readonly="1"/>
+                    <field name="supplier_name" readonly="1"/>
+                    <field name="vendor_codes" readonly="1"/>
+                    <field name="buyer_names" readonly="1"/>
+                    <field name="scm_controller_id" readonly="1"/>
+                    <field name="qm_controller_id" readonly="1"/>
+                    <field name="qm_user_score" readonly="1"/>
+                    <field name="scm_user_score" readonly="1"/>
+                    <field name="user_score" readonly="1"/>
+                    <field name="create_date" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_qm_scm_ctl_submit_vendor_part_search_list">
+            <field name="name">QM/SCM CTL Submit Score Search</field>
+            <field name="model">iac.score.part_category</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="id"/>
+                    <field name="plant_id"/>
+                    <field name="supplier_code"/>
+                    <field name="vendor_codes"/>
+                    <group string="Group By">
+                        <filter name="by_state" string="State"
+                                context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--QM/SCM CTL提交或调整分数视图动作-->
+        <record model="ir.actions.act_window" id="action_view_qm_scm_submit_score">
+            <field name="name">QM/SCM CTL Submit Score</field>
+            <field name="res_model">iac.score.part_category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_qm_scm_ctl_submit_vendor_part_list" />
+            <!--<field name="domain">[('state','in',['scoring','disapprove'])]</field>-->
+        </record>
+
+        <!--QM/SCM controller 查看分数评鉴历史-->
+        <record id="view_qm_scm_read_score_history_list" model="ir.ui.view">
+            <field name="name">QM/SCM examine Score history</field>
+            <field name="model">iac.score.approve.log</field>
+            <field name="arch" type="xml" >
+                <tree string="Vendor Part Score List" create="false">
+                      <field name="create_date" readonly="1"/>
+                      <field name="user_id" readonly="1"/>
+                      <!--<field name="description" readonly="1"/>-->
+                      <field name="score_snapshot" readonly="1"/>
+                      <field name="part_category_id" readonly="1"/>
+                      <field name="calculate_score" readonly="1"/>
+                      <field name="user_score" readonly="1"/>
+                      <field name="approve_role" readonly="1"/>
+                      <field name="approve_status" readonly="1"/>
+                      <!--<field name="user_score" options="{'no_create': True,'no_open': True}"/>-->
+                      <field name="memo" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--QM/SCM CTL提交或调整分数视图动作-->
+        <record model="ir.actions.act_window" id="action_view_qm_scm_read_score_history">
+            <field name="name">QM/SCM examine Score history</field>
+            <field name="res_model">iac.score.approve.log</field>
+            <!--<field name="view_type">form</field>-->
+            <field name="view_mode">tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_qm_scm_read_score_history_list" />
+            <!--<field name="domain">[('state','in',['scoring','disapprove'])]</field>-->
+        </record>
+
+
+
+<!--======================================================================================================-->
+
+        <!-- SCM controller CTL 调整分数后提交给SCM Leader审核 -->
+        <record id="iac_scm_adj_scoring_submit_action_server" model="ir.actions.server">
+            <field name="name">Submit</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_score_part_category"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_batch_submit()
+            </field>
+        </record>
+
+        <record id="action_iac_scm_adj_scoring_submit" model="ir.values">
+            <field name="name">Submit</field>
+            <field name="model_id" ref="model_iac_score_part_category"/>
+            <field name="model">iac.score.part_category</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_scm_adj_scoring_submit_action_server" name="value"/>
+        </record>
+
+<!--======================================================================================================-->
+
+        <!--QM/SCM 核准分数form视图 vendor材料类别分数-->
+        <record id="view_leader_approve_vendor_part_score_form" model="ir.ui.view">
+            <field name="name">QM/SCM 核准</field>
+            <field name="model">iac.score.part_category.inherit</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Part Score List" create="false" editable="bottom">
+                    <sheet>
+                        <group string="Vendor Part Score List">
+                            <group>
+                                <field name="plant_id" readonly="1"/>
+                                <field name="supplier_code" readonly="1"/>
+                                <field name="supplier_name" readonly="1"/>
+                                <field name="supplier_class" readonly="1"/>
+                                <field name="part_category_id" readonly="1"/>
+                                <field name="part_class" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="gr_qty" readonly="1"/>
+                                <field name="gr_amount" readonly="1"/>
+                                <field name="user_score" readonly="1"/>
+                                <field name="weight" readonly="1"/>
+                                <!--<field name="weight_score" readonly="1"/>-->
+                                <field name="state" readonly="1"/>
+                                <field name="score_snapshot" readonly="1"/>
+                                <field name="qm_memo" groups="oscg_vendor.group_qm_leader"/>
+                                <field name="scm_memo" groups="oscg_vendor.group_scm_leader"/>
+                            </group>
+                        </group>
+                        <notebook>
+                              <page string="Score part category lines">
+                                  <field name="line_ids" context="{'disable_open':True}">
+                                      <tree string="Score part category line" create="false" delete="false" default_order="seq_no">
+                                          <field name="group_code" readonly="1"/>
+                                          <field name="code" readonly="1"/>
+                                          <field name="seq_no" readonly="1"/>
+                                          <field name="description" readonly="1"/>
+                                          <field name="score_standard" readonly="1"/>
+                                          <field name="ratio" readonly="1"/>
+                                          <field name="calculate_score" readonly="1"/>
+                                          <field name="user_score" readonly="1"/>
+                                          <field name="memo" readonly="1"/>
+                                      </tree>
+                                  </field>
+                              </page>
+                          </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <!--QM/SCM CTL提交或调整分数tree视图 vendor材料类别分数-->
+        <record id="view_leader_approve_score_vendor_part_list" model="ir.ui.view">
+            <field name="name">QM/SCM 核准</field>
+            <field name="model">iac.score.part_category.inherit</field>
+            <field name="arch" type="xml" >
+                <tree string="Vendor Part Score List" create="false">
+                     <!--attrs="{'invisible': [('scm_state','not in', ['scoring','disapprove'])]}"-->
+                    <button name="button_search_log" string="Log" type="object"/>
+                    <field name="state" readonly="1"/>
+                    <field name="plant_id" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="supplier_code" readonly="1"/>
+                    <field name="supplier_class" readonly="1"/>
+                    <field name="qm_memo" readonly="1"/>
+                    <field name="supplier_name" readonly="1"/>
+                    <field name="vendor_codes" readonly="1"/>
+                    <field name="scm_controller_id" readonly="1"/>
+                    <field name="qm_controller_id" readonly="1"/>
+                    <field name="qm_user_score" readonly="1"/>
+                    <field name="scm_user_score" readonly="1"/>
+                    <field name="user_score" readonly="1"/>
+                    <field name="create_date" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_leader_approve_score_vendor_part_search_list">
+            <field name="name">QM/SCM Leader Approve Vendor Part Search</field>
+            <field name="model">iac.score.part_category.inherit</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="id"/>
+                    <field name="plant_id"/>
+                    <field name="supplier_code"/>
+                    <field name="vendor_codes"/>
+                    <group string="Group By">
+                        <filter name="by_state" string="State"
+                                context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--QM/SCM Leader核准分数视图动作-->
+        <record model="ir.actions.act_window" id="action_view_leader_approve_score">
+            <field name="name">QM/SCM Leader核准</field>
+            <field name="res_model">iac.score.part_category.inherit</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_leader_approve_score_vendor_part_list" />
+            <!--<field name="domain">[('state','=','to approve')]</field>-->
+        </record>
+
+
+        <!-- SCM Leader 核准分数Approve -->
+        <record id="iac_leader_approve_scoring_action_server" model="ir.actions.server">
+            <field name="name">Approve</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_score_part_category_inherit"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.leader_approve_score()
+            </field>
+        </record>
+
+        <record id="action_iac_leader_approve_scoring_submit" model="ir.values">
+            <field name="name">Approve</field>
+            <field name="model_id" ref="model_iac_score_part_category_inherit"/>
+            <field name="model">iac.score.part_category.inherit</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_leader_approve_scoring_action_server" name="value"/>
+        </record>
+
+        <!-- SCM Leader 核准分数Disapprove -->
+        <record id="iac_leader_disapprove_scoring_action_server" model="ir.actions.server">
+            <field name="name">Disapprove</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_score_part_category_inherit"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.leader_disapprove_score()
+            </field>
+        </record>
+
+        <record id="action_iac_leader_disapprove_scoring_submit" model="ir.values">
+            <field name="name">Disapprove</field>
+            <field name="model_id" ref="model_iac_score_part_category_inherit"/>
+            <field name="model">iac.score.part_category.inherit</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_leader_disapprove_scoring_action_server" name="value"/>
+        </record>
+
+<!--======================================================================================================-->
+
+<!--以下的view废除-->
+        <!-- Vendor评鉴主表 -->
+        <!--<record id="view_score_list_form" model="ir.ui.view">-->
+            <!--<field name="name">iac.score.list.form</field>-->
+            <!--<field name="model">iac.score.list</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Vendor Score List" create="false">-->
+                    <!--<sheet>-->
+                        <!--<group>-->
+                            <!--<group>-->
+                                <!--<field name="plant_id" options="{'no_create': True, 'no_edit': True}"/>-->
+                                <!--<field name="supplier_company_id" options="{'no_create': True, 'no_edit': True}"/>-->
+                            <!--</group>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="view_score_list_list" model="ir.ui.view">-->
+            <!--<field name="name">iac.score.list.list</field>-->
+            <!--<field name="model">iac.score.list</field>-->
+            <!--<field name="arch" type="xml" >-->
+                <!--<tree string="Vendor Score List" create="false">-->
+                    <!--<field name="plant_id" readonly="1"/>-->
+                    <!--<field name="supplier_company_id" readonly="1"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash;定义视图动作&ndash;&gt;-->
+        <!--<record model="ir.actions.act_window" id="action_view_score_list_list">-->
+            <!--<field name="name">Vendor Score List</field>-->
+            <!--<field name="res_model">iac.score.list</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">form,tree</field>-->
+            <!--<field name="target">main</field>-->
+            <!--<field name="view_id" ref="view_score_list_list" />-->
+        <!--</record>-->
+
+        <!-- SCM/QM Controller指定评核人员列表视图 -->
+        <!--<record id="view_score_part_category_list" model="ir.ui.view">-->
+            <!--<field name="name">iac.score.part_category.list</field>-->
+            <!--<field name="model">iac.score.part_category</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree string="Vendor Score Part Category List" create="false" editable="bottom">-->
+                    <!--<field name="scm_controller_id" readonly="1"/>-->
+                    <!--<field name="scm_partner_id" />-->
+                    <!--<field name="qm_controller_id" readonly="1"/>-->
+                    <!--<field name="qm_partner_id" />-->
+                    <!--<field name="plant_id" readonly="1"/>-->
+                    <!--<field name="supplier_code" readonly="1"/>-->
+                    <!--<field name="supplier_name" readonly="1"/>-->
+                    <!--<field name="vendor_codes" readonly="1"/>-->
+                    <!--<field name="vendor_types" readonly="1"/>-->
+                    <!--<field name="supplier_class" readonly="1"/>-->
+                    <!--<field name="part_category_id" readonly="1"/>-->
+                    <!--<field name="part_category_class" readonly="1"/>-->
+                    <!--<field name="gr_amount" readonly="1"/>-->
+                    <!--<field name="gr_qty" readonly="1"/>-->
+                    <!--<field name="user_score" readonly="1"/>-->
+                    <!--<field name="weight" readonly="1"/>-->
+                    <!--<field name="weight_score" readonly="1"/>-->
+
+                    <!--<field name="state" readonly="1"/>-->
+                    <!--<field name="create_date" readonly="1"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record id="view_score_part_category_form" model="ir.ui.view">-->
+            <!--<field name="name">iac.score.part_category.form</field>-->
+            <!--<field name="model">iac.score.part_category</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Score Part Category">-->
+                    <!--<sheet>-->
+                        <!--<group>-->
+                            <!--<field name="plant_id"/>-->
+                            <!--<field name="supplier_company_id"/>-->
+                            <!--<field name="supplier_code" readonly="1"/>-->
+                            <!--<field name="supplier_name" readonly="1"/>-->
+                            <!--<field name="supplier_class" readonly="1"/>-->
+                            <!--<field name="part_category_id"/>-->
+                            <!--<field name="part_category_class" readonly="1"/>-->
+                        <!--</group>-->
+                        <!--<group>-->
+                            <!--<field name="gr_qty"/>-->
+                            <!--<field name="gr_amount"/>-->
+                            <!--<field name="user_score"/>-->
+                            <!--<field name="weight"/>-->
+                            <!--<field name="weight_score"/>-->
+                            <!--<field name="state"/>-->
+                            <!--<field name="score_snapshot"/>-->
+                        <!--</group>-->
+                        <!--<notebook>-->
+                            <!--<page string="Line">-->
+                                <!--<field name="line_ids" attrs="{'readonly': [('state', '!=', 'scoring')]}">-->
+                                    <!--<tree string="Line" create="false" delete="false">-->
+                                        <!--<field name="group_code"/>-->
+                                        <!--<field name="sequence"/>-->
+                                        <!--<field name="description"/>-->
+                                        <!--<field name="score_standard"/>-->
+                                        <!--<field name="ratio"/>-->
+                                        <!--<field name="calculate_score"/>-->
+                                        <!--<field name="user_score"/>-->
+                                        <!--<field name="scm_partner_id"/>-->
+                                        <!--<field name="scm_memo"/>-->
+                                        <!--<field name="qm_partner_id"/>-->
+                                        <!--<field name="qm_memo"/>-->
+                                        <!--<field name="state"/>-->
+                                    <!--</tree>-->
+                                <!--</field>-->
+                            <!--</page>-->
+                        <!--</notebook>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--定义视图动作-->
+        <!--<record model="ir.actions.act_window" id="action_view_score_part_category_list">-->
+            <!--<field name="name">Score Part Category Class</field>-->
+            <!--<field name="res_model">iac.score.part_category</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">form,tree</field>-->
+            <!--<field name="target">main</field>-->
+            <!--<field name="view_id" ref="view_score_part_category_list" />-->
+        <!--</record>-->
+
+         <!--继承iac.score.part_category model，配合class使用不执行记录规则 -->
+        <record id="view_class_score_part_category_list" model="ir.ui.view">
+            <field name="name">iac.class.score.part_category.list</field>
+            <field name="model">iac.class.score.part_category</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Score Part Category List" create="false" editable="bottom">
+                    <field name="plant_id" readonly="1"/>
+                    <field name="vendor_codes" readonly="1"/>
+                    <field name="supplier_code" readonly="1"/>
+                    <field name="supplier_name" readonly="1"/>
+                    <field name="supplier_class" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="part_category_class" readonly="1"/>
+
+                    <field name="user_score"/>
+                    <field name="weight"/>
+                    <field name="weight_score"/>
+                    <field name="scm_controller_id" readonly="1"/>
+                    <field name="scm_partner_id" groups="oscg_vendor.group_scm_controller"/>
+                    <field name="qm_controller_id" readonly="1"/>
+                    <field name="qm_partner_id" groups="oscg_vendor.group_qm_controller"/>
+                    <field name="scm_state" readonly="1"/>
+                    <field name="qm_state" readonly="1"/>
+                    <field name="create_date" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_class_score_part_category_form" model="ir.ui.view">
+            <field name="name">iac.class.score.part_category.form</field>
+            <field name="model">iac.class.score.part_category</field>
+            <field name="arch" type="xml">
+                <form string="Score Part Category">
+                    <sheet>
+                        <group>
+                            <field name="plant_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="supplier_company_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="supplier_code" readonly="1"/>
+                            <field name="supplier_name" readonly="1"/>
+                            <field name="supplier_class" readonly="1"/>
+                            <field name="part_category_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="part_category_class" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="gr_qty"/>
+                            <field name="gr_amount"/>
+                            <field name="user_score"/>
+                            <field name="weight"/>
+                            <field name="weight_score"/>
+                            <field name="scm_state"/>
+                            <field name="qm_state"/>
+                            <field name="score_snapshot"/>
+                        </group>
+                        <notebook>
+                            <page string="Line">
+                                <field name="line_ids">
+                                    <tree string="Line" create="false" delete="false">
+                                        <field name="group_code"/>
+                                        <field name="seq_no"/>
+                                        <field name="description"/>
+                                        <field name="score_standard"/>
+                                        <field name="ratio"/>
+                                        <field name="calculate_score"/>
+                                        <field name="user_score"/>
+                                        <field name="scm_partner_id"/>
+                                        <field name="scm_memo"/>
+                                        <field name="qm_partner_id"/>
+                                        <field name="qm_memo"/>
+                                        <!--<field name="state"/>-->
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--&lt;!&ndash; SCM/QM Controller指定评核人员列表视图 &ndash;&gt;-->
+        <!--<record id="view_score_supplier_company_list" model="ir.ui.view">-->
+            <!--<field name="name">iac.score.supplier_company.list</field>-->
+            <!--<field name="model">iac.score.supplier_company</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree string="Vendor Score Supplier Company List">-->
+                    <!--<field name="supplier_company_id"/>-->
+                    <!--<field name="plant_id"/>-->
+                    <!--<field name="plant_score"/>-->
+                    <!--<field name="business_amount"/>-->
+                    <!--<field name="weight"/>-->
+                    <!--<field name="weight_score"/>-->
+                    <!--<field name="scm_controller_id"/>-->
+                    <!--<field name="qm_controller_id"/>-->
+                    <!--<field name="qm_leader_id"/>-->
+                    <!--<field name="state"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record id="view_score_supplier_company_form" model="ir.ui.view">-->
+            <!--<field name="name">iac.score.supplier_company.form</field>-->
+            <!--<field name="model">iac.score.supplier_company</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Supplier Company Score">-->
+                        <!--<sheet>-->
+                        <!--<group>-->
+                            <!--<field name="supplier_company_id"/>-->
+                            <!--<field name="plant_id"/>-->
+                            <!--<field name="plant_score"/>-->
+                            <!--<field name="business_amount"/>-->
+                            <!--<field name="weight"/>-->
+                            <!--<field name="weight_score"/>-->
+                        <!--</group>-->
+                        <!--<group>-->
+                            <!--<field name="scm_controller_id"/>-->
+                            <!--<field name="qm_controller_id"/>-->
+                            <!--<field name="qm_leader_id"/>-->
+                            <!--<field name="state"/>-->
+                        <!--</group>-->
+                        <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!-- 继承iac.score.supplier_company model，不执行记录规则  -->
+        <record id="view_class_score_supplier_company_list" model="ir.ui.view">
+            <field name="name">iac.class.score.supplier_company.list</field>
+            <field name="model">iac.class.score.supplier_company</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Score Supplier Company List">
+                    <field name="supplier_company_id"/>
+                    <field name="plant_id"/>
+                    <field name="plant_score"/>
+                    <field name="business_amount"/>
+                    <field name="weight"/>
+                    <field name="weight_score"/>
+                    <field name="score_snapshot"/>
+                    <!--<field name="qm_controller_id"/>-->
+                    <!--<field name="qm_leader_id"/>-->
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_class_score_supplier_company_form" model="ir.ui.view">
+            <field name="name">iac.class.score.supplier_company.form</field>
+            <field name="model">iac.class.score.supplier_company</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Company Score">
+                        <sheet>
+                        <group>
+                            <field name="supplier_company_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="plant_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="plant_score"/>
+                            <field name="business_amount"/>
+                            <field name="weight"/>
+                            <field name="weight_score"/>
+                        </group>
+                        <group>
+                            <field name="scm_controller_id"/>
+                            <field name="qm_controller_id"/>
+                            <field name="qm_leader_id"/>
+                            <field name="state"/>
+                        </group>
+                        </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--&lt;!&ndash; SCM/QM user打分时选择材料类别列表视图 &ndash;&gt;-->
+        <!--<record id="view_user_scoring_part_category_list" model="ir.ui.view">-->
+            <!--<field name="name">SCM/QM user打分时选择材料类别列表视图</field>-->
+            <!--<field name="model">iac.score.part_category</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree string="选择评分的材料分类" create="false">-->
+                    <!--<field name="id"/>-->
+                    <!--<field name="scm_partner_id"/>-->
+                    <!--<field name="qm_partner_id"/>-->
+                    <!--<field name="plant_id"/>-->
+                    <!--<field name="vendor_codes" readonly="1"/>-->
+                    <!--<field name="vendor_types" readonly="1"/>-->
+                    <!--<field name="supplier_code"/>-->
+                    <!--<field name="supplier_company_id"/>-->
+                    <!--<field name="part_category_id"/>-->
+                    <!--<field name="part_class"/>-->
+
+                    <!--<field name="user_score"/>-->
+                    <!--<field name="weight"/>-->
+                    <!--<field name="weight_score"/>-->
+                    <!--<field name="scm_user_score"/>-->
+                    <!--<field name="qm_user_score"/>-->
+                    <!--<field name="state"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash;<record id="iac_user_scoring_action_server" model="ir.actions.server">&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="name">打分</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="type">ir.actions.server</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="model_id" ref="model_iac_score_part_category"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="state">code</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="code">&ndash;&gt;-->
+<!--&lt;!&ndash;if records:&ndash;&gt;-->
+    <!--&lt;!&ndash;action = records.action_batch_user_scoring()&ndash;&gt;-->
+            <!--&lt;!&ndash;</field>&ndash;&gt;-->
+        <!--&lt;!&ndash;</record>&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<record id="action_iac_user_scoring" model="ir.values">&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="name">打分</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="model_id" ref="model_iac_score_part_category"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="model">iac.score.part_category</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="key2">client_action_multi</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field eval="'ir.actions.server,%d'%iac_user_scoring_action_server" name="value"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</record>&ndash;&gt;-->
+
+
+        <!--&lt;!&ndash; SCM/QM user 打分 &ndash;&gt;-->
+        <!--<record id="view_score_part_category_line_list" model="ir.ui.view">-->
+            <!--<field name="name">iac.score.part_category.line.list</field>-->
+            <!--<field name="model">iac.score.part_category.line</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree string="Score Result" create="false" editable="true">-->
+                    <!--<field name="vendor_codes" readonly="1"/>-->
+                    <!--<field name="sequence" readonly="1"/>-->
+                    <!--<field name="description" readonly="1"/>-->
+                    <!--<field name="score_standard" readonly="1"/>-->
+                    <!--<field name="ratio" readonly="1"/>-->
+                    <!--<field name="score_value" readonly="1"/>-->
+                    <!--<field name="calculate_score" readonly="1"/>-->
+                    <!--<field name="user_score" attrs="{'readonly':[('state','!=','scoring')]}"/>-->
+                    <!--<field name="scm_memo" groups="oscg_vendor.group_scm_user" attrs="{'readonly':[('state','!=','scoring')]}"/>-->
+                    <!--<field name="qm_memo" groups="oscg_vendor.group_qm_user" attrs="{'readonly':[('state','!=','scoring')]}"/>-->
+                    <!--<field name="state"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record id="view_iac_score_part_category_lines_form" model="ir.ui.view">
+            <field name="name">iac.score.part_category.line.form</field>
+            <field name="model">iac.score.part_category.line</field>
+            <field name="arch" type="xml">
+                <form string="Part Category Line" create="false">
+                    <sheet>
+                        <group>
+                            <field name="part_category_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="plant_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="vendor_codes" readonly="1"/>
+                            <field name="group_code" />
+                            <field name="seq_no"/>
+                            <field name="description"/>
+                            <field name="score_standard"/>
+                        </group>
+                        <group>
+                            <field name="ratio"/>
+                            <field name="calculate_score"/>
+                            <field name="user_score"/>
+                            <field name="scm_partner_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="scm_memo"/>
+                            <field name="qm_partner_id" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="qm_memo"/>
+                            <field name="state"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--&lt;!&ndash;定义视图动作&ndash;&gt;-->
+        <!--<record model="ir.actions.act_window" id="action_view_score_sum_list">-->
+            <!--<field name="name">Score Part Category Line</field>-->
+            <!--<field name="res_model">iac.score.part_category.line</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">form,tree</field>-->
+            <!--<field name="target">main</field>-->
+            <!--<field name="view_id" ref="view_score_part_category_line_list" />-->
+        <!--</record>-->
+
+        <!--<record id="iac_user_scoring_submit_action_server" model="ir.actions.server">-->
+            <!--<field name="name">最终提交</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_score_part_category_line"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.action_batch_submit()-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_iac_user_scoring_submit" model="ir.values">-->
+            <!--<field name="name">最终提交</field>-->
+            <!--<field name="model_id" ref="model_iac_score_part_category_line"/>-->
+            <!--<field name="model">iac.score.part_category.line</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field eval="'ir.actions.server,%d'%iac_user_scoring_submit_action_server" name="value"/>-->
+        <!--</record>-->
+
+        <record id="view_class_part_category_form" model="ir.ui.view">
+            <field name="name">iac.class.part_category.form</field>
+            <field name="model">iac.class.part_category</field>
+            <field name="arch" type="xml">
+                <form string="Part Category Class" create="false">
+                    <sheet>
+                        <group>
+                            <field name="supplier_company_id" readonly="1" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="part_category_id" readonly="1" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="calculate_score" readonly="1"/>
+                            <field name="calculate_part_class" readonly="1"/>
+                            <field name="final_part_class" readonly="1"/>
+                            <field name="scm_memo" readonly="1"/>
+                            <field name="qm_memo" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="file_id" widget="dms_file" string="File" directory="model_muk_dms_directory.3" readonly="1"/>
+                            <field name="state"/>
+                        </group>
+                        <notebook>
+                            <page name="part_category" string="Part Category Score">
+                                <field name="score_part_category_ids" readonly="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_class_part_category_list" model="ir.ui.view">
+            <field name="name">iac.class.part_category.list</field>
+            <field name="model">iac.class.part_category</field>
+            <field name="arch" type="xml">
+                <tree string="Part Category Class" create="false" editable="bottom">
+                    <button name="button_upload_file" string="Detail" type="object"/>
+                    <field name="supplier_company_id" readonly="1"/>
+                    <field name="part_category_id" readonly="1"/>
+                    <field name="calculate_score"/>
+                    <field name="calculate_part_class"/>
+                    <field name="final_part_class" attrs="{'readonly': [('state','not in', ['scoring','disapprove'])]}" readonly="1"/>
+                    <field name="scm_memo" readonly="1"/>
+                    <field name="qm_memo" readonly="1"/>
+                    <field name="file_id" readonly="1"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--&lt;!&ndash; SCM Controller评定part category Class处理&ndash;&gt;-->
+        <!--<record id="view_scm_controller_class_part_category_form" model="ir.ui.view">-->
+            <!--<field name="name">iac.class.part_category.scm_controller.form</field>-->
+            <!--<field name="model">iac.class.part_category.scm_controller</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Part Category Class" create="false">-->
+                    <!--<sheet>-->
+                        <!--<group>-->
+                            <!--<group>-->
+                                <!--<field name="supplier_company_id" readonly="1"/>-->
+                                <!--<field name="part_category_id" readonly="1"/>-->
+                                <!--<field name="calculate_score" readonly="1"/>-->
+                                <!--<field name="calculate_part_class" readonly="1"/>-->
+                                <!--<field name="final_part_class" attrs="{'readonly': [('state','not in', ['scoring','disapprove'])]}"/>-->
+                                <!--<field name="scm_memo" attrs="{'readonly': [('state','not in', ['scoring','disapprove'])]}"/>-->
+                                <!--<field name="qm_memo" readonly="1"/>-->
+                            <!--</group>-->
+                            <!--<group>-->
+                                <!--<field name="file_id" widget="dms_file" string="File" directory="model_muk_dms_directory.3" attrs="{'readonly': [('state','not in', ['scoring','disapprove'])]}"/>-->
+                                <!--<field name="state"/>-->
+                            <!--</group>-->
+                        <!--</group>-->
+                        <!--<notebook>-->
+                            <!--<page name="part_category" string="Part Category Score">-->
+                                <!--<field name="score_part_category_ids" readonly="1"/>-->
+                            <!--</page>-->
+                        <!--</notebook>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="view_scm_controller_class_part_category_list" model="ir.ui.view">-->
+            <!--<field name="name">iac.class.part_category.scm_controller.list</field>-->
+            <!--<field name="model">iac.class.part_category.scm_controller</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree string="Part Category Class" create="false" editable="bottom">-->
+                    <!--<button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('state','not in', ['scoring','done','to approve','disapprove'])]}"/>-->
+                    <!--<field name="state"/>-->
+                    <!--<field name="supplier_company_id" readonly="1"/>-->
+                    <!--<field name="part_category_id" readonly="1"/>-->
+                    <!--<field name="calculate_score" readonly="1"/>-->
+                    <!--<field name="calculate_part_class" readonly="1"/>-->
+                    <!--<field name="final_part_class" attrs="{'readonly': [('state','not in', ['scoring','disapprove'])]}"/>-->
+                    <!--<field name="scm_memo" attrs="{'readonly': [('state','not in', ['scoring','disapprove'])]}"/>-->
+                    <!--<field name="qm_memo" readonly="1"/>-->
+
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record model="ir.actions.act_window"  id="action_view_class_part_category_scm_controller_list">-->
+            <!--<field name="name">Part Category Class</field>-->
+            <!--<field name="res_model">iac.class.part_category.scm_controller</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">form,tree</field>-->
+            <!--<field name="target">main</field>-->
+            <!--<field name="view_id" ref="view_scm_controller_class_part_category_list"/>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash; QM Leader审核 class&ndash;&gt;-->
+        <!--<record model="ir.ui.view" id="view_qm_leader_class_part_category_list">-->
+            <!--<field name="name">qm_leader_class_part_category.list</field>-->
+            <!--<field name="model">iac.class.part_category.qm_leader</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree string="Part Category Class" create="false" editable="bottom">-->
+                    <!--<button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('calculate_part_class','!=','D'),('final_part_class','!=','C')]}"/>-->
+                    <!--<field name="supplier_company_id" readonly="1"/>-->
+                    <!--<field name="part_category_id" readonly="1"/>-->
+                    <!--<field name="calculate_score" readonly="1"/>-->
+                    <!--<field name="calculate_part_class" readonly="1"/>-->
+                    <!--<field name="final_part_class" readonly="1"/>-->
+                    <!--<field name="scm_memo" readonly="1"/>-->
+                    <!--<field name="qm_memo" attrs="{'readonly': [('state','!=', 'to approve')]}"/>-->
+                    <!--&lt;!&ndash;-->
+                    <!--<field name="file_id" readonly="1"/>-->
+                    <!--&ndash;&gt;-->
+                    <!--<button name="button_download_file" type='object' string="download file..."/>-->
+                    <!--<field name="state"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record model="ir.ui.view" id="view_qm_leader_class_part_category_form">-->
+            <!--<field name="name">qm_leader_class_part_category.form</field>-->
+            <!--<field name="model">iac.class.part_category.qm_leader</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Part Category Class" create="false">-->
+                    <!--<sheet>-->
+                        <!--<group>-->
+                            <!--<group>-->
+                                <!--<field name="supplier_company_id" readonly="1"/>-->
+                                <!--<field name="part_category_id" readonly="1"/>-->
+                                <!--<field name="calculate_score"/>-->
+                                <!--<field name="calculate_part_class"/>-->
+                                <!--<field name="final_part_class" readonly="1"/>-->
+                                <!--<field name="scm_memo" readonly="1"/>-->
+                                <!--<field name="qm_memo" attrs="{'readonly': [('state','!=', 'to approve')]}"/>-->
+                            <!--</group>-->
+                            <!--<group>-->
+                                <!--<field name="file_id" widget="dms_file" string="File" directory="model_muk_dms_directory.3" readonly="1"/>-->
+                                <!--<field name="state"/>-->
+                            <!--</group>-->
+                        <!--</group>-->
+                        <!--<notebook>-->
+                            <!--<page name="part_category" string="Part Category">-->
+                                <!--<field name="score_part_category_ids" readonly="1"/>-->
+                            <!--</page>-->
+                        <!--</notebook>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record id="view_class_supplier_company_form" model="ir.ui.view">
+        <field name="name">iac.class.supplier_company.form</field>
+        <field name="model">iac.class.supplier_company</field>
+        <field name="arch" type="xml">
+            <form string="Supplier Company Class" create="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="supplier_company_id" readonly="1"/>
+                            <field name="current_class"/>
+                            <field name="calculate_score" readonly="1"/>
+                            <field name="calculate_class" readonly="1"/>
+                            <field name="final_class" readonly="1"/>
+                        </group>
+                        <group>
+                            <!--<field name="scm_controller_id" readonly="1"/>-->
+                            <field name="scm_memo" readonly="1"/>
+                            <!--<field name="qm_controller_id" readonly="1"/>-->
+                            <!--<field name="qm_leader_id" readonly="1"/>-->
+                            <field name="qm_memo" readonly="1"/>
+                            <field name="state"/>
+                            <field name="file_id" widget="dms_file" string="File" directory="model_muk_dms_directory.3" readonly="1"/>
+                            <field name="score_snapshot"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="supplier_company_score" string="Supplier Company Score">
+                            <field name="score_supplier_company_ids" readonly="1"/>
+                        </page>
+                        <page name="part_category_class" string="Part Category Class">
+                            <field name="class_part_category_ids" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+        </record>
+
+        <record id="view_class_supplier_company_list" model="ir.ui.view">
+            <field name="name">iac.class.supplier_company.list</field>
+            <field name="model">iac.class.supplier_company</field>
+            <field name="arch" type="xml">
+                <tree string="Supplier Company Class" create="false">
+                    <button name="button_search_log" string="Log" type="object"/>
+                    <field name="supplier_company_id" readonly="1"/>
+                    <field name="calculate_score"/>
+                    <field name="calculate_class"/>
+                    <field name="final_class" readonly="1"/>
+                    <field name="state"/>
+                    <field name="score_snapshot"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_class_supplier_company_search_list">
+            <field name="name">View Class Supplier Company Search</field>
+            <field name="model">iac.class.supplier_company</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="id"/>
+                    <field name="supplier_company_id"/>
+                    <group string="Group By">
+                        <filter name="by_state" string="State"
+                                context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window"  id="action_view_class_supplier_company_list">
+            <field name="name">Supplier Company Class History</field>
+            <field name="res_model">iac.class.supplier_company</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_class_supplier_company_list"/>
+        </record>
+
+        <!--评核历史记录查询 查看等级评鉴历史-->
+        <record id="view_log_signature_class_history_list" model="ir.ui.view">
+            <field name="name">class approval history</field>
+            <field name="model">iac.class.approve.log</field>
+            <field name="arch" type="xml" >
+                <tree string="Vendor Part Score List" create="false">
+                      <field name="create_date" readonly="1"/>
+                      <field name="user_id" readonly="1"/>
+                      <!--<field name="description" readonly="1"/>-->
+                      <field name="score_snapshot" readonly="1"/>
+                      <field name="calculate_class" readonly="1"/>
+                      <field name="user_class" readonly="1"/>
+                      <field name="approve_role" readonly="1"/>
+                      <field name="action" readonly="1"/>
+                      <!--<field name="user_score" options="{'no_create': True,'no_open': True}"/>-->
+                      <field name="memo" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--评核历史记录查询 查看等级评鉴历史视图动作-->
+        <record model="ir.actions.act_window" id="action_view_signature_class_history">
+            <field name="name">class signature history</field>
+            <field name="res_model">iac.class.approve.log</field>
+            <!--<field name="view_type">form</field>-->
+            <field name="view_mode">tree</field>
+            <field name="target">main</field>
+            <field name="view_id" ref="view_log_signature_class_history_list" />
+            <!--<field name="domain">[('state','in',['scoring','disapprove'])]</field>-->
+        </record>
+
+        <!-- SCM Controller评定supplier company Class处理-->
+        <record id="view_class_supplier_company_scm_controller_form" model="ir.ui.view">
+        <field name="name">iac.class.supplier_company.scm_controller.form</field>
+        <field name="model">iac.class.supplier_company.scm_controller</field>
+        <field name="arch" type="xml">
+            <form string="Supplier Company Class" create="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="supplier_company_id" readonly="1" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="current_class"/>
+                            <field name="user_score" readonly="1"/>
+                            <field name="user_class" readonly="1"/>
+                        </group>
+                        <group>
+                            <!--<field name="scm_controller_id" readonly="1"/>-->
+                            <field name="scm_memo"
+                                   attrs="{'readonly': [('state','not in', ['in_review','disapprove'])]}"/>
+                            <!--<field name="qm_controller_id" readonly="1"/>-->
+                            <!--<field name="qm_leader_id" readonly="1"/>-->
+                            <field name="qm_memo" readonly="1"/>
+                            <field name="state"/>
+                            <field name="file_id" widget="dms_file" string="File" directory="model_muk_dms_directory.3"
+                                   attrs="{'readonly': [('state','not in', ['in_review','disapprove'])]}"/>
+                            <field name="score_snapshot"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="supplier_company_score" string="Supplier Company Score">
+                            <field name="score_supplier_company_ids" readonly="1"/>
+                        </page>
+                        <page name="part_category_class" string="Part Category Class">
+                            <field name="class_part_category_ids" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+        </record>
+
+        <record id="view_class_supplier_company_scm_controller_list" model="ir.ui.view">
+            <field name="name">iac.class.supplier_company.scm_controller.list</field>
+            <field name="model">iac.class.supplier_company.scm_controller</field>
+            <field name="arch" type="xml">
+                <tree string="Supplier Company Class" create="false" editable="bottom">
+                    <button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('state','not in', ['scoring','disapprove','in_review','done'])]}"/>
+                    <button name="button_search_log" string="Log" type="object"/>
+                    <field name="supplier_company_id" readonly="1" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                    <field name="user_score" readonly="1"/>
+                    <field name="user_class" readonly="1"/>
+                    <field name="scm_memo"/>
+                    <field name="state"/>
+                    <field name="score_snapshot"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- SCM controller 評定SC class 退件 -->
+        <record id="iac_scm_scoring_sc_disapprove_action_server" model="ir.actions.server">
+            <field name="name">Disapprove</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_class_supplier_company_scm_controller"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_batch_disapprove()
+            </field>
+        </record>
+
+        <record id="action_iac_scm_scoring_sc_disapprove" model="ir.values">
+            <field name="name">Disapprove</field>
+            <field name="model_id" ref="model_iac_class_supplier_company_scm_controller"/>
+            <field name="model">iac.class.supplier_company.scm_controller</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_scm_scoring_sc_disapprove_action_server" name="value"/>
+        </record>
+
+
+        <!-- QM Leader审核supplier company Class处理-->
+        <record id="view_class_supplier_company_qm_leader_form" model="ir.ui.view">
+        <field name="name">iac.class.supplier_company.qm_leader.form</field>
+        <field name="model">iac.class.supplier_company.qm_leader</field>
+        <field name="arch" type="xml">
+            <form string="Supplier Company Class" create="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="supplier_company_id" readonly="1" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                            <field name="current_class"/>
+                            <field name="user_score" readonly="1"/>
+                            <field name="user_class" readonly="1"/>
+                            <!--<field name="final_class" readonly="1"/>-->
+                        </group>
+                        <group>
+                            <!--<field name="scm_controller_id" readonly="1"/>-->
+                            <field name="scm_memo" readonly="1"/>
+                            <!--<field name="qm_controller_id" readonly="1"/>-->
+                            <!--<field name="qm_leader_id" readonly="1"/>-->
+                            <field name="qm_memo" attrs="{'readonly': [('state','!=', 'to approve')]}"/>
+                            <field name="state"/>
+                            <field name="file_id" widget="dms_file" string="File" directory="model_muk_dms_directory.3" readonly="1"/>
+                            <field name="score_snapshot"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="supplier_company_score" string="Supplier Company Score">
+                            <field name="score_supplier_company_ids" readonly="1"/>
+                        </page>
+                        <page name="part_category_class" string="Part Category Class">
+                            <field name="class_part_category_ids" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+        </record>
+
+        <record id="view_class_supplier_company_qm_leader_list" model="ir.ui.view">
+            <field name="name">iac.class.supplier_company.qm_leader.list</field>
+            <field name="model">iac.class.supplier_company.qm_leader</field>
+            <field name="arch" type="xml">
+                <tree string="Supplier Company Class" create="false" editable="bottom">
+                    <button name="button_upload_file" string="Detail" type="object" attrs="{'invisible': [('state','not in', ['to approve'])]}"/>
+                    <button name="button_search_log" string="Log" type="object"/>
+                    <field name="supplier_company_id" readonly="1" options="{'no_create': True,'no_edit':True,'no_open':True}"/>
+                    <field name="user_score" readonly="1"/>
+                    <field name="user_class" readonly="1"/>
+                    <!--<field name="final_class" readonly="1"/>-->
+                    <field name="qm_memo" attrs="{'readonly': [('state','!=', 'to approve')]}"/>
+                    <field name="state"/>
+                    <button name="button_download_file" type='object' string="download file..."/>
+                    <field name="score_snapshot"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- 手动产品评核名单 -->
+        <record id="view_generate_supplier_company_list" model="ir.ui.view">
+        <field name="name">Supplier Company</field>
+        <field name="type">tree</field>
+        <field name="model">iac.generate.supplier.company</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="company_no"/>
+                <field name="name"/>
+                <field name="vat_no"/>
+                <field name="supplier_type"/>
+                <field name="current_class"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+      </record>
+
+      <record id="view_generate_supplier_company_form" model="ir.ui.view">
+        <field name="name">Supplier Company</field>
+        <field name="type">form</field>
+        <field name="model">iac.generate.supplier.company</field>
+        <field name="arch" type="xml">
+            <form string="Supplier Company">
+                <sheet string="Supplier Company">
+                    <group>
+                        <group>
+                            <field name="company_no"/>
+                            <field name="name"/>
+                            <field name="company_name2"/>
+                            <field name="vat_no"/>
+                        </group>
+                        <group>
+                            <field name="supplier_type"/>
+                            <field name="current_class"/>
+                            <field name="comment"/>
+                        </group>
+                        <notebook>
+                            <page string="Vendors">
+                                <field name="line_ids">
+                                    <tree string="Vendors" editable="bottom">
+                                        <field name="vendor_id" options="{'no_create': True, 'no_edit': True}"/>
+                                        <field name="vendor_code"/>
+                                        <field name="vendor_name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+      </record>
+        <record id="iac_class_supplier_company_list_submit_action_server" model="ir.actions.server">
+            <field name="name">产生名单</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_generate_supplier_company"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.button_batch_gen_score_list()
+            </field>
+        </record>
+
+        <record id="action_iac_class_supplier_company_list_submit" model="ir.values">
+            <field name="name">产生名单</field>
+            <field name="model_id" ref="model_iac_generate_supplier_company"/>
+            <field name="model">iac.generate.supplier.company</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_class_supplier_company_list_submit_action_server" name="value"/>
+        </record>
+
+        <!--&lt;!&ndash; SCM controller 評定Part class 最终提交 &ndash;&gt;-->
+        <!--<record id="iac_scm_scoring_pc_submit_action_server" model="ir.actions.server">-->
+            <!--<field name="name">Submit</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_class_part_category_scm_controller"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.action_batch_submit()-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_iac_scm_scoring_pc_submit" model="ir.values">-->
+            <!--<field name="name">Submit</field>-->
+            <!--<field name="model_id" ref="model_iac_class_part_category_scm_controller"/>-->
+            <!--<field name="model">iac.class.part_category.scm_controller</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field eval="'ir.actions.server,%d'%iac_scm_scoring_pc_submit_action_server" name="value"/>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash; QM leader核准Part class 調整，审核通过 &ndash;&gt;-->
+        <!--<record id="iac_qm_approve_pc_submit_action_server" model="ir.actions.server">-->
+            <!--<field name="name">Approve</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_class_part_category_qm_leader"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.action_batch_approve()-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_iac_qm_approve_pc_submit" model="ir.values">-->
+            <!--<field name="name">Approve</field>-->
+            <!--<field name="model_id" ref="model_iac_class_part_category_qm_leader"/>-->
+            <!--<field name="model">iac.class.part_category.qm_leader</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field eval="'ir.actions.server,%d'%iac_qm_approve_pc_submit_action_server" name="value"/>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash; QM leader核准Part class 調整，拒绝 &ndash;&gt;-->
+        <!--<record id="iac_qm_disapprove_pc_submit_action_server" model="ir.actions.server">-->
+            <!--<field name="name">Disapprove</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_class_part_category_qm_leader"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.action_batch_disapprove()-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_iac_qm_disapprove_pc_submit" model="ir.values">-->
+            <!--<field name="name">Disapprove</field>-->
+            <!--<field name="model_id" ref="model_iac_class_part_category_qm_leader"/>-->
+            <!--<field name="model">iac.class.part_category.qm_leader</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field eval="'ir.actions.server,%d'%iac_qm_disapprove_pc_submit_action_server" name="value"/>-->
+        <!--</record>-->
+
+        <!-- SCM controller 評定SC class 最终提交 -->
+        <record id="iac_scm_scoring_sc_submit_action_server" model="ir.actions.server">
+            <field name="name">Submit</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_class_supplier_company_scm_controller"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_batch_submit()
+            </field>
+        </record>
+
+        <record id="action_iac_scm_scoring_sc_submit" model="ir.values">
+            <field name="name">Submit</field>
+            <field name="model_id" ref="model_iac_class_supplier_company_scm_controller"/>
+            <field name="model">iac.class.supplier_company.scm_controller</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_scm_scoring_sc_submit_action_server" name="value"/>
+        </record>
+
+        <!-- QM leader核准SC class 調整，审核通过 -->
+        <record id="iac_qm_approve_sc_submit_action_server" model="ir.actions.server">
+            <field name="name">Approve</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_class_supplier_company_qm_leader"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_batch_approve()
+            </field>
+        </record>
+
+        <record id="action_iac_qm_approve_sc_submit" model="ir.values">
+            <field name="name">Approve</field>
+            <field name="model_id" ref="model_iac_class_supplier_company_qm_leader"/>
+            <field name="model">iac.class.supplier_company.qm_leader</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_qm_approve_sc_submit_action_server" name="value"/>
+        </record>
+
+        <!-- QM leader核准SC class 調整，拒绝 -->
+        <record id="iac_qm_disapprove_sc_submit_action_server" model="ir.actions.server">
+            <field name="name">Disapprove</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_iac_class_supplier_company_qm_leader"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_batch_disapprove()
+            </field>
+        </record>
+
+        <record id="action_iac_qm_disapprove_sc_submit" model="ir.values">
+            <field name="name">Disapprove</field>
+            <field name="model_id" ref="model_iac_class_supplier_company_qm_leader"/>
+            <field name="model">iac.class.supplier_company.qm_leader</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%iac_qm_disapprove_sc_submit_action_server" name="value"/>
+        </record>
+
+        <!--&lt;!&ndash; d class return，SCM Controller确定要执行d class return&ndash;&gt;-->
+        <!--<record id="view_dclass_return_sc_form" model="ir.ui.view">-->
+            <!--<field name="name">iac.dclass_return.supplier.company.form</field>-->
+            <!--<field name="model">iac.dclass_return.supplier.company</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="D Class Supplier Company" create="false">-->
+                    <!--<header>-->
+                        <!--<button String="Apply" type="object" class="oe_highlight" name="button_apply"/>-->
+                    <!--</header>-->
+                    <!--<sheet string="D Class Supplier Company">-->
+                        <!--<group>-->
+                            <!--<group>-->
+                                <!--<field name="company_no"/>-->
+                                <!--<field name="name"/>-->
+                                <!--<field name="company_name2"/>-->
+                                <!--<field name="vat_no"/>-->
+                            <!--</group>-->
+                            <!--<group>-->
+                                <!--<field name="supplier_type"/>-->
+                                <!--<field name="current_class"/>-->
+                                <!--<field name="comment"/>-->
+                            <!--</group>-->
+                            <!--<notebook>-->
+                                <!--<page string="Vendors">-->
+                                    <!--<field name="line_ids">-->
+                                        <!--<tree string="Vendors" editable="bottom">-->
+                                            <!--<field name="vendor_id" options="{'no_create': True, 'no_edit': True}"/>-->
+                                            <!--<field name="vendor_code"/>-->
+                                            <!--<field name="vendor_name"/>-->
+                                        <!--</tree>-->
+                                    <!--</field>-->
+                                <!--</page>-->
+                            <!--</notebook>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash; d class return，SCM Controller上传文件提交qm leader审核 &ndash;&gt;-->
+        <!--<record id="view_dclass_return_form" model="ir.ui.view">-->
+            <!--<field name="name">iac.dclass.return.form</field>-->
+            <!--<field name="model">iac.dclass.return</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="D Class Return" create="false">-->
+                    <!--<header>-->
+                        <!--<button String="Submit" type="object" class="oe_highlight" name="button_submit"/>-->
+                        <!--<button String="Cancel" type="object" class="oe_highlight" name="button_cancel" attrs="{'invisible': [('state', 'not in', ['draft', 'disapprove'])]}"/>-->
+                        <!--<field name="state" widget="statusbar" statusbar_visible="draft,to approve,disapprove,done" readonly="1"/>-->
+                    <!--</header>-->
+                    <!--<sheet string="D Class Return">-->
+                        <!--<group>-->
+                            <!--<group>-->
+                                <!--<field name="supplier_company_id"/>-->
+                                <!--<field name="vendor_id"/>-->
+                                <!--<field name="dclass_file_id" widget="dms_file" string="File" directory="model_muk_dms_directory.3" attrs="{'readonly': [('state', 'in', ['to approve', 'done'])]}"/>-->
+                            <!--</group>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash; QM Leader审核d class 返回 &ndash;&gt;-->
+        <!--<record id="view_dclass_return_qm_leader_list" model="ir.ui.view">-->
+            <!--<field name="name">iac.dclass.return.qm_leader.list</field>-->
+            <!--<field name="type">tree</field>-->
+            <!--<field name="model">iac.dclass.return.qm_leader</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree string="D Class Return" create="false">-->
+                    <!--<field name="supplier_company_id"/>-->
+                    <!--<field name="vendor_id"/>-->
+                    <!--&lt;!&ndash;-->
+                    <!--<field name="dclass_file_id"/>-->
+                     <!--&ndash;&gt;-->
+                    <!--<field name="state"/>-->
+                    <!--<button name="button_download_file" type='object' string="download file..."/>-->
+                    <!--<field name="create_date"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record id="view_dclass_return_qm_leader_form" model="ir.ui.view">-->
+            <!--<field name="name">iac.dclass.return.qm_leader.form</field>-->
+            <!--<field name="model">iac.dclass.return.qm_leader</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="D Class Return" create="false">-->
+                    <!--<sheet string="D Class Return">-->
+                        <!--<group>-->
+                            <!--<group>-->
+                                <!--<field name="supplier_company_id"/>-->
+                                <!--<field name="vendor_id"/>-->
+                                <!--<field name="dclass_file_id" widget="dms_file" string="File" directory="model_muk_dms_directory.3" readonly="1"/>-->
+                                <!--<field name="state"/>-->
+                            <!--</group>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record model="ir.actions.act_window"  id="action_view_dclass_return_qm_leader_form">-->
+            <!--<field name="name">核准D Class返回</field>-->
+            <!--<field name="res_model">iac.dclass.return.qm_leader</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">form,tree</field>-->
+            <!--<field name="target">main</field>-->
+            <!--<field name="domain" />-->
+            <!--<field name="view_id" ref="view_dclass_return_qm_leader_list"/>-->
+        <!--</record>-->
+        <!--&lt;!&ndash; QM leader核准D Class 返回，审核通过 &ndash;&gt;-->
+        <!--<record id="iac_qm_approve_dclass_return_action_server" model="ir.actions.server">-->
+            <!--<field name="name">Approve</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_dclass_return_qm_leader"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.action_batch_approve()-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_iac_qm_approve_dclass_return" model="ir.values">-->
+            <!--<field name="name">Approve</field>-->
+            <!--<field name="model_id" ref="model_iac_dclass_return_qm_leader"/>-->
+            <!--<field name="model">iac.dclass.return.qm_leader</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field eval="'ir.actions.server,%d'%iac_qm_approve_dclass_return_action_server" name="value"/>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash; QM leader核准D Class 返回，拒绝 &ndash;&gt;-->
+        <!--<record id="iac_qm_disapprove_dclass_return_action_server" model="ir.actions.server">-->
+            <!--<field name="name">Disapprove</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_iac_dclass_return_qm_leader"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">-->
+                <!--if records:-->
+                    <!--action = records.action_batch_disapprove()-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_iac_qm_disapprove_dclass_return" model="ir.values">-->
+            <!--<field name="name">Disapprove</field>-->
+            <!--<field name="model_id" ref="model_iac_dclass_return_qm_leader"/>-->
+            <!--<field name="model">iac.dclass.return.qm_leader</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field eval="'ir.actions.server,%d'%iac_qm_disapprove_dclass_return_action_server" name="value"/>-->
+        <!--</record>-->
+  </data>
+</odoo>
